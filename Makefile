@@ -1,8 +1,9 @@
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -I./includes/ -I./libft/
 
 SRCS = srcs/main.c
+
 
 OBJS = $(SRCS:.c=.o)
 
@@ -13,7 +14,7 @@ LIBFT = libft/libft.a
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) -I . $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
 $(LIBFT):
 	cd libft && make

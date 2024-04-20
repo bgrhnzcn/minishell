@@ -6,11 +6,13 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/19 23:34:52 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/04/20 22:53:56 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
+
+#define ALLOCATED
 
 int	main(int argc, char **argv)
 {
@@ -20,6 +22,7 @@ int	main(int argc, char **argv)
 	char	*path;
 	char	*temp;
 	char	*prompt;
+	char	*splitted;
 	//HISTORY_STATE state;
 
 	cmd = malloc(0);
@@ -36,6 +39,9 @@ int	main(int argc, char **argv)
 		prompt = ft_strjoin(temp, "$");
 		cmd = readline(prompt);
 		add_history(cmd);
+		printf("%s\n", cmd);
+		splitted = strtok(cmd, " 	");
+		printf("%s\n", splitted);
 		printf("%s\n", cmd);
 		free(path);
 		free(temp);
