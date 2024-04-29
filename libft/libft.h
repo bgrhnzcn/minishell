@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/01/30 17:30:39 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/04/30 01:55:33 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # define PI		3.14159265358979323846
 
 void		*ft_bzero(void *s, size_t n);
-void		*ft_calloc(size_t nmemb, size_t size);
 void		*ft_memmove(void *dst, const void *src, size_t len);
 char		*ft_strdup(const char *s);
 t_bool		ft_isalnum(int c);
@@ -58,6 +57,22 @@ int			ft_atoi(const char *str);
 int			ft_atoi_hex(const char *str);
 char		*ft_itoa(int n);
 char		**ft_split(char const *s, char c);
+
+//----------------------Memory-----------------------
+
+void		*ft_malloc(size_t nmemb, size_t size);
+void		*ft_calloc(size_t nmemb, size_t size);
+
+//-----------------------Vectors----------------------
+
+void		*ft_vector_new(size_t type_size_b);
+void		ft_vector_free(void *vector);
+t_vector	*ft_vector_realloc(void	*vector_adrr, t_vector *head);
+t_vector	*ft_vector_head(void *vector);
+size_t		ft_vector_len(void *vector);
+size_t		ft_vector_append(void *vector_adrr, void *val);
+size_t		ft_vector_insert(void *vector_adrr, void *val, const size_t index);
+size_t		ft_vector_pop(void *vector, void *out);
 
 //-----------------------Lists------------------------
 

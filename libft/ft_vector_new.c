@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_vector_new.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/28 14:55:47 by bgrhnzcn         ###   ########.fr       */
+/*   Created: 2024/04/28 18:01:32 by bgrhnzcn          #+#    #+#             */
+/*   Updated: 2024/04/29 20:09:36 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft.h"
+void	*ft_vector_new(size_t type_size_b)
+{
+	t_vector	*vector;
 
-#endif
+	vector = ft_calloc(1, (sizeof(t_vector) + (type_size_b * 1)));
+	if (vector == NULL)
+		return (NULL);
+	vector->type_size = type_size_b;
+	vector->lenght = 0;
+	vector->buffer_size = type_size_b * 1;
+	return (&vector->buffer);
+}

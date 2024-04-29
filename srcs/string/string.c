@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 22:11:23 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/20 22:42:25 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/04/29 19:49:29 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ char	*ft_strpbrk(char *str, const char *accept)
 
 char	*ft_strtok(char *str, char *delim)
 {
-	
+
 }

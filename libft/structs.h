@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 19:34:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/07 16:10:49 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/04/29 19:20:58 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,23 @@ typedef union u_color
 }	t_color;
 # endif
 
-typedef enum e_bool{
+typedef enum e_bool
+{
 	false,
 	true
 }	t_bool;
+
+typedef struct s_vector
+{
+	//Size of stored types in bytes
+	size_t	type_size;
+	//Buffer size in bytes
+	size_t	buffer_size;
+	//Count of elements
+	size_t	lenght;
+	//Main buffer for storage
+	char	buffer[];
+}	t_vector;
 
 typedef struct s_list
 {
