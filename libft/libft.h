@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/30 01:55:33 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/01 02:50:31 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,50 @@
 # define PI		3.14159265358979323846
 
 void		*ft_bzero(void *s, size_t n);
-void		*ft_memmove(void *dst, const void *src, size_t len);
 char		*ft_strdup(const char *s);
 t_bool		ft_isalnum(int c);
 t_bool		ft_isalpha(int c);
 t_bool		ft_isascii(int c);
 t_bool		ft_isdigit(int c);
 t_bool		ft_isprint(int c);
-void		*ft_memchr(const void *s, int c, size_t n);
-int			ft_memcmp(const void *s1, const void *s2, size_t n);
-void		*ft_memcpy(void *dst, const void *src, size_t n);
+/**
+ * @brief 
+ * Move the memeory specified with parameters.
+ * Usefull when moving large areas for a small amount.
+ * @param dst Destination adress.
+ * @param src Source adress.
+ * @param len Size of moving area as byte.
+ * @return Returns a pointer to dest.
+ */
 void		*ft_memmove(void *dst, const void *src, size_t len);
+/**
+ * @brief 
+ * Scans the n bytes of the area pointed by s to find c.
+ * Checks only single byte.
+ * @param s Start point for check.
+ * @param c Scanned byte.
+ * @param n Size of the scan area as byte.
+ * @return Returns the adress of found c or NULL if can't find.
+ */
+void		*ft_memchr(const void *s, int c, size_t n);
+/**
+ * @brief 
+ * 
+ * @param s1 
+ * @param s2 
+ * @param n 
+ * @return int 
+ */
+int			ft_memcmp(const void *s1, const void *s2, size_t n);
+/**
+ * @brief 
+ * Copies n bytes of data from src to dst.
+ * @param dst Destination adress.
+ * @param src Source adress.
+ * @param n Size of copying area as byte.
+ * @return Returns dst.
+ */
+void		*ft_memcpy(void *dst, const void *src, size_t n);
 void		*ft_memset(void *b, int c, size_t len);
 void		ft_putchar_fd(char c, int fd);
 void		ft_putendl_fd(char *s, int fd);
@@ -65,14 +98,109 @@ void		*ft_calloc(size_t nmemb, size_t size);
 
 //-----------------------Vectors----------------------
 
+typedef int*			t_int_vec;
+typedef char*			t_char_vec;
+typedef long*			t_long_vec;
+typedef unsigned char*	t_uchar_vec;
+typedef unsigned int*	t_uint_vec;
+typedef unsigned long*	t_ulong_vec;
+
+/**
+ * @brief
+ * Returns dynamic array implemantation.
+ * You can access elements like standart array.
+ * @param type_size_b Size of stored type in bytes.
+ * @return Pointer to buffer.
+ */
 void		*ft_vector_new(size_t type_size_b);
+/**
+ * @brief 
+ * Free allocated memory for vector.
+ * @param vector Pointer to buffer.
+ */
 void		ft_vector_free(void *vector);
-t_vector	*ft_vector_realloc(void	*vector_adrr, t_vector *head);
+/**
+ * @brief 
+ * Increases the capacity of the vector with given amount.
+ * Don't use if it's not important.
+ * @param vector_adrr Adress of pointer to buffer.
+ * @param head Head of vector.
+ * @param size Growing size as a byte.
+ * @return Returns newly allocated version of vector head.
+ */
+t_vector	*ft_vector_grow(void *vector_adrr, t_vector *head, size_t size);
+/**
+ * @brief 
+ * Decrease the capacity of the vector with given amount.
+ * Don't use if it's not important.
+ * @param vector_adrr Adress of pointer to buffer.
+ * @param head Head of vector.
+ * @param size Shrinking size as a byte.
+ * @return Returns newly allocated version of vector head.
+ */
+t_vector	*ft_vector_shrink(void *vector_adrr, t_vector *head, size_t size);
+/**
+ * @brief 
+ * Gets head of a vector.
+ * @param vector Vector buffer.
+ * @return Returns pointer to head of vector.
+ */
 t_vector	*ft_vector_head(void *vector);
+/**
+ * @brief 
+ * Gets current lenght of a vector.
+ * @param vector Vector buffer.
+ * @return Returns lenght of a vector as an existing element count.
+ */
 size_t		ft_vector_len(void *vector);
+/**
+ * @brief 
+ * Add new element to end of the vector.
+ * If necessery growe the vector.
+ * @param vector_adrr Adress of pointer to buffer.
+ * @param val The value at the address is copied to the vector.
+ * @return Returns the new lenght of vector after new element.
+ */
 size_t		ft_vector_append(void *vector_adrr, void *val);
+/**
+ * @brief 
+ * Add new element to given index of the vector.
+ * It moves the elements after the index by one.
+ * If necessery growe the vector.
+ * @param vector_adrr Adress of pointer to buffer.
+ * @param val The value at the address is copied to the vector.
+ * @param index Index to operate.
+ * @return Returns the new size of the vector after new element.
+ */
 size_t		ft_vector_insert(void *vector_adrr, void *val, const size_t index);
-size_t		ft_vector_pop(void *vector, void *out);
+/**
+ * @brief 
+ * Removes last element of the vector.
+ * If necessery shrinks the vector.
+ * @param vector_adrr Adress of pointer to buffer.
+ * @param out The adress of output value. If not need then pass NULL.
+ * @return Returns the new size of the vector after element removed.
+ */
+size_t		ft_vector_pop(void *vector_adrr, void *out);
+/**
+ * @brief 
+ * Removes the element of given index.
+ * It moves the elements after the index by one.
+ * If necessery shrinks the vector.
+ * @param vector_adrr Adress of pointer to buffer.
+ * @param out The adress of output value. If not need then pass NULL.
+ * @param index Index to operate.
+ * @return Returns the new size of the vector after element removed.
+ */
+size_t		ft_vector_remove(void *vector_adrr, void *out, const size_t index);
+/**
+ * @brief 
+ * Removes all the element in the vector.
+ * Doesn't free vectors itself.
+ * @param vector_adrr Adress of pointer to buffer.
+ */
+void		ft_vector_iter(void *vector, void (*f)());
+void		ft_vector_clear(void *vector_adrr);
 
 //-----------------------Lists------------------------
 

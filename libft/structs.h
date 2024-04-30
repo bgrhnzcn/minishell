@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 19:34:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/29 19:20:58 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/01 02:32:06 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_vector
 	//Count of elements
 	size_t	lenght;
 	//Main buffer for storage
-	char	buffer[];
+	char	buffer[1];
 }	t_vector;
 
 typedef struct s_list

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/30 02:01:31 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/01 01:49:41 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,29 @@ int	main(int argc, char **argv)
 	//char	*splitted;
 	//HISTORY_STATE state;
 
+	printf("sizeof: %ld\n",sizeof(t_vector));
 	int	holder;
 	int* vector_int = ft_vector_new(sizeof(int));
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 513; i++)
 	{
 		ft_vector_append(&vector_int, &i);
 		t_vector *head = ft_vector_head(vector_int);
 		printf("----\nres: %d\n-----\n", vector_int[i]);
-		printf("type: %ld\n", head->type_size);
 		printf("buff_size: %ld\n", head->buffer_size);
-		printf("lenght: %ld\n", head->lenght);
-		printf("buffer: %p\n", head->buffer);
 	}
 	int	ins = -5461;
 	ft_vector_insert(&vector_int, &ins, 53);
+	for (size_t i = 0; i < ft_vector_len(vector_int); i++)
+		printf("Index(%ld): %d\n", i, vector_int[i]);
+	ft_vector_remove(&vector_int, NULL, 53);
+	for (size_t i = 0; i < ft_vector_len(vector_int); i++)
+		printf("Index(%ld): %d\n", i, vector_int[i]);
 	for (int i = ft_vector_len(vector_int); i > 0; i--)
 	{
-		ft_vector_pop(vector_int, &holder);
-		printf("Index(%d): %d\n", i, holder);
+		ft_vector_pop(&vector_int, &holder);
+		t_vector *head = ft_vector_head(vector_int);
+		printf("----\nres: %d\n-----\n", holder);
+		printf("buff_size: %ld\n", head->buffer_size);
 	}
 	ft_vector_free(vector_int);
 	//cmd = malloc(0);

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 00:26:35 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/30 02:03:41 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/04/30 13:50:34 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	ft_vector_insert(void *vector_adrr, void *val, const size_t index)
 	head = ft_vector_head(*(char **)vector_adrr);
 	if (head->lenght == head->buffer_size / head->type_size)
 	{
-		head = ft_vector_realloc(vector_adrr, head);
+		head = ft_vector_grow(vector_adrr, head, head->buffer_size);
 		if (head == NULL)
 			return (-1);
 	}
