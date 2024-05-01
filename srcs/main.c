@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/01 01:49:41 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:17:47 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ int	main(int argc, char **argv)
 		printf("----\nres: %d\n-----\n", vector_int[i]);
 		printf("buff_size: %ld\n", head->buffer_size);
 	}
-	int	ins = -5461;
-	ft_vector_insert(&vector_int, &ins, 53);
+	ft_vector_insert(&vector_int, &(int){-54}, 53);
 	for (size_t i = 0; i < ft_vector_len(vector_int); i++)
 		printf("Index(%ld): %d\n", i, vector_int[i]);
 	ft_vector_remove(&vector_int, NULL, 53);
