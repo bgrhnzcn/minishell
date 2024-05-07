@@ -4,7 +4,6 @@ CFLAGS = -Wall -Werror -Wextra -I./includes/ -I./libft/
 
 SRCS = srcs/main.c
 
-
 OBJS = $(SRCS:.c=.o)
 
 NAME = minishell

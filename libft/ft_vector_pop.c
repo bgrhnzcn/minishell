@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_vector_pop.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 20:10:04 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/04/30 15:58:26 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/07 14:18:34 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ size_t	ft_vector_pop(void *vector_adrr, void *out)
 			head->type_size);
 	head->lenght--;
 	if (head->buffer_size > head->type_size)
+	{
 		if (head->lenght * head->type_size == head->buffer_size / 2)
 		{
 			head = ft_vector_shrink(vector_adrr, head, head->buffer_size / 2);
 			if (head == NULL)
 				return (-1);
 		}
+	}
 	return (head->lenght);
 }

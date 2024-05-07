@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/01 13:17:47 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/07 18:52:43 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 int	main(int argc, char **argv)
 {
-	(void)argv;
 	(void)argc;
 	//char	*cmd;
 	//char	*path;
@@ -24,31 +23,34 @@ int	main(int argc, char **argv)
 	//char	*prompt;
 	//char	*splitted;
 	//HISTORY_STATE state;
-
-	printf("sizeof: %ld\n",sizeof(t_vector));
-	int	holder;
-	int* vector_int = ft_vector_new(sizeof(int));
-	for (int i = 0; i < 513; i++)
-	{
-		ft_vector_append(&vector_int, &i);
-		t_vector *head = ft_vector_head(vector_int);
-		printf("----\nres: %d\n-----\n", vector_int[i]);
-		printf("buff_size: %ld\n", head->buffer_size);
-	}
-	ft_vector_insert(&vector_int, &(int){-54}, 53);
-	for (size_t i = 0; i < ft_vector_len(vector_int); i++)
-		printf("Index(%ld): %d\n", i, vector_int[i]);
-	ft_vector_remove(&vector_int, NULL, 53);
-	for (size_t i = 0; i < ft_vector_len(vector_int); i++)
-		printf("Index(%ld): %d\n", i, vector_int[i]);
-	for (int i = ft_vector_len(vector_int); i > 0; i--)
-	{
-		ft_vector_pop(&vector_int, &holder);
-		t_vector *head = ft_vector_head(vector_int);
-		printf("----\nres: %d\n-----\n", holder);
-		printf("buff_size: %ld\n", head->buffer_size);
-	}
-	ft_vector_free(vector_int);
+	char	**text = ft_split(argv[1], ' ');
+	size_t	max = ft_strarrlen(text);
+	for (size_t i = 0; i < max; i++)
+		printf("hash: %zu\n", ft_hash(text[i], ft_strlen(text[i]), 50));
+	//printf("sizeof: %ld\n",sizeof(t_vector));
+	//int	holder;
+	//int* vector_int = ft_vector_new(sizeof(int));
+	//for (int i = 0; i < 513; i++)
+	//{
+	//	ft_vector_append(&vector_int, &i);
+	//	t_vector *head = ft_vector_head(vector_int);
+	//	printf("----\nres: %d\n-----\n", vector_int[i]);
+	//	printf("buff_size: %ld\n", head->buffer_size);
+	//
+	//ft_vector_insert(&vector_int, &(int){-54}, 53);
+	//for (size_t i = 0; i < ft_vector_len(vector_int); i++)
+	//	printf("Index(%ld): %d\n", i, vector_int[i]);
+	//ft_vector_remove(&vector_int, NULL, 53);
+	//for (size_t i = 0; i < ft_vector_len(vector_int); i++)
+	//	printf("Index(%ld): %d\n", i, vector_int[i]);
+	//for (int i = ft_vector_len(vector_int); i > 0; i--)
+	//{
+	//	ft_vector_pop(&vector_int, &holder);
+	//	t_vector *head = ft_vector_head(vector_int);
+	//	printf("----\nres: %d\n-----\n", holder);
+	//	printf("buff_size: %ld\n", head->buffer_size);
+	//}
+	//ft_vector_free(vector_int);
 	//cmd = malloc(0);
 	//if (cmd == NULL)
 	//	exit(EXIT_FAILURE);

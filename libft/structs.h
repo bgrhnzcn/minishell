@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 19:34:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/01 22:04:40 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:06:10 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,11 @@ typedef enum e_bool
 
 typedef struct s_vector
 {
-	//Size of stored types in bytes
-	size_t	type_size;
-	//Buffer size in bytes
-	size_t	buffer_size;
-	//Count of elements
-	size_t	lenght;
-	//Main buffer for storage
-	char	buffer[1];
+	size_t	type_size;		//Type size in bytes.
+	size_t	buffer_size;	//Buffer size in bytes
+	size_t	lenght;			//Count of elements
+	char	buffer[1];		//Main buffer for storage
+	//C++ like vector struct.
 }	t_vector;
 
 typedef struct s_list
