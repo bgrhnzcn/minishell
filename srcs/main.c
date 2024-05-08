@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/07 18:52:43 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/08 17:34:33 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,20 @@ int	main(int argc, char **argv)
 	//char	*prompt;
 	//char	*splitted;
 	//HISTORY_STATE state;
+	if (argc <= 1)
+		return (EXIT_FAILURE);
 	char	**text = ft_split(argv[1], ' ');
 	size_t	max = ft_strarrlen(text);
+	t_hash_table *test_table = ft_table_new(10,
+		(t_hash_type){.key_type = sizeof(char *),
+		.value_type = sizeof(int)}, ft_hash);
 	for (size_t i = 0; i < max; i++)
-		printf("hash: %zu\n", ft_hash(text[i], ft_strlen(text[i]), 50));
+	{
+		ft_table_insert(test_table, text[i], &(int){i});
+	}
+	for (size_t i = 0; i < test_table->table_size; i++)
+		printf("	%zu	--------	%s --- %d\n", i, (char *)test_table->table[i].key, (int)test_table->table[i].value);
+	
 	//printf("sizeof: %ld\n",sizeof(t_vector));
 	//int	holder;
 	//int* vector_int = ft_vector_new(sizeof(int));

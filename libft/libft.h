@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/07 17:20:15 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/08 17:29:47 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,8 +205,9 @@ void		ft_vector_clear(void *vector_adrr);
 
 //-----------------------Hash-------------------------
 
-size_t	ft_hash(void *data, size_t type, size_t size);
-
+size_t	ft_hash(void *data, size_t type);
+t_hash_table	*ft_table_new(size_t table_size, t_hash_type type, size_t (*hash)(void *data, size_t type));
+void	ft_table_insert(t_hash_table *table, void *key, void *value);
 
 //-----------------------Lists------------------------
 

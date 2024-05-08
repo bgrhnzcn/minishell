@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 19:34:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/07 17:06:10 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/08 17:21:05 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,29 @@ typedef struct s_stack
 	int		count;
 	t_list	*top;
 }	t_stack;
+
+typedef struct s_hash_type
+{
+	size_t	key_type;
+	size_t	value_type;
+}	t_hash_type;
+
+static const t_hash_type	g_table_str_to_int = (t_hash_type)
+{.key_type = sizeof (char *), .value_type = sizeof (int)};
+
+typedef struct s_hash_entry
+{
+	void	*key;
+	void	*value;
+}	t_hash_entry;
+
+typedef struct s_hash_table
+{
+	size_t			(*hash)(void *data, size_t type);
+	t_hash_entry	*table;
+	t_hash_type		types;
+	size_t			table_size;
+}	t_hash_table;
 
 typedef struct s_map
 {
