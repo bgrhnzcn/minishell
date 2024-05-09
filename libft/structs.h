@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 19:34:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/08 17:21:05 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/09 23:59:41 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,27 +67,27 @@ typedef struct s_stack
 	t_list	*top;
 }	t_stack;
 
-typedef struct s_hash_type
+typedef enum e_types
 {
-	size_t	key_type;
-	size_t	value_type;
-}	t_hash_type;
+	type_str = 0,
+	type_int = sizeof(int),
+	type_char = sizeof(char),
+	type_pointer = sizeof(void *)
+}	t_types;
 
-static const t_hash_type	g_table_str_to_int = (t_hash_type)
-{.key_type = sizeof (char *), .value_type = sizeof (int)};
-
-typedef struct s_hash_entry
+typedef struct s_kv_pair
 {
 	void	*key;
 	void	*value;
-}	t_hash_entry;
+}	t_kv_pair;
 
 typedef struct s_hash_table
 {
-	size_t			(*hash)(void *data, size_t type);
-	t_hash_entry	*table;
-	t_hash_type		types;
-	size_t			table_size;
+	size_t		(*hash)(void *data, size_t type);
+	t_kv_pair	*table;
+	t_types		key_type;
+	t_types		value_type;
+	size_t		table_size;
 }	t_hash_table;
 
 typedef struct s_map

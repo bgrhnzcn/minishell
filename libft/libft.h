@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/08 17:29:47 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/10 00:44:11 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,12 +202,14 @@ size_t		ft_vector_remove(void *vector_adrr, void *out, const size_t index);
 void		ft_vector_iter(void *vector, void (*f)());
 void		ft_vector_clear(void *vector_adrr);
 
-
 //-----------------------Hash-------------------------
 
-size_t	ft_hash(void *data, size_t type);
-t_hash_table	*ft_table_new(size_t table_size, t_hash_type type, size_t (*hash)(void *data, size_t type));
-void	ft_table_insert(t_hash_table *table, void *key, void *value);
+size_t			ft_hash(void *data, size_t size);
+
+t_hash_table	*ft_table_new(size_t table_size, t_types key_type,
+				t_types value_type, size_t (hash)(void *data, size_t size));
+
+void			ft_table_insert(t_hash_table *table, void *key, void *value);
 
 //-----------------------Lists------------------------
 

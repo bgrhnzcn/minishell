@@ -3,26 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_table_new.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 14:53:10 by buozcan           #+#    #+#             */
-/*   Updated: 2024/05/08 17:38:24 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/10 00:15:59 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_hash_table	*ft_table_new(size_t table_size, t_hash_type type, size_t (*hash)(void *data, size_t type))
+t_hash_table	*ft_table_new(size_t table_size, t_types key_type,
+	t_types value_type, size_t (hash)(void *data, size_t size))
 {
 	t_hash_table	*table;
 	table = malloc(sizeof(t_hash_table));
 	if (table == NULL)
 		return (NULL);
-	table->table = malloc(sizeof(t_hash_entry) * table_size);
+	table->table = malloc(sizeof(t_kv_pair) * table_size);
 	if (table->table == NULL)
 		return (free(table), NULL);
-	table->hash = hash;
+	table->key_type = key_type;
+	table->value_type = value_type;
 	table->table_size = table_size;
-	table->types = type;
+	table->hash = hash;
 	return (table);
 }

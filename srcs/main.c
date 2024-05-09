@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/08 17:34:33 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/10 00:47:48 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@ int	main(int argc, char **argv)
 	//char	*splitted;
 	//HISTORY_STATE state;
 	if (argc <= 1)
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	char	**text = ft_split(argv[1], ' ');
 	size_t	max = ft_strarrlen(text);
-	t_hash_table *test_table = ft_table_new(10,
-		(t_hash_type){.key_type = sizeof(char *),
-		.value_type = sizeof(int)}, ft_hash);
+	t_hash_table *test_table = ft_table_new(10, type_str, type_int, ft_hash);
+	if (test_table == NULL)
+		exit(EXIT_FAILURE);
 	for (size_t i = 0; i < max; i++)
 	{
 		ft_table_insert(test_table, text[i], &(int){i});
 	}
 	for (size_t i = 0; i < test_table->table_size; i++)
-		printf("	%zu	--------	%s --- %d\n", i, (char *)test_table->table[i].key, (int)test_table->table[i].value);
+		printf("	%zu	--------	%s --- %d\n", i, (char *)test_table->table[i].key, *(int *)test_table->table[i].value);
 	
 	//printf("sizeof: %ld\n",sizeof(t_vector));
 	//int	holder;
