@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 19:34:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/09 23:59:41 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:55:34 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,17 @@ typedef enum e_types
 	type_char = sizeof(char),
 	type_pointer = sizeof(void *)
 }	t_types;
-
+//can be changed
 typedef struct s_kv_pair
 {
 	void	*key;
 	void	*value;
 }	t_kv_pair;
-
+//make more research about listing collision
 typedef struct s_hash_table
 {
 	size_t		(*hash)(void *data, size_t type);
-	t_kv_pair	*table;
+	t_list		**table;
 	t_types		key_type;
 	t_types		value_type;
 	size_t		table_size;
