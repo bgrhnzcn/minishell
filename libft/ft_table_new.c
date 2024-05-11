@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_table_new.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 14:53:10 by buozcan           #+#    #+#             */
-/*   Updated: 2024/05/10 18:55:01 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:54:44 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_hash_table	*ft_table_new(size_t table_size, t_types key_type,
 	table = malloc(sizeof(t_hash_table));
 	if (table == NULL)
 		return (NULL);
-	table->table = ft_calloc(table_size, sizeof(t_list *));
+	table->table = ft_calloc(table_size, sizeof(t_kv_pair));
 	if (table->table == NULL)
 		return (free(table), NULL);
 	table->key_type = key_type;

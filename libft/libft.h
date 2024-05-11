@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/10 00:44:11 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/11 16:30:21 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,8 @@ t_hash_table	*ft_table_new(size_t table_size, t_types key_type,
 				t_types value_type, size_t (hash)(void *data, size_t size));
 
 void			ft_table_insert(t_hash_table *table, void *key, void *value);
+
+void			ft_table_print(t_hash_table *table);
 
 //-----------------------Lists------------------------
 

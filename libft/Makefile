@@ -9,7 +9,7 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c\
 	ft_arrays.c ft_stackpop.c ft_stackpush.c ft_stacknew.c ft_stackclear.c \
 	ft_vector_new.c ft_vector_free.c ft_vector_grow.c ft_vector_shrink.c ft_vector_len.c \
 	ft_vector_append.c ft_vector_insert.c ft_vector_pop.c ft_vector_remove.c ft_vector_head.c \
-	ft_hash.c ft_table_new.c ft_table_insert.c
+	ft_hash.c ft_table_new.c ft_table_insert.c ft_table_print.c
 
 ifdef $(USE_MATH)
 	SRCS += ft_vec_conv.c ft_vec2_double.c ft_vec2_op.c ft_vec2_vec2.c ft_vec3_double.c\

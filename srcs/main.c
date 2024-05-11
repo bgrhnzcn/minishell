@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/10 18:55:04 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:14:40 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	for (int i = 0; i < argc; i++)
 		ft_table_insert(test_table, argv[i], &i);
+	ft_table_print(test_table);
 	//printf("sizeof: %ld\n",sizeof(t_vector));
 	//int	holder;
 	//int* vector_int = ft_vector_new(sizeof(int));
