@@ -2,7 +2,7 @@ CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra -I./includes/ -I./libft/
 
-SRCS = srcs/main.c
+SRCS = srcs/main.c srcs/builtins/env.c srcs/builtins/pwd.c srcs/builtins/cd.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -23,6 +23,7 @@ clean:
 	cd libft && make fclean
 
 fclean: clean
+	rm -f ${OBJS}
 	rm -f ${NAME}
 
 re: fclean all

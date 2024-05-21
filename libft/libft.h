@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/11 16:30:21 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/20 12:45:53 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ char		**ft_split(char const *s, char c);
 
 void		*ft_malloc(size_t nmemb, size_t size);
 void		*ft_calloc(size_t nmemb, size_t size);
+void		*ft_new(void *data, t_types type);
 
 //-----------------------Vectors----------------------
 
@@ -206,12 +207,6 @@ void		ft_vector_clear(void *vector_adrr);
 
 size_t			ft_hash(void *data, size_t size);
 
-t_hash_table	*ft_table_new(size_t table_size, t_types key_type,
-				t_types value_type, size_t (hash)(void *data, size_t size));
-
-void			ft_table_insert(t_hash_table *table, void *key, void *value);
-
-void			ft_table_print(t_hash_table *table);
 
 //-----------------------Lists------------------------
 
