@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/20 12:45:53 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/23 01:04:54 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef long*			t_long_vec;
 typedef unsigned char*	t_uchar_vec;
 typedef unsigned int*	t_uint_vec;
 typedef unsigned long*	t_ulong_vec;
+typedef char**			t_str_vec;
 
 /**
  * @brief
@@ -202,6 +203,14 @@ size_t		ft_vector_remove(void *vector_adrr, void *out, const size_t index);
  */
 void		ft_vector_iter(void *vector, void (*f)());
 void		ft_vector_clear(void *vector_adrr);
+
+//-----------------------String-----------------------
+
+typedef char*			t_string;
+
+t_string	ft_string_new(char *str);
+size_t		ft_string_len(t_string *str);
+size_t		ft_string_cat(t_string *dst, char *src);
 
 //-----------------------Hash-------------------------
 

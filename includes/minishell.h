@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/21 18:52:10 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/23 01:09:26 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@
 # include "libft.h"
 
 void	env(char **envp);
-void	pwd(void);
-void	cd(char *path);
+void	pwd(t_str_vec env);
+char	*get_env(t_str_vec env, char *var);
+void	set_env(t_str_vec *env, char *var, char *value);
+void	cd(t_str_vec *env, char *path);
 
 
 

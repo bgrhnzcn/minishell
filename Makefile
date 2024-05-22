@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra -I./includes/ -I./libft/
+CFLAGS = -g -Wall -Werror -Wextra -I./includes/ -I./libft/
 
 SRCS = srcs/main.c srcs/builtins/env.c srcs/builtins/pwd.c srcs/builtins/cd.c
 

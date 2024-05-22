@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_string_cat.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 16:47:17 by buozcan           #+#    #+#             */
-/*   Updated: 2024/05/22 17:23:14 by bgrhnzcn         ###   ########.fr       */
+/*   Created: 2024/05/23 00:14:37 by bgrhnzcn          #+#    #+#             */
+/*   Updated: 2024/05/23 01:06:28 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+size_t	ft_string_cat(t_string *dst, char *src)
 {
-	size_t	i;
-
-	if (dst == NULL && src == NULL)
-		return (NULL);
-	i = 0;
-	while (i < n)
+	if (dst == NULL || src == NULL)
+		return (0);
+	while (*src)
 	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-		i++;
+		ft_vector_append(dst, src);
+		src++;
 	}
-	return (dst);
+	return (ft_vector_len(dst));
 }

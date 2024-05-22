@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_string_new.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 16:47:17 by buozcan           #+#    #+#             */
-/*   Updated: 2024/05/22 17:23:14 by bgrhnzcn         ###   ########.fr       */
+/*   Created: 2024/05/22 23:38:05 by bgrhnzcn          #+#    #+#             */
+/*   Updated: 2024/05/23 01:06:18 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+t_string	ft_string_new(char *str)
 {
-	size_t	i;
+	t_string	new;
 
-	if (dst == NULL && src == NULL)
+	if (str == NULL)
 		return (NULL);
-	i = 0;
-	while (i < n)
+	new = ft_vector_new(sizeof (char));
+	if (new == NULL)
+		return (NULL);
+	while (*str)
 	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-		i++;
+		ft_vector_append(&new, str);
+		str++;
 	}
-	return (dst);
+	return (new);
 }
