@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_swap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/24 17:39:55 by buozcan          ###   ########.fr       */
+/*   Created: 2024/05/24 17:56:59 by buozcan           #+#    #+#             */
+/*   Updated: 2024/05/24 17:57:25 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	env(t_str_vec envp)
+void	ft_swap()
 {
-	size_t	i;
 
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
-	exit(EXIT_SUCCESS);
 }

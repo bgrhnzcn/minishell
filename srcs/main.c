@@ -3,31 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/23 15:20:12 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:48:06 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*create_prompt(void)
+char	*create_prompt(t_str_vec env)
 {
 	char	*prompt;
-	char	*user;
 	char	*cwd;
 
 	cwd = NULL;
 	prompt = ft_calloc(300, sizeof(char));
-	user = getenv("USER");
-	cwd = getcwd(cwd, 200);
-	prompt[0] = '[';
-	ft_strlcat(prompt, user, 300);
-	ft_strlcat(prompt, "@archlinux ", 300);
+	cwd = get_env(env, "PWD");
+	ft_strlcat(prompt, "minishell - ", 300);
 	ft_strlcat(prompt, cwd, 300);
-	ft_strlcat(prompt, "]$ ", 300);
 	return (prompt);
+}
+
+char	*get_input(t_str_vec env)
+{
+	t_string	input;
+	t_string	prompt;
+
+	prompt = create_prompt(env);
+	input = readline(prompt);
+	free(prompt);
+	return (input);
 }
 
 t_str_vec	init_env(char **envp)
@@ -48,14 +54,16 @@ t_str_vec	init_env(char **envp)
 
 char	*get_env(t_str_vec env, char *var)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (ft_strncmp(env[i], var, ft_strlen(var)))
+	while (i < ft_vector_len(&env) - 1)
+	{
+		if (!ft_strncmp(env[i], var, ft_strlen(var)))
+			return (env[i]);
 		i++;
-	if (env[i] == NULL)
-		return (NULL);
-	return (env[i]);
+	}
+	return (NULL);
 }
 
 void	set_env(t_str_vec *env, char *var, char *value)
@@ -73,9 +81,7 @@ void	set_env(t_str_vec *env, char *var, char *value)
 		ft_vector_append(env, &var_title);
 		return ;
 	}
-	i = 0;
-	while (ft_strncmp((*env)[i], var, ft_strlen(var)))
-		i++;
+	
 	ft_vector_remove(env, &temp, i);
 	ft_string_free(temp);
 	var_title = ft_string_new(var);
@@ -96,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	while (!ft_strnstr(input, "exit", 5))
 	{
 		free(input);
-		input = readline(create_prompt());
+		input = get_input(envi);
 		if (ft_strnstr(input, "clear", 6))
 		{
 			pid = fork();

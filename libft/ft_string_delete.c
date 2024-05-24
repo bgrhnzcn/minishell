@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_string_delete.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/24 17:39:55 by buozcan          ###   ########.fr       */
+/*   Created: 2024/05/24 18:01:36 by buozcan           #+#    #+#             */
+/*   Updated: 2024/05/24 18:07:57 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	env(t_str_vec envp)
+size_t	ft_string_delete(t_string *str, size_t from, size_t to)
 {
 	size_t	i;
 
-	i = 0;
-	while (envp[i] != NULL)
+	if (from > to || *str == NULL)
+		return (-1);
+	i = to;
+	while (i > from)
 	{
-		printf("%s\n", envp[i]);
-		i++;
+		ft_vector_remove(str, NULL, to);
+		to--;
 	}
-	exit(EXIT_SUCCESS);
+	return (0);
 }
