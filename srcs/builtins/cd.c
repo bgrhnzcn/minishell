@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:13:02 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/23 01:10:00 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:42:21 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ void	cd(t_str_vec *env, char *path)
 	{
 		home = get_env(*env, "HOME");
 		if (home == NULL)
+		{
 			printf("minishell: cd: HOME not set\n");
+			return ;
+		}
 		if (chdir(home + 5))
 		{
 			printf("minishell: cd: %s: %s\n", home, strerror(errno));
-			set_env(env, "PWD", home);
+			return ;
 		}
+		set_env(env, "PWD", home);
 	}
 	//absolute path
 	else if (path[0] == '/')

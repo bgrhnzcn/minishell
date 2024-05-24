@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 01:22:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/01 01:48:03 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:46:26 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_vector	*ft_vector_grow(void *vector_adrr, t_vector *head, size_t size)
 {
 	t_vector	*new_vector;
 
-	new_vector = malloc(sizeof (t_vector) - 8 + head->buffer_size + size);
+	new_vector = ft_calloc(1, sizeof (t_vector) - 8 + head->buffer_size + size);
 	if (new_vector == NULL)
 		return (NULL);
 	ft_memmove(&new_vector->buffer, head->buffer, head->buffer_size);

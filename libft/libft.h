@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/23 01:04:54 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:53:19 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ typedef char*			t_string;
 
 t_string	ft_string_new(char *str);
 size_t		ft_string_len(t_string *str);
+void		ft_string_free(t_string str);
 size_t		ft_string_cat(t_string *dst, char *src);
 
 //-----------------------Hash-------------------------

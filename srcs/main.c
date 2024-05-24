@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/23 01:12:08 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:20:12 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	set_env(t_str_vec *env, char *var, char *value)
 	i = 0;
 	while (ft_strncmp((*env)[i], var, ft_strlen(var)))
 		i++;
-	free((*env)[i]);
+	ft_vector_remove(env, &temp, i);
+	ft_string_free(temp);
 	var_title = ft_string_new(var);
 	ft_string_cat(&var_title, "=");
 	ft_string_cat(&var_title, value);
@@ -90,7 +91,6 @@ int	main(int argc, char **argv, char **envp)
 	pid_t		pid;
 
 	(void)argc;
-	envi = ft_vector_new(sizeof(t_string));
 	envi = init_env(envp);
 	input = malloc(0);
 	while (!ft_strnstr(input, "exit", 5))
@@ -125,7 +125,7 @@ int	main(int argc, char **argv, char **envp)
 				wait(NULL);
 		}
 		if (ft_strnstr(input, "cd", 3))
-			cd(&envi, "/bin");
+			cd(&envi, NULL);
 	}
 	free(input);
 	return (0);
