@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 15:55:15 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/28 17:54:06 by bgrhnzcn         ###   ########.fr       */
+/*   Created: 2024/05/30 00:37:11 by bgrhnzcn          #+#    #+#             */
+/*   Updated: 2024/05/30 01:32:01 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	pwd(t_str_vec env)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*cwd;
-
-	cwd = get_env(env, "PWD");
-	if (cwd == NULL)
+	if (!s1 || !s2)
+		return (-1);
+	while (*s1 == *s2)
 	{
-		cwd = getcwd(NULL, 0);
-		printf("%s\n", cwd);
+
 	}
-	else
-		printf("%s\n", cwd + 4);
 }

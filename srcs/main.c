@@ -3,136 +3,108 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/24 18:48:06 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/05/29 22:21:46 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*create_prompt(t_str_vec env)
+char	*create_prompt(t_shell *shell)
 {
-	char	*prompt;
+	t_string	prompt;
 	char	*cwd;
 
 	cwd = NULL;
-	prompt = ft_calloc(300, sizeof(char));
-	cwd = get_env(env, "PWD");
-	ft_strlcat(prompt, "minishell - ", 300);
-	ft_strlcat(prompt, cwd, 300);
+	prompt = ft_string_new("minishell@");
+	cwd = get_env(shell->env, "PWD");
+	if (cwd == NULL)
+	{
+		cwd = getcwd(NULL, 0);
+		ft_string_cat(&prompt, cwd);
+		ft_string_cat(&prompt, " > ");
+		free(cwd);
+	}
+	else
+	{
+		ft_string_cat(&prompt, cwd + 4);
+		ft_string_cat(&prompt, "> ");
+	}
 	return (prompt);
 }
 
-char	*get_input(t_str_vec env)
+void	init_shell(t_shell *shell, char **envp)
+{
+	init_env(&shell->env, envp, ENV_LIMIT);
+	shell->input = malloc(0);
+}
+
+char	*get_input(t_shell *shell)
 {
 	t_string	input;
 	t_string	prompt;
 
-	prompt = create_prompt(env);
+	prompt = create_prompt(shell);
 	input = readline(prompt);
-	free(prompt);
+	ft_string_free(prompt);
 	return (input);
 }
 
-t_str_vec	init_env(char **envp)
+int	buildins(t_shell *shell, char **argv)
 {
-	t_str_vec	env;
-	t_string	temp;
-
-	env = ft_vector_new(sizeof(t_string));
-	while (*envp != NULL)
-	{
-		temp = ft_string_new(*envp);
-		ft_vector_append(&env, &temp);
-		envp++;
-	}
-	ft_vector_append(&env, &(char **){NULL});
-	return env;
+	if (ft_strnstr(argv[0], "env", 4))
+		env(shell->env);
+	else if (ft_strnstr(argv[0], "pwd", 4))
+		pwd(shell->env);
+	else if (ft_strnstr(argv[0], "cd", 3))
+		cd(&shell->env, argv[1]);
+	else if (ft_strnstr(argv[0], "export", 7))
+		export(&shell->env, "Deneme", "999999999999999999999");
+	else if (ft_strnstr(argv[0], "unset", 6))
+		unset(&shell->env, "Deneme");
+	else
+		return (1);
+	return (0);
 }
 
-char	*get_env(t_str_vec env, char *var)
+void	executer(t_shell *shell, char **argv)
 {
-	size_t	i;
+	char	**paths;
 
-	i = 0;
-	while (i < ft_vector_len(&env) - 1)
-	{
-		if (!ft_strncmp(env[i], var, ft_strlen(var)))
-			return (env[i]);
-		i++;
-	}
-	return (NULL);
-}
-
-void	set_env(t_str_vec *env, char *var, char *value)
-{
-	char	*var_title;
-	char	*temp;
-	int		i;
-
-	temp = get_env(*env, var);
-	if (temp == NULL)
-	{
-		var_title = ft_string_new(var);
-		ft_string_cat(&var_title, "=");
-		ft_string_cat(&var_title, value);
-		ft_vector_append(env, &var_title);
+	if (argv[0])
+	paths = get_env(shell->env, "PATH");
+	if (paths == NULL)
+	if (!buildins(shell, argv))
 		return ;
+	else
+	{
+
+		shell->pid = fork();
+		if (shell->pid == 0)
+		{
+			execve(, argv, shell->env);
+			exit(EXIT_SUCCESS);
+		}
+		else
+			wait(NULL);
 	}
-	
-	ft_vector_remove(env, &temp, i);
-	ft_string_free(temp);
-	var_title = ft_string_new(var);
-	ft_string_cat(&var_title, "=");
-	ft_string_cat(&var_title, value);
-	ft_vector_insert(env, &var_title, i);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_str_vec	envi;
-	char		*input;
-	pid_t		pid;
+	t_shell		shell;
 
-	(void)argc;
-	envi = init_env(envp);
-	input = malloc(0);
-	while (!ft_strnstr(input, "exit", 5))
+	if (argc != 1)
+		return (EXIT_FAILURE);
+	init_shell(&shell, envp);
+	while (!ft_strnstr(shell.input, "exit", 5))
 	{
-		free(input);
-		input = get_input(envi);
-		if (ft_strnstr(input, "clear", 6))
-		{
-			pid = fork();
-			if (pid == 0)
-			{
-				execve("/bin/clear", argv, envi);
-				exit(EXIT_SUCCESS);
-			}
-			else
-				wait(NULL);
-		}
-		if (ft_strnstr(input, "env", 4))
-		{
-			pid = fork();
-			if (pid == 0)
-				env(envi);
-			else
-				wait(NULL);
-		}
-		if (ft_strnstr(input, "pwd", 4))
-		{
-			pid = fork();
-			if (pid == 0)
-				pwd(envi);
-			else
-				wait(NULL);
-		}
-		if (ft_strnstr(input, "cd", 3))
-			cd(&envi, NULL);
+		free(shell.input);
+		shell.input = get_input(&shell);
+		executer(&shell, ft_split(shell.input, ' '));
 	}
-	free(input);
-	return (0);
+	free(shell.input);
+	return (EXIT_SUCCESS);
 }

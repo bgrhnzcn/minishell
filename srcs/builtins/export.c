@@ -6,13 +6,13 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:08:54 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/20 17:16:19 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:05:28 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	export(char *var, char **envp)
+void	export(t_str_vec *env, char *var, char *value)
 {
-	while ()
+	set_env(env, var, value);
 }
