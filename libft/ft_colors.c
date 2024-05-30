@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_colors.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 02:59:42 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/01/18 18:29:03 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:21:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_color	ft_set_color(__uint8_t a, __uint8_t r, __uint8_t g, __uint8_t b)
 	return (color);
 }
 
-t_color	ft_get_gradient_val(t_color from, t_color to, double value)
+t_color	ft_get_gradient_val(t_color from, t_color to, float value)
 {
 	t_color	color;
 

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:55:15 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/28 17:54:06 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:10:25 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(t_str_vec env)
+void	mini_pwd(char **env)
 {
 	char	*cwd;
 

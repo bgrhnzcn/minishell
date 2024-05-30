@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/30 00:23:03 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:34:19 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	find_env_index(t_str_vec env, t_string var)
+int	find_env_index(char **env, char *var)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < ft_vector_len(&env) - 1)
+	while (i < ft_strarrlen(env))
 	{
 		if (!ft_strncmp(env[i], var, ft_strlen(var)))
 			return (i);
@@ -26,7 +26,7 @@ int	find_env_index(t_str_vec env, t_string var)
 	return (-1);
 }
 
-char	*get_env(t_str_vec env, char *var)
+char	*get_env(char **env, char *var)
 {
 	int	i;
 
@@ -80,45 +80,40 @@ PWD,
 //	return env;
 //}
 
-int	set_env(t_env_map envs, char *var)
+int	set_env(char **env, char *var)
 {
-	size_t	index;
-
-	index = (envs.hash(var, ft_strlen(var)) % envs.buffer_size);
-	if (envs.buffer[index].is_free == true)
-		envs.buffer[index] = (t_env)
-			{.is_free = false, .var = var, .next = NULL};
-	else if (ft_strnstr(envs.buffer[index].var, var,))
-
+	(void)env;
+	(void)var;
+	return (1);
 }
 
-void	init_env(t_env_map *envs, char **envp)
+int	init_env(t_shell *shell, char **envp)
 {
-	char		*var;
+	int	i;
 
-	envs->buffer_size = ENV_LIMIT - 1;
-	envs->hash = ft_hash;
-	envs->buffer = ft_calloc(ENV_LIMIT, sizeof (t_env));
-	if (envs->buffer == NULL)
-		return (NULL);
-	envs->buffer[envs->buffer_size] = (t_env)
-		{.is_free = false, .var = NULL, .next = NULL};
-	while (*envp)
+	i = 0;
+	shell->env = malloc(sizeof (char *) * ENV_LIMIT);
+	if (shell->env  == NULL)
+		return (1);
+	while (envp[i] != NULL || i < ENV_LIMIT)
 	{
-		set_env(*envs, ft_substr(*envp, 0, ft_strlen(*envp)));
-		envp++;
+		shell->env[i] = ft_substr(envp[i], 0, ft_strlen(envp[i]));
+		if (shell->env[i] == NULL)
+			return (ft_free_str_arr(shell->env), 1);
+		i++;
 	}
+	shell->env[i] = NULL;
+	return (0);
 }
 
-void	mini_env(char **envp)
+void	mini_env(char **env)
 {
 	size_t	i;
 
 	i = 0;
-	while (envp[i] != NULL)
+	while (env[i] != NULL)
 	{
-		printf("%s\n", envp[i]);
+		printf("%s\n", env[i]);
 		i++;
 	}
-	exit(EXIT_SUCCESS);
 }

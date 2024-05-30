@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 16:50:51 by buozcan           #+#    #+#             */
-/*   Updated: 2024/01/18 18:32:36 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:21:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-double	ft_deg_to_rad(double deg)
+float	ft_deg_to_rad(float deg)
 {
 	return ((deg / 180) * PI);
 }
 
-double	ft_rad_to_deg(double rad)
+float	ft_rad_to_deg(float rad)
 {
 	return (rad * (180 / PI));
 }

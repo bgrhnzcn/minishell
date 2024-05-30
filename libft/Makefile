@@ -13,8 +13,8 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c\
 	ft_string_new.c ft_string_cat.c ft_string_free.c ft_hash.c
 
 ifdef $(USE_MATH)
-	SRCS += ft_vec_conv.c ft_vec2_double.c ft_vec2_op.c ft_vec2_vec2.c ft_vec3_double.c\
-		ft_vec3_vec3.c ft_vec3_op.c ft_vec4_double.c ft_vec4_op.c ft_vec4_vec4.c\
+	SRCS += ft_vec_conv.c ft_vec2_float.c ft_vec2_op.c ft_vec2_vec2.c ft_vec3_float.c\
+		ft_vec3_vec3.c ft_vec3_op.c ft_vec4_float.c ft_vec4_op.c ft_vec4_vec4.c\
 		ft_mtx3_basic.c ft_utils.c ft_mtx4_basic.c ft_bresenham_line.c ft_drawing.c ft_maps.c\
 		ft_colors.c
 endif

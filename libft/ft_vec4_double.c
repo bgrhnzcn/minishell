@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vec4_double.c                                   :+:      :+:    :+:   */
+/*   ft_vec4_float.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,9 @@
 
 #include "libft.h"
 
-double	ft_vec4_dot(t_vec4 vec1, t_vec4 vec2)
+float	ft_vec4_dot(t_vec4 vec1, t_vec4 vec2)
 {
-	double	res;
+	float	res;
 
 	res = 0;
 	res += vec1.x * vec2.x;
@@ -24,7 +24,7 @@ double	ft_vec4_dot(t_vec4 vec1, t_vec4 vec2)
 	return (res);
 }
 
-double	ft_vec4_mag(t_vec4 vec)
+float	ft_vec4_mag(t_vec4 vec)
 {
 	return (sqrt(ft_vec4_dot(vec, vec)));
 }

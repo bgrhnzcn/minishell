@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vec2_double.c                                   :+:      :+:    :+:   */
+/*   ft_vec2_float.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,9 @@
 
 #include "libft.h"
 
-double	ft_vec2_dot(t_vec2 vec1, t_vec2 vec2)
+float	ft_vec2_dot(t_vec2 vec1, t_vec2 vec2)
 {
-	double	res;
+	float	res;
 
 	res = 0;
 	res += vec1.x * vec2.x;
@@ -22,17 +22,17 @@ double	ft_vec2_dot(t_vec2 vec1, t_vec2 vec2)
 	return (res);
 }
 
-double	ft_get_dist2(t_vec2 point1, t_vec2 point2)
+float	ft_get_dist2(t_vec2 point1, t_vec2 point2)
 {
-	double	dist_x;
-	double	dist_y;
+	float	dist_x;
+	float	dist_y;
 
 	dist_x = fabs(point1.x - point2.x);
 	dist_y = fabs(point1.y - point2.y);
 	return (sqrt(pow(dist_x, 2) * pow(dist_y, 2)));
 }
 
-double	ft_vec2_mag(t_vec2 vec)
+float	ft_vec2_mag(t_vec2 vec)
 {
 	t_vec2	vec_null;
 

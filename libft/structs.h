@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 19:34:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/11 16:31:08 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:21:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,31 +94,31 @@ typedef struct s_hash_table
 
 typedef struct s_map
 {
-	double	min_i;
-	double	max_i;
-	double	min_o;
-	double	max_o;
+	float	min_i;
+	float	max_i;
+	float	min_o;
+	float	max_o;
 }	t_map;
 
 typedef union u_vec2
 {
 	struct
 	{
-		double	x;
-		double	y;
+		float	x;
+		float	y;
 	};
-	double	data[2];
+	float	data[2];
 }	t_vec2;
 
 typedef union u_vec3
 {
 	struct
 	{
-		double	x;
-		double	y;
-		double	z;
+		float	x;
+		float	y;
+		float	z;
 	};
-	double	data[3];
+	float	data[3];
 }	t_vec3;
 
 typedef struct s_gradient
@@ -142,12 +142,12 @@ typedef union u_vec4
 {
 	struct
 	{
-		double	x;
-		double	y;
-		double	z;
-		double	w;
+		float	x;
+		float	y;
+		float	z;
+		float	w;
 	};
-	double	data[4];
+	float	data[4];
 }	t_vec4;
 
 typedef union u_mtx3
@@ -158,7 +158,7 @@ typedef union u_mtx3
 		t_vec3	col2;
 		t_vec3	col3;
 	};
-	double	data[9];
+	float	data[9];
 }	t_mtx3;
 
 typedef union u_mtx4
@@ -170,7 +170,7 @@ typedef union u_mtx4
 		t_vec4	col3;
 		t_vec4	col4;
 	};
-	double	data[16];
+	float	data[16];
 }	t_mtx4;
 
 typedef struct s_mesh
@@ -192,10 +192,10 @@ typedef struct s_img
 typedef struct s_draw_line
 {
 	t_vec2	delta;
-	double	inc;
-	double	side_check;
-	double	x;
-	double	y;
+	float	inc;
+	float	side_check;
+	float	x;
+	float	y;
 }	t_draw_line;
 
 typedef struct s_get_verteces

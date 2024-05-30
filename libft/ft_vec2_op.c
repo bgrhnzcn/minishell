@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_vec2_op.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:38:33 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/01/18 18:27:23 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:21:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_vec2	ft_vec2_set(double x, double y)
+t_vec2	ft_vec2_set(float x, float y)
 {
 	t_vec2	vec_res;
 
@@ -39,7 +39,7 @@ t_vec2	ft_vec2_sub(t_vec2	vec1, t_vec2 vec2)
 	return (vec_res);
 }
 
-t_vec2	ft_vec2_mul(t_vec2 vec, double mul)
+t_vec2	ft_vec2_mul(t_vec2 vec, float mul)
 {
 	t_vec2	vec_res;
 
@@ -48,7 +48,7 @@ t_vec2	ft_vec2_mul(t_vec2 vec, double mul)
 	return (vec_res);
 }
 
-t_vec2	ft_vec2_div(t_vec2 vec, double div)
+t_vec2	ft_vec2_div(t_vec2 vec, float div)
 {
 	t_vec2	vec_res;
 

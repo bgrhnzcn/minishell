@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:08:54 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/28 18:05:28 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:14:30 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	export(t_str_vec *env, char *var, char *value)
+void	mini_export(t_shell *shell, char *var)
 {
-	set_env(env, var, value);
+	set_env(shell->env, var);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:20:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/23 14:53:19 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:21:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,64 +282,64 @@ void		ft_stackclear(t_stack *stack, void (*del)(void *));
 /*Gets numbers of strings inside of string arrays.
 String arrays must be null-ended.*/
 size_t		ft_strarrlen(char **arr);
-//Free all the arrays inside double array.
+//Free all the arrays inside float array.
 void		ft_free_str_arr(char **str_arr);
 /*Hexadecimal version of atoi().
 It works both of uppercase and lowercase versions.*/
 int			ft_atoi_hex(const char *str);
 //Degree to Radian conversions.
-double		ft_deg_to_rad(double deg);
+float		ft_deg_to_rad(float deg);
 //Radian to Degree conversions.
-double		ft_rad_to_deg(double rad);
+float		ft_rad_to_deg(float rad);
 
 //----------------------------- Mapping ----------------------------------
 
 //Initializes map from given values to use inside map function.
-t_map		ft_map_init(double min_i, double max_i, double min_o, double max_o);
+t_map		ft_map_init(float min_i, float max_i, float min_o, float max_o);
 /*Gives normalized value (0 to 1 range value)
 of given value inside specified range.*/
-double		ft_normalize(double val, double min, double max);
+float		ft_normalize(float val, float min, float max);
 /*Gets normalized value (0 to 1 range value)
 and gives the value corresponding on specified range.*/
-double		ft_lerp(double val, double min, double max);
+float		ft_lerp(float val, float min, float max);
 //This function uses t_map to convert value from one range to another.
-double		ft_map(double val, t_map map);
+float		ft_map(float val, t_map map);
 
-t_vec2		ft_vec2_set(double x, double y);
+t_vec2		ft_vec2_set(float x, float y);
 t_vec2		ft_vec2_sub(t_vec2	vec1, t_vec2 vec2);
 t_vec2		ft_vec2_add(t_vec2 vec1, t_vec2 vec2);
-t_vec2		ft_vec2_mul(t_vec2 vec, double mul);
-t_vec2		ft_vec2_div(t_vec2 vec, double div);
+t_vec2		ft_vec2_mul(t_vec2 vec, float mul);
+t_vec2		ft_vec2_div(t_vec2 vec, float div);
 
-t_vec3		ft_vec3_set(double x, double y, double z);
+t_vec3		ft_vec3_set(float x, float y, float z);
 t_vec3		ft_vec3_sub(t_vec3	vec1, t_vec3 vec2);
 t_vec3		ft_vec3_add(t_vec3 vec1, t_vec3 vec2);
-t_vec3		ft_vec3_mul(t_vec3 vec, double mul);
-t_vec3		ft_vec3_div(t_vec3 vec, double div);
+t_vec3		ft_vec3_mul(t_vec3 vec, float mul);
+t_vec3		ft_vec3_div(t_vec3 vec, float div);
 
-t_vec4		ft_vec4_set(double x, double y, double z, double w);
+t_vec4		ft_vec4_set(float x, float y, float z, float w);
 t_vec4		ft_vec4_add(t_vec4 vec1, t_vec4 vec2);
 t_vec4		ft_vec4_sub(t_vec4 vec1, t_vec4 vec2);
-t_vec4		ft_vec4_mul(t_vec4 vec, double mul);
-t_vec4		ft_vec4_div(t_vec4 vec, double div);
+t_vec4		ft_vec4_mul(t_vec4 vec, float mul);
+t_vec4		ft_vec4_div(t_vec4 vec, float div);
 
 t_vec2		ft_vec2_norm(t_vec2 vec);
 
-double		ft_vec2_dot(t_vec2 vec1, t_vec2 vec2);
-double		ft_get_dist2(t_vec2 point1, t_vec2 point);
-double		ft_vec2_mag(t_vec2 vec);
+float		ft_vec2_dot(t_vec2 vec1, t_vec2 vec2);
+float		ft_get_dist2(t_vec2 point1, t_vec2 point);
+float		ft_vec2_mag(t_vec2 vec);
 
 t_vec3		ft_vec3_norm(t_vec3 vec);
 t_vec3		ft_vec3_cross(t_vec3 vec1, t_vec3 vec2);
 
-double		ft_vec3_dot(t_vec3 vec1, t_vec3 vec2);
-double		ft_get_dist3(t_vec3 point1, t_vec3 point);
-double		ft_vec3_mag(t_vec3 vec);
+float		ft_vec3_dot(t_vec3 vec1, t_vec3 vec2);
+float		ft_get_dist3(t_vec3 point1, t_vec3 point);
+float		ft_vec3_mag(t_vec3 vec);
 
 t_vec4		ft_vec4_norm(t_vec4 vec);
 
-double		ft_vec4_dot(t_vec4 vec1, t_vec4 vec2);
-double		ft_vec4_mag(t_vec4 vec);
+float		ft_vec4_dot(t_vec4 vec1, t_vec4 vec2);
+float		ft_vec4_mag(t_vec4 vec);
 
 //------------------------------ Basic Matrix Functions ---------------------
 
@@ -362,7 +362,7 @@ t_vec4		ft_mtx_vec_mul4(t_mtx4 mtx, t_vec4 vec);
 t_mtx4		ft_mtx_mtx_mul4(t_mtx4 mtx1, t_mtx4 mtx2);
 
 //3D vector to 4D vector conversion.
-t_vec4		ft_vec3_to_vec4(t_vec3 vec3, double w);
+t_vec4		ft_vec3_to_vec4(t_vec3 vec3, float w);
 //4D vector to 3D vector conversion.
 t_vec3		ft_vec4_to_vec3(t_vec4 vec4);
 
@@ -372,7 +372,7 @@ t_vec3		ft_vec4_to_vec3(t_vec4 vec4);
 a = Alpha, r = Red, g = Green, b = Blue*/
 t_color		ft_set_color(__uint8_t a, __uint8_t r, __uint8_t g, __uint8_t b);
 //Returns gradient value from given normalized value.
-t_color		ft_get_gradient_val(t_color from, t_color to, double value);
+t_color		ft_get_gradient_val(t_color from, t_color to, float value);
 //Gradient initializer.
 t_gradient	ft_set_gradient(t_color from, t_color to);
 //Gradient inverter.
