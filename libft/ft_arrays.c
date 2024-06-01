@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 17:01:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/01/18 18:27:50 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/31 12:51:32 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	ft_strarrlen(char **arr)
 	if (arr == NULL)
 		return (0);
 	i = 0;
-	while (arr[i] && *arr[i] != '\n')
+	while (arr[i])
 		i++;
 	return (i);
 }

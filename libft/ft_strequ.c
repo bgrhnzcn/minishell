@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_strequ.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 00:37:11 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/30 01:32:01 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/05/30 21:48:21 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+t_bool	ft_strequ(const char *s1, const char *s2)
 {
 	if (!s1 || !s2)
-		return (-1);
-	while (*s1 == *s2)
+		return (error);
+	if (ft_strlen(s1) != ft_strlen(s2))
+		return (false);
+	while (*s1)
 	{
-
+		if (*s1 - *s2)
+			return (false);
+		s2++;
+		s1++;
 	}
+	return (true);
 }

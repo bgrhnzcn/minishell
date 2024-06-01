@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/30 17:55:05 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/06/01 21:02:06 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@ char	*create_prompt(t_shell *shell)
 	char	*cwd;
 
 	cwd = NULL;
-	prompt = malloc(sizeof(char) * 200);
+	prompt = ft_calloc(200, sizeof(char));
 	ft_strlcat(prompt, "minishell@", 200);
 	cwd = get_env(shell->env, "PWD");
 	if (cwd == NULL)
 	{
 		cwd = getcwd(NULL, 0);
-		ft_strlcat(prompt, cwd, 200);
+		ft_strlcat(prompt, ft_strrchr(cwd, '/'), 200);
 		ft_strlcat(prompt, " > ", 200);
 		free(cwd);
 	}
 	else
 	{
-		ft_strlcat(prompt, cwd + 4, 200);
+		ft_strlcat(prompt, ft_strrchr(cwd, '/'), 200);
 		ft_strlcat(prompt, "> ", 200);
 	}
 	return (prompt);
@@ -38,7 +38,11 @@ char	*create_prompt(t_shell *shell)
 
 void	init_shell(t_shell *shell, char **envp)
 {
-	init_env(shell, envp);
+	if (init_env(shell, envp))
+	{
+		printf("Error: initialization of env is failed.\n");
+		exit(EXIT_FAILURE);
+	}
 	shell->input = malloc(0);
 }
 
@@ -55,16 +59,18 @@ char	*get_input(t_shell *shell)
 
 int	buildins(t_shell *shell, char **argv)
 {
-	if (ft_strnstr(argv[0], "env", 4))
+	if (ft_strequ(argv[0], "exit"))
+		mini_exit(shell, EXIT_SUCCESS);
+	if (ft_strequ(argv[0], "env"))
 		mini_env(shell->env);
-	else if (ft_strnstr(argv[0], "pwd", 4))
+	else if (ft_strequ(argv[0], "pwd"))
 		mini_pwd(shell->env);
-	else if (ft_strnstr(argv[0], "cd", 3))
+	else if (ft_strequ(argv[0], "cd"))
 		mini_cd(shell->env, argv[1]);
-	else if (ft_strnstr(argv[0], "export", 7))
-		mini_export(shell, "Deneme");
-	else if (ft_strnstr(argv[0], "unset", 6))
-		mini_unset(shell, "Deneme");
+	else if (ft_strequ(argv[0], "export"))
+		mini_export(shell, argv);
+	else if (ft_strequ(argv[0], "unset"))
+		mini_unset(shell, argv[1]);
 	else
 		return (1);
 	return (0);
@@ -72,15 +78,22 @@ int	buildins(t_shell *shell, char **argv)
 
 void	executer(t_shell *shell, char **argv)
 {
+	//char	**paths;
+	char	*test;
 
 	if (!buildins(shell, argv))
 		return ;
 	else
 	{
+		//paths = ft_split(get_env(shell->env, "PATH"), ':');
+		test = ft_calloc(300, sizeof (char));
+		ft_strlcat(test, "/usr/bin/", 300);
+		ft_strlcat(test, argv[0], 300);
 		shell->pid = fork();
 		if (shell->pid == 0)
 		{
-			execve("/bin/ls", argv, shell->env);
+			if (execve(test, argv, shell->env))
+				printf("%s:%s\n", test, strerror(errno));
 			ft_free_str_arr(argv);
 			exit(EXIT_SUCCESS);
 		}
@@ -97,7 +110,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		return (EXIT_FAILURE);
 	init_shell(&shell, envp);
-	while (!ft_strnstr(shell.input, "exit", 5))
+	while (true)
 	{
 		free(shell.input);
 		shell.input = get_input(&shell);

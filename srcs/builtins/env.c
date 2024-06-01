@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/30 17:34:19 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/06/01 21:34:01 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,20 @@
 int	find_env_index(char **env, char *var)
 {
 	size_t	i;
+	char	*temp;
 
 	i = 0;
-	while (i < ft_strarrlen(env))
+	while (i < ft_strarrlen(env) - 1)
 	{
-		if (!ft_strncmp(env[i], var, ft_strlen(var)))
-			return (i);
+		temp = ft_substr(env[i], 0, (int)(ft_strchr(env[i], '=') - env[i]));
+		if (temp == NULL)
+			return (error);
+		if (ft_strequ(temp, var))
+			return (free(temp), i);
+		free(temp);
 		i++;
 	}
-	return (-1);
+	return (error);
 }
 
 char	*get_env(char **env, char *var)
@@ -31,60 +36,34 @@ char	*get_env(char **env, char *var)
 	int	i;
 
 	i = find_env_index(env, var);
-	if (i == -1)
+	if (i == error)
 		return (NULL);
 	return (env[i]);
 }
 
-//void	set_env(t_str_vec *env, char *var, char *value)
-//{
-//	char	*var_title;
-//	char	*temp;
-//	int		i;
-//
-//	temp = get_env(*env, var);
-//	if (temp == NULL)
-//	{
-//		var_title = ft_string_new(var);
-//		ft_string_cat(&var_title, "=");
-//		ft_string_cat(&var_title, value);
-//		ft_vector_insert(env, &var_title, ft_vector_len(env) - 1);
-//		return ;
-//	}
-//	i = find_env_index(*env, var);
-//	if (i == -1)
-//		return ;
-//	ft_vector_remove(env, &temp, i);
-//	ft_string_free(temp);
-//	var_title = ft_string_new(var);
-//	ft_string_cat(&var_title, "=");
-//	ft_string_cat(&var_title, value);
-//	ft_vector_insert(env, &var_title, i);
-//}
-/*important environments:
-PWD, 
-*/
-//t_str_vec	init_env(char **envp)
-//{
-//	t_str_vec	env;
-//	t_string	temp;
-//
-//	env = ft_vector_new(sizeof(t_string));
-//	while (*envp != NULL)
-//	{
-//		temp = ft_string_new(*envp);
-//		ft_vector_append(&env, &temp);
-//		envp++;
-//	}
-//	ft_vector_append(&env, &(char **){NULL});
-//	return env;
-//}
-
-int	set_env(char **env, char *var)
+void	set_env(char **env, char *var, char *value)
 {
-	(void)env;
-	(void)var;
-	return (1);
+	char	*temp;
+	int		i;
+	size_t	env_size;
+
+	i = ft_strarrlen(env);
+	if (i == ENV_LIMIT - 1)
+		return ;
+	env_size = ft_strlen(var) + ft_strlen(value) + 2;
+	temp = get_env(env, var);
+	if (temp != NULL)
+	{
+		i = find_env_index(env, var);
+		printf("%d.%s\n", i, temp);
+		free(temp);
+	}
+	env[i] = ft_calloc(env_size, sizeof(char));
+	ft_strlcat(env[i], var, env_size);
+	ft_strlcat(env[i], "=", env_size);
+	ft_strlcat(env[i], value, env_size);
+	if (temp == NULL)
+		env[i + 1] = NULL;
 }
 
 int	init_env(t_shell *shell, char **envp)
@@ -92,10 +71,10 @@ int	init_env(t_shell *shell, char **envp)
 	int	i;
 
 	i = 0;
-	shell->env = malloc(sizeof (char *) * ENV_LIMIT);
+	shell->env = ft_calloc(ENV_LIMIT, sizeof (char *));
 	if (shell->env  == NULL)
 		return (1);
-	while (envp[i] != NULL || i < ENV_LIMIT)
+	while (envp[i] != NULL && i < ENV_LIMIT)
 	{
 		shell->env[i] = ft_substr(envp[i], 0, ft_strlen(envp[i]));
 		if (shell->env[i] == NULL)

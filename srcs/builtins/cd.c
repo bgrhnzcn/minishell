@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:13:02 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/30 16:21:54 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/06/01 20:29:41 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void	cd_home(char **env)
 {
 	char	*home;
-	char	*temp;
 
 	home = get_env(env, "HOME");
 	if (home == NULL)
@@ -28,12 +27,8 @@ static void	cd_home(char **env)
 		printf("minishell: cd: %s: %s\n", home, strerror(errno));
 		return ;
 	}
-	temp = get_env(env, "PWD");
-	if (temp == NULL)
-	{
-		temp = getcwd(NULL, 0);
-		free(temp);
-	}
+	set_env(env, "OLDPWD", (get_env(env, "PWD") + 4));
+	set_env(env, "PWD", home + 5);
 }
 
 static void	cd_abs_path(char ** env, char *path)
@@ -45,12 +40,10 @@ static void	cd_abs_path(char ** env, char *path)
 		printf("minishell: cd: %s: %s\n", path, strerror(errno));
 		return ;
 	}
-	temp = get_env(env, "PWD");
-	if (temp == NULL)
-	{
-		temp = getcwd(NULL, 0);
-		free(temp);
-	}
+	set_env(env, "OLDPWD", (get_env(env, "PWD") + 4));
+	temp = getcwd(NULL, 0);
+	set_env(env, "PWD", temp);
+	free(temp);
 }
 
 static void	cd_rel_path(char ** env, char *path)
@@ -62,12 +55,10 @@ static void	cd_rel_path(char ** env, char *path)
 		printf("minishell: cd: %s: %s\n", path, strerror(errno));
 		return ;
 	}
-	temp = get_env(env, "PWD");
-	if (temp == NULL)
-	{
-		temp = getcwd(NULL, 0);
-		free(temp);
-	}
+	set_env(env, "OLDPWD", (get_env(env, "PWD") + 4));
+	temp = getcwd(NULL, 0);
+	set_env(env, "PWD", temp);
+	free(temp);
 }
 
 void	mini_cd(char **env, char *path)
