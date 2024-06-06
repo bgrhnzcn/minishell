@@ -18,7 +18,7 @@ $(NAME): $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
 $(LIBFT):
-	cd libft && make
+	cd libft && make && make clean
 
 clean:
 	cd srcs && rm -rf *.o

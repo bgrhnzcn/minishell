@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/06/01 21:02:06 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:13:25 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@ char	*create_prompt(t_shell *shell)
 	if (cwd == NULL)
 	{
 		cwd = getcwd(NULL, 0);
+		ft_strlcat(prompt, "..", 200);
 		ft_strlcat(prompt, ft_strrchr(cwd, '/'), 200);
 		ft_strlcat(prompt, " > ", 200);
 		free(cwd);
 	}
 	else
 	{
+		ft_strlcat(prompt, "..", 200);
 		ft_strlcat(prompt, ft_strrchr(cwd, '/'), 200);
 		ft_strlcat(prompt, "> ", 200);
 	}
@@ -93,7 +95,7 @@ void	executer(t_shell *shell, char **argv)
 		if (shell->pid == 0)
 		{
 			if (execve(test, argv, shell->env))
-				printf("%s:%s\n", test, strerror(errno));
+				printf("%s: %s\n", "minishell", strerror(errno));
 			ft_free_str_arr(argv);
 			exit(EXIT_SUCCESS);
 		}
