@@ -2,11 +2,25 @@ CC = gcc
 
 CFLAGS = -g -Wall -Werror -Wextra -I./includes/ -I./libft/
 
-SRCS = srcs/main.c srcs/builtins/env.c srcs/builtins/pwd.c srcs/builtins/exit.c \
-	   srcs/builtins/cd.c srcs/builtins/unset.c srcs/builtins/export.c \
-	   srcs/debug/debug.c
+SRC = src
+
+OBJ = obj
+
+SRCS = $(SRC)/main.c \
+	$(SRC)/builtins/env.c \
+	$(SRC)/builtins/pwd.c \
+	$(SRC)/builtins/exit.c \
+	$(SRC)/builtins/cd.c \
+	$(SRC)/builtins/unset.c \
+	$(SRC)/builtins/export.c \
+	$(SRC)/parse/token.c \
+	$(SRC)/parse/tokenizer.c \
+	$(SRC)/debug/debug.c \
 
 OBJS = $(SRCS:.c=.o)
+
+#$(OBJ)/%.o: $(SRC)/%.c
+#	@$(CC) $(CFLAGS) -o $@ -c $?
 
 NAME = minishell
 
@@ -18,16 +32,18 @@ $(NAME): $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
 $(LIBFT):
-	cd libft && make && make clean
+	@make -C libft && make -C libft clean
 
 clean:
-	cd srcs && rm -rf *.o
-	cd libft && make fclean
+	@rm -rf $(SRC)/*.o
+	@make -C libft fclean
 
 fclean: clean
-	rm -f ${OBJS}
-	rm -f ${NAME}
+	@rm -f ${NAME}
 
 re: fclean all
+
+run: $(NAME)
+	@./minishell
 
 .PHONY: all re fclean clean

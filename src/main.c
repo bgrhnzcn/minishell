@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/06/06 13:13:25 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/09 18:45:31 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	init_shell(t_shell *shell, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	shell->input = malloc(0);
+	shell->token_list.type = HEAD;
 }
 
 char	*get_input(t_shell *shell)
@@ -89,7 +90,7 @@ void	executer(t_shell *shell, char **argv)
 	{
 		//paths = ft_split(get_env(shell->env, "PATH"), ':');
 		test = ft_calloc(300, sizeof (char));
-		ft_strlcat(test, "/usr/bin/", 300);
+		ft_strlcat(test, "/bin/", 300);
 		ft_strlcat(test, argv[0], 300);
 		shell->pid = fork();
 		if (shell->pid == 0)
@@ -107,6 +108,7 @@ void	executer(t_shell *shell, char **argv)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell		shell;
+	char		*input_trimmed;
 
 	(void)argv;
 	if (argc != 1)
@@ -116,10 +118,16 @@ int	main(int argc, char **argv, char **envp)
 	{
 		free(shell.input);
 		shell.input = get_input(&shell);
-		if (shell.input[0] == '\0')
-			continue ;
-		else
-			executer(&shell, ft_split(shell.input, ' '));
+		add_history(shell.input);
+		input_trimmed = ft_strtrim(shell.input, g_whitespaces);
+		parse_input(&shell.token_list, input_trimmed);
+		free(input_trimmed);
+		print_tokens(&shell.token_list);
+		//if (shell.input[0] == '\0')
+		//	continue ;
+		//else
+		//	executer(&shell, ft_split(shell.input, ' '));
+		clear_tokens(&shell.token_list);
 	}
 	free(shell.input);
 	return (EXIT_SUCCESS);

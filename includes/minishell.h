@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/06/01 17:22:02 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/09 19:11:20 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,48 @@
 
 # define ENV_LIMIT 1000
 
+static const char	g_whitespaces[6] = " \t\n\r\v\f";
+
+typedef enum e_token_type
+{
+	HEAD,
+	PIPE,
+	OUTPUT,
+	INPUT,
+	APPEND,
+	WORD,
+	HEREDOC,
+	QUOTE,
+	DOUBLE_QUOTE
+}	t_token_type;
+
+typedef	struct s_token
+{
+	t_token_type	type;
+	int				index;
+	char			*text;
+	struct s_token	*next;
+	struct s_token	*prev;
+}	t_token;
+
 typedef struct s_shell
 {
 	char		**env;
 	char		*input;
+	t_token		token_list;
 	pid_t		pid;
 }	t_shell;
+
+//---------------------------- Tokenizer ---------------------------------
+
+t_token	*new_token(t_token_type type, int index, char *text);
+t_bool	add_token_last(t_token *tokens, t_token *token);
+void	print_tokens(t_token *token_list);
+void	clear_tokens(t_token *token_list);
+
+//------------------------------ Parser ----------------------------------
+
+t_token	*parse_input(t_token *token_list, char *input);
 
 char	*get_env(char ** env, char *var);
 void	set_env(char **env, char *var, char *value);

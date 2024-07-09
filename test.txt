@@ -1,0 +1,2 @@
+deneme metini asd"""asdasd";
+test.txt

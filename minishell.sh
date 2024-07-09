@@ -1,6 +1,6 @@
-#!/bin/fish
-if ! test -f ./minishell; then
-	make
-	make clean
-fi
-$leak ./minishell $1
+#!/bin/bash
+
+while [[ True ]]; do
+	leaks minishell
+done
+
