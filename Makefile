@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Werror -Wextra -I./includes/ -I./libft/
+CFLAGS = -g -Wall -Werror -Wextra -fsanitize=address -I./includes/ -I./libft/
 
 SRC = src
 

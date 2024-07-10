@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:31:46 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/10 19:27:21 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/10 23:19:23 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	remove_token(t_token *tokens, t_token *token)
 	t_token	*temp;
 
 	temp = tokens;
-	while (temp->next == NULL)
+	while (temp->next != NULL)
 	{
 		if (temp->next == token)
 		{
@@ -67,9 +67,10 @@ void	print_tokens(t_token *token_list)
 	temp = token_list;
 	while (temp != NULL)
 	{
-		printf("[ INFO ] Token\n{\n\t.type = %s,\n\t.index = %d,\n\t.text = %s,\n\t.next = %p,\n\t.prev = %p\n}\n",
+		printf(
+			"[ INFO ] Token\n{\n\t.type = %s,\n\t.index = %d,\n\t.text = %s,\n\t.adress = %p,\n\t.next = %p,\n\t.prev = %p\n}\n",
 			token_type_str[temp->type], temp->index, temp->text,
-			temp->next, temp->prev);
+			temp ,temp->next, temp->prev);
 		temp = temp->next;
 	}
 }

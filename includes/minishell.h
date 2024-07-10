@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/10 19:20:38 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/10 22:39:45 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	print_tokens(t_token *token_list);
 void	clear_tokens(t_token *token_list);
 void	remove_token(t_token *tokens, t_token *token);
 void 	check_quotes(t_token *token_list,char **env);
+void	get_last_token(t_token *token_list);
+
 
 //------------------------------ Parser ----------------------------------
 
