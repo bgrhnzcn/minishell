@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:31:46 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/09 19:00:28 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/10 19:27:21 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,33 @@ t_bool	add_token_last(t_token *tokens, t_token *token)
 	return (false);
 }
 
+void	remove_token(t_token *tokens, t_token *token)
+{
+	t_token	*temp;
+
+	temp = tokens;
+	while (temp->next == NULL)
+	{
+		if (temp->next == token)
+		{
+			temp->next = temp->next->next;
+			temp->next->prev = temp;
+		}
+		temp = temp->next;
+	}
+	free(token);
+}
+
 void	print_tokens(t_token *token_list)
 {
 	t_token	*temp;
-	char	token_type_str[9][20] = {"HEAD", "PIPE", "OUTPUT", "INPUT", "APPEND",
-		"WORD", "HEREDOC", "QUOTE", "DOUBLE_QUOTE"};
+	char	token_type_str[10][20] = {"HEAD", "PIPE", "OUTPUT", "INPUT", "APPEND",
+		"WORD", "HEREDOC", "QUOTE", "DOUBLE_QUOTE", "DOLLAR"};
 
 	temp = token_list;
 	while (temp != NULL)
 	{
-		printf("[ INFO ] Token: .type = %s, .index = %d, .text = %s, .next = %p, .prev = %p\n",
+		printf("[ INFO ] Token\n{\n\t.type = %s,\n\t.index = %d,\n\t.text = %s,\n\t.next = %p,\n\t.prev = %p\n}\n",
 			token_type_str[temp->type], temp->index, temp->text,
 			temp->next, temp->prev);
 		temp = temp->next;

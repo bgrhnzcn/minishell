@@ -12,13 +12,18 @@ void double_quote(t_token *tokens, char **env)
 			while(res != tokens)
 			{
 				if(res->type == DOLLAR)
-					get_env(env,res->text);
-				res->type = WORD;
+				{
+					printf("%s\n", get_env(env, res->text + 1));
+					remove_token(tokens, res);
+				}
+				else
+					res->type = WORD;
 				res = res->prev;
 			}
 		}
 		res = res->next;
 	}
+	ft_putstr_fd("Unclosed Quotes.", STDERR_FILENO);
 }
 void sıngle_quote(t_token *tokens)
 {
@@ -37,6 +42,7 @@ void sıngle_quote(t_token *tokens)
 		}
 		res = res->next;
 	}
+	ft_putstr_fd("Unclosed Quotes.", STDERR_FILENO);
 }
 void check_quotes(t_token *token_list,char **env)
 {
