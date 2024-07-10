@@ -16,6 +16,7 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/parse/token.c \
 	$(SRC)/parse/tokenizer.c \
 	$(SRC)/debug/debug.c \
+	$(SRC)/parse/quotes.c \
 
 OBJS = $(SRCS:.c=.o)
 

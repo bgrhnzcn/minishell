@@ -6,46 +6,55 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 16:08:16 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/09 19:06:35 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/10 17:19:25 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_bool	is_token(char *input, int i)
+static t_token_type	token_type(char *input, int i, int input_len)
 {
 	if (input[i] == '\'')
-			return (true);
+			return (QUOTE);
 	else if (input[i] == '\"')
-		return (true);
+		return (DOUBLE_QUOTE);
 	else if (input[i] == '|')
-		return (true);
+		return (PIPE);
 	else if (input[i] == '<')
-			return (true);
+	{
+		if (i + 1 < input_len && input[i + 1] == '<')
+			return (HEREDOC);
+		else
+			return (INPUT);
+	}
 	else if (input[i] == '>')
-			return (true);
-	return (false);
+	{
+		if (i + 1 < input_len && input[i + 1] == '<')
+			return (APPEND);
+		else
+			return (OUTPUT);
+	}
+	return (HEAD);
 }
 
 static t_token	*create_token_word(char *input, int i, int input_len)
 {
-	int		start_i;
-	char	*temp;
+	int				start_i;
+	char			*temp;
+	t_token_type	type;
 
 	start_i = i;
 	while (i < input_len)
 	{
-		if (is_token(input, i))
-		{
-			temp = ft_substr(input, start_i, i - 1);
-			return (free(temp), new_token(WORD, start_i,
-				ft_strtrim(temp, g_whitespaces)));
-		}
+		type = token_type(input, i, input_len);
+		if (type != HEAD)
+			return (new_token(WORD, start_i,
+				ft_substr(input, start_i, i - start_i)));
 		i++;
 	}
-	temp = ft_substr(input, start_i, i);
-	return (free(temp), new_token(WORD, start_i,
-		ft_strtrim(temp, g_whitespaces)));
+	temp = ft_substr(input, start_i, i - start_i);
+	return (new_token(WORD, start_i,
+		temp));
 }
 
 static t_token	*create_token_type(char *input, int i, int input_len)
@@ -54,6 +63,8 @@ static t_token	*create_token_type(char *input, int i, int input_len)
 			return (new_token(QUOTE, i, ft_substr(input, i, 1)));
 	else if (input[i] == '\"')
 		return (new_token(DOUBLE_QUOTE, i, ft_substr(input, i, 1)));
+	else if (input[i] == '$')
+		return (new_token(DOLLAR, i, ft_substr(input, i, 1)));
 	else if (input[i] == '|')
 		return (new_token(PIPE, i, ft_substr(input, i, 1)));
 	else if (input[i] == '<')
@@ -88,11 +99,13 @@ t_token	*parse_input(t_token *token_list, char *input)
 		if (temp == NULL)
 			return (ft_putstr_fd("Error happened while generating tokens.",
 				STDERR_FILENO), NULL);
-		i += ft_strlen(temp->text) - 1;
+		i += ft_strlen(temp->text);
 		if (add_token_last(token_list, temp) == error)
 			return (ft_putstr_fd("Error happened while generating tokens.",
 				STDERR_FILENO), NULL);
-		i++;
 	}
 	return (NULL);
 }
+//" "\0
+// ^^
+

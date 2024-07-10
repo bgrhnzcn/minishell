@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/09 18:45:31 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/10 17:16:32 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(shell.input);
 		input_trimmed = ft_strtrim(shell.input, g_whitespaces);
 		parse_input(&shell.token_list, input_trimmed);
+		check_quotes(&shell.token_list,shell.env);
 		free(input_trimmed);
 		print_tokens(&shell.token_list);
 		//if (shell.input[0] == '\0')
