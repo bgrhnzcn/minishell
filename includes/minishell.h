@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/10 22:39:45 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/11 17:10:08 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ typedef enum e_token_type
 	HEREDOC,
 	QUOTE,
 	DOUBLE_QUOTE,
-	DOLLAR
+	DOLLAR,
+	WHITESPACE,
+	TAIL
 }	t_token_type;
 
 typedef	struct s_token
@@ -66,8 +68,7 @@ void	print_tokens(t_token *token_list);
 void	clear_tokens(t_token *token_list);
 void	remove_token(t_token *tokens, t_token *token);
 void 	check_quotes(t_token *token_list,char **env);
-void	get_last_token(t_token *token_list);
-
+void	perform_expansion(t_token *token_list, char **env);
 
 //------------------------------ Parser ----------------------------------
 

@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Werror -Wextra -fsanitize=address -I./includes/ -I./libft/
+CFLAGS = -g -Wall -Wextra -fsanitize=address -fsanitize=leak -I./includes/ -I./libft/
 
 SRC = src
 
@@ -17,6 +17,7 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/parse/tokenizer.c \
 	$(SRC)/debug/debug.c \
 	$(SRC)/parse/quotes.c \
+	$(SRC)/parse/expansion.c \
 
 OBJS = $(SRCS:.c=.o)
 
@@ -30,21 +31,22 @@ LIBFT = libft/libft.a
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
 $(LIBFT):
-	@make -C libft && make -C libft clean
+	make -C libft && make -C libft clean
 
 clean:
-	@rm -rf $(SRC)/*.o
-	@make -C libft fclean
+	cd $(SRC) && rm -rf builtins/*.o debug/*.o \
+				parse/*.o pipe/*.o string/*.o *.o
+	make -C libft fclean
 
 fclean: clean
-	@rm -f ${NAME}
+	rm -f ${NAME}
 
 re: fclean all
 
 run: $(NAME)
-	@./minishell
+	./minishell
 
 .PHONY: all re fclean clean

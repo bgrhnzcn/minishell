@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/10 23:19:33 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/11 18:55:40 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	init_shell(t_shell *shell, char **envp)
 	}
 	shell->input = malloc(0);
 	shell->token_list.type = HEAD;
+	shell->token_list.text = " ";
 }
 
 char	*get_input(t_shell *shell)
@@ -113,6 +114,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc != 1)
 		return (EXIT_FAILURE);
+	int	*a = malloc(4);
+	a = NULL;
 	init_shell(&shell, envp);
 	while (true)
 	{
@@ -122,6 +125,7 @@ int	main(int argc, char **argv, char **envp)
 		input_trimmed = ft_strtrim(shell.input, g_whitespaces);
 		parse_input(&shell.token_list, input_trimmed);
 		check_quotes(&shell.token_list,shell.env);
+		perform_expansion(&shell.token_list, shell.env);
 		free(input_trimmed);
 		print_tokens(&shell.token_list);
 		//if (shell.input[0] == '\0')
