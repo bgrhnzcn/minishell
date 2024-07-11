@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/11 18:55:40 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/11 22:42:15 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	init_shell(t_shell *shell, char **envp)
 	}
 	shell->input = malloc(0);
 	shell->token_list.type = HEAD;
-	shell->token_list.text = " ";
+	shell->token_list.text = "";
 }
 
 char	*get_input(t_shell *shell)
@@ -82,14 +82,14 @@ int	buildins(t_shell *shell, char **argv)
 
 void	executer(t_shell *shell, char **argv)
 {
-	//char	**paths;
+	char	**paths;
 	char	*test;
 
 	if (!buildins(shell, argv))
 		return ;
 	else
 	{
-		//paths = ft_split(get_env(shell->env, "PATH"), ':');
+		paths = ft_split(get_env(shell->env, "PATH"), ':');
 		test = ft_calloc(300, sizeof (char));
 		ft_strlcat(test, "/bin/", 300);
 		ft_strlcat(test, argv[0], 300);
@@ -114,8 +114,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc != 1)
 		return (EXIT_FAILURE);
-	int	*a = malloc(4);
-	a = NULL;
 	init_shell(&shell, envp);
 	while (true)
 	{
@@ -126,12 +124,14 @@ int	main(int argc, char **argv, char **envp)
 		parse_input(&shell.token_list, input_trimmed);
 		check_quotes(&shell.token_list,shell.env);
 		perform_expansion(&shell.token_list, shell.env);
+		join_cont_words(&shell.token_list);
 		free(input_trimmed);
 		print_tokens(&shell.token_list);
-		//if (shell.input[0] == '\0')
-		//	continue ;
-		//else
-		//	executer(&shell, ft_split(shell.input, ' '));
+		shell.argv = create_argv(shell.token_list.next);
+		if (shell.input[0] == '\0')
+			;
+		else
+			executer(&shell, shell.argv);
 		clear_tokens(&shell.token_list);
 	}
 	free(shell.input);

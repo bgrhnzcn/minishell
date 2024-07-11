@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/11 17:10:08 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/11 22:42:16 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_shell
 {
 	char		**env;
 	char		*input;
+	char		**argv;
 	t_token		token_list;
 	pid_t		pid;
 }	t_shell;
@@ -69,6 +70,8 @@ void	clear_tokens(t_token *token_list);
 void	remove_token(t_token *tokens, t_token *token);
 void 	check_quotes(t_token *token_list,char **env);
 void	perform_expansion(t_token *token_list, char **env);
+void	join_cont_words(t_token *token_list);
+char	**create_argv(t_token *token_list);
 
 //------------------------------ Parser ----------------------------------
 
