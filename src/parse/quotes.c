@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static t_bool double_quote(t_token *tokens, char **env)
+static t_bool double_quote(t_token *tokens)
 {
 	t_token *temp;
 	t_token	*closing_quote;
@@ -9,7 +9,7 @@ static t_bool double_quote(t_token *tokens, char **env)
 	while (temp != NULL && temp->type != DOUBLE_QUOTE)
 		temp = temp->next;
 	if (temp == NULL)
-		return (ft_putstr_fd("Unclosed Quotes.", STDERR_FILENO), error);
+		return (ft_putstr_fd("Unclosed Quotes.\n", STDERR_FILENO), error);
 	else
 	{
 		closing_quote = temp;
@@ -35,7 +35,7 @@ static t_bool single_quote(t_token *tokens)
 	while (temp != NULL && temp->type != QUOTE)
 		temp = temp->next;
 	if (temp == NULL)
-		return (ft_putstr_fd("Unclosed Quotes.", STDERR_FILENO), error);
+		return (ft_putstr_fd("Unclosed Quotes.\n", STDERR_FILENO), error);
 	else
 	{
 		closing_quote = temp;
@@ -51,7 +51,7 @@ static t_bool single_quote(t_token *tokens)
 	return (false);
 }
 
-void check_quotes(t_token *token_list,char **env)
+void check_quotes(t_token *token_list)
 {
 	t_token	*temp;
 
@@ -60,7 +60,7 @@ void check_quotes(t_token *token_list,char **env)
 	{
 		if (temp->type == DOUBLE_QUOTE)
 		{
-			if (double_quote(temp,env) == error)
+			if (double_quote(temp) == error)
 				return ;
 			temp = token_list;
 		}

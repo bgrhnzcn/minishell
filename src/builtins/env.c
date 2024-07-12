@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/06/06 16:23:58 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/12 12:34:25 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ int	find_env_index(char **env, char *var)
 
 char	*get_env(char **env, char *var)
 {
+	char	*res;
 	int	i;
 
 	i = find_env_index(env, var);
 	if (i == error)
-		return (NULL);
-	return (env[i]);
+		return (ft_strdup(""));
+	res = ft_strdup(env[i]);
+	if (res == NULL)
+		return (ft_strdup(""));
+	return (res);
 }
 
 void	set_env(char **env, char *var, char *value)
@@ -77,7 +81,7 @@ int	init_env(t_shell *shell, char **envp)
 		return (1);
 	while (envp[i] != NULL && i < ENV_LIMIT)
 	{
-		shell->env[i] = ft_substr(envp[i], 0, ft_strlen(envp[i]));
+		shell->env[i] = ft_strdup(envp[i]);
 		if (shell->env[i] == NULL)
 			return (ft_free_str_arr(shell->env), 1);
 		i++;

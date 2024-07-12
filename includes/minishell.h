@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/11 22:42:16 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/12 11:53:01 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,15 @@ t_bool	add_token_last(t_token *tokens, t_token *token);
 void	print_tokens(t_token *token_list);
 void	clear_tokens(t_token *token_list);
 void	remove_token(t_token *tokens, t_token *token);
-void 	check_quotes(t_token *token_list,char **env);
-void	perform_expansion(t_token *token_list, char **env);
-void	join_cont_words(t_token *token_list);
-char	**create_argv(t_token *token_list);
 
 //------------------------------ Parser ----------------------------------
 
 t_token	*parse_input(t_token *token_list, char *input);
+void 	check_quotes(t_token *token_list);
+void	perform_expansion(t_token *token_list, char **env);
+void	join_cont_words(t_token *token_list);
+void	remove_whitespaces(t_token *token_list);
+char	**create_argv(t_token *token_list);
 
 char	*get_env(char ** env, char *var);
 void	set_env(char **env, char *var, char *value);

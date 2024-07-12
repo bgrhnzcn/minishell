@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:13:02 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/08 18:29:21 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/12 12:25:53 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	cd_home(char **env)
 {
 	char	*home;
+	char	*pwd;
 
 	home = get_env(env, "HOME");
 	if (home == NULL)
@@ -27,37 +28,46 @@ static void	cd_home(char **env)
 		printf("minishell: cd: %s: %s\n", home, strerror(errno));
 		return ;
 	}
-	set_env(env, "OLDPWD", (get_env(env, "PWD") + 4));
+	pwd = get_env(env, "PWD");
+	set_env(env, "OLDPWD", (pwd + 4));
 	set_env(env, "PWD", home + 5);
+	free(home);
+	free(pwd);
 }
 
 static void	cd_abs_path(char ** env, char *path)
 {
 	char	*temp;
+	char	*pwd;
 
 	if (chdir(path))
 	{
 		printf("minishell: cd: %s: %s\n", path, strerror(errno));
 		return ;
 	}
-	set_env(env, "OLDPWD", (get_env(env, "PWD") + 4));
+	pwd = get_env(env, "PWD");
+	set_env(env, "OLDPWD", pwd + 4);
 	temp = getcwd(NULL, 0);
 	set_env(env, "PWD", temp);
+	free(pwd);
 	free(temp);
 }
 
 static void	cd_rel_path(char ** env, char *path)
 {
 	char	*temp;
+	char	*pwd;
 
 	if (chdir(path))
 	{
 		printf("minishell: cd: %s: %s\n", path, strerror(errno));
 		return ;
 	}
-	set_env(env, "OLDPWD", (get_env(env, "PWD") + 4));
+	pwd = get_env(env, "PWD");
+	set_env(env, "OLDPWD", pwd + 4);
 	temp = getcwd(NULL, 0);
 	set_env(env, "PWD", temp);
+	free(pwd);
 	free(temp);
 }
 

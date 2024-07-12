@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:55:15 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/30 16:10:25 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/12 12:27:49 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,5 @@ void	mini_pwd(char **env)
 	}
 	else
 		printf("%s\n", cwd + 4);
+	free(cwd);
 }

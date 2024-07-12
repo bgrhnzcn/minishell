@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -fsanitize=address -fsanitize=leak -I./includes/ -I./libft/
+CFLAGS = -g -Wall -Wextra -I./includes/ -I./libft/
 
 SRC = src
 
@@ -18,6 +18,7 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/debug/debug.c \
 	$(SRC)/parse/quotes.c \
 	$(SRC)/parse/expansion.c \
+	$(SRC)/parse/argv.c \
 
 OBJS = $(SRCS:.c=.o)
 
@@ -48,5 +49,9 @@ re: fclean all
 
 run: $(NAME)
 	./minishell
+
+leak: re
+	@bash ./minishell.sh
+	@make run
 
 .PHONY: all re fclean clean

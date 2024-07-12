@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/11 22:42:15 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/12 12:38:06 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*create_prompt(t_shell *shell)
 		ft_strlcat(prompt, ft_strrchr(cwd, '/'), 200);
 		ft_strlcat(prompt, "> ", 200);
 	}
+	free(cwd);
 	return (prompt);
 }
 
@@ -48,6 +49,7 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->input = malloc(0);
 	shell->token_list.type = HEAD;
 	shell->token_list.text = "";
+	shell->token_list.prev = NULL;
 }
 
 char	*get_input(t_shell *shell)
@@ -122,16 +124,17 @@ int	main(int argc, char **argv, char **envp)
 		add_history(shell.input);
 		input_trimmed = ft_strtrim(shell.input, g_whitespaces);
 		parse_input(&shell.token_list, input_trimmed);
-		check_quotes(&shell.token_list,shell.env);
+		check_quotes(&shell.token_list);
 		perform_expansion(&shell.token_list, shell.env);
-		join_cont_words(&shell.token_list);
 		free(input_trimmed);
+		join_cont_words(&shell.token_list);
+		remove_whitespaces(&shell.token_list);
 		print_tokens(&shell.token_list);
-		shell.argv = create_argv(shell.token_list.next);
-		if (shell.input[0] == '\0')
-			;
-		else
-			executer(&shell, shell.argv);
+		//shell.argv = create_argv(shell.token_list.next);
+		//if (shell.input[0] == '\0')
+		//	;
+		//else
+		//	executer(&shell, shell.argv);
 		clear_tokens(&shell.token_list);
 	}
 	free(shell.input);
