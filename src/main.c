@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/12 12:38:06 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/14 11:17:49 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,17 @@ int	main(int argc, char **argv, char **envp)
 		input_trimmed = ft_strtrim(shell.input, g_whitespaces);
 		parse_input(&shell.token_list, input_trimmed);
 		check_quotes(&shell.token_list);
-		perform_expansion(&shell.token_list, shell.env);
 		free(input_trimmed);
+		if (check_syntax(&shell.token_list, shell.env) == error)
+		{
+			clear_tokens(&shell.token_list);
+			continue ;
+		}
+		perform_expansion(&shell.token_list, shell.env);
 		join_cont_words(&shell.token_list);
 		remove_whitespaces(&shell.token_list);
-		print_tokens(&shell.token_list);
+		if (pipe_check(&shell.token_list) != error);
+			//print_tokens(&shell.token_list);
 		//shell.argv = create_argv(shell.token_list.next);
 		//if (shell.input[0] == '\0')
 		//	;

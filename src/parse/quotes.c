@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/14 09:53:32 by bgrhnzcn          #+#    #+#             */
+/*   Updated: 2024/07/14 09:54:27 by bgrhnzcn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static t_bool double_quote(t_token *tokens)
+static t_bool	double_quote(t_token *tokens)
 {
-	t_token *temp;
+	t_token	*temp;
 	t_token	*closing_quote;
 
 	temp = tokens->next;
@@ -26,9 +38,9 @@ static t_bool double_quote(t_token *tokens)
 	return (false);
 }
 
-static t_bool single_quote(t_token *tokens)
+static t_bool	single_quote(t_token *tokens)
 {
-	t_token *temp;
+	t_token	*temp;
 	t_token	*closing_quote;
 
 	temp = tokens->next;
@@ -51,12 +63,12 @@ static t_bool single_quote(t_token *tokens)
 	return (false);
 }
 
-void check_quotes(t_token *token_list)
+void	check_quotes(t_token *token_list)
 {
 	t_token	*temp;
 
 	temp = token_list;
-	while(temp != NULL)
+	while (temp != NULL)
 	{
 		if (temp->type == DOUBLE_QUOTE)
 		{

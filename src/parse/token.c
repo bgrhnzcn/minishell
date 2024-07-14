@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:31:46 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/12 12:13:06 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/14 12:09:11 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*new_token(t_token_type type, int index, char *text)
+t_token	*new_token(t_token_type type, char *text)
 {
 	t_token	*token;
 
@@ -20,28 +20,13 @@ t_token	*new_token(t_token_type type, int index, char *text)
 	if (token == NULL)
 		return (NULL);
 	token->type = type;
-	token->index = index;
 	token->text = text;
 	if (token->text == NULL)
 		return (free(token), NULL);
 	return (token);
 }
 
-t_bool	add_token_last(t_token *tokens, t_token *token)
-{
-	t_token *temp;
-
-	temp = tokens;
-	if (temp == NULL || token == NULL)
-		return (error);
-	while (temp->next != NULL)
-		temp = temp->next;
-	temp->next = token;
-	token->prev = temp;
-	return (false);
-}
-
-void	remove_token(t_token *tokens, t_token *token)
+t_token	*remove_token(t_token *tokens, t_token *token)
 {
 	t_token	*temp;
 
@@ -56,23 +41,37 @@ void	remove_token(t_token *tokens, t_token *token)
 		}
 		temp = temp->next;
 	}
+	token->next = NULL;
+	token->prev = NULL;
+	return (token);
+}
+
+void	destroy_token(t_token *token)
+{
 	free(token->text);
 	free(token);
+}
+
+void	print_token(t_token *token)
+{
+	printf(
+			"[ INFO ] Token\n{\n\t.type = %s,\n\t.text = %s,\n\t.adress = %p,\n\t.next = %p,\n\t.prev = %p\n}\n",
+			g_token_type_str[token->type],
+			token->text,
+			token,
+			token->next,
+			token->prev
+			);
 }
 
 void	print_tokens(t_token *token_list)
 {
 	t_token	*temp;
 
-	char	token_type_str[12][20] = {"HEAD", "PIPE", "OUTPUT", "INPUT", "APPEND",
-		"WORD", "HEREDOC", "QUOTE", "DOUBLE_QUOTE", "DOLLAR", "WHITESPACE", "TAIL"};
 	temp = token_list;
 	while (temp != NULL)
 	{
-		printf(
-			"[ INFO ] Token\n{\n\t.type = %s,\n\t.index = %d,\n\t.text = %s,\n\t.adress = %p,\n\t.next = %p,\n\t.prev = %p\n}\n",
-			token_type_str[temp->type], temp->index, temp->text,
-			temp ,temp->next, temp->prev);
+		print_token(temp);
 		temp = temp->next;
 	}
 }

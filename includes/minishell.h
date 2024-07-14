@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/12 11:53:01 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/14 13:50:07 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@
 
 # define ENV_LIMIT 1000
 
-static const char	g_whitespaces[6] = " \t\n\r\v\f";
+# define UNIMPLEMENTED(str) printf(str)
+
+static const char	g_whitespaces[7] = " \t\n\r\v\f";
+static const char	g_token_type_str[13][20] = {"HEAD", "PIPE", "OUTPUT", "INPUT", "APPEND",
+	"WORD", "HEREDOC", "QUOTE", "DOUBLE_QUOTE", "DOLLAR", "WHITESPACE", "COMMAND", "TAIL"};
 
 typedef enum e_token_type
 {
@@ -40,13 +44,13 @@ typedef enum e_token_type
 	DOUBLE_QUOTE,
 	DOLLAR,
 	WHITESPACE,
+	COMMAND,
 	TAIL
 }	t_token_type;
 
-typedef	struct s_token
+typedef struct s_token
 {
 	t_token_type	type;
-	int				index;
 	char			*text;
 	struct s_token	*next;
 	struct s_token	*prev;
@@ -63,20 +67,33 @@ typedef struct s_shell
 
 //---------------------------- Tokenizer ---------------------------------
 
-t_token	*new_token(t_token_type type, int index, char *text);
-t_bool	add_token_last(t_token *tokens, t_token *token);
+t_token	*new_token(t_token_type type, char *text);
+void	print_token(t_token *token);
 void	print_tokens(t_token *token_list);
 void	clear_tokens(t_token *token_list);
-void	remove_token(t_token *tokens, t_token *token);
+void	destroy_token(t_token *token);
+t_bool	add_token_last(t_token *tokens, t_token *token);
+t_bool	add_token_after(t_token *before, t_token *new);
+t_token	*remove_token(t_token *tokens, t_token *token);
+t_token	*remove_sublist(t_token *list_start, t_token *list_end);
+
+
 
 //------------------------------ Parser ----------------------------------
 
 t_token	*parse_input(t_token *token_list, char *input);
 void 	check_quotes(t_token *token_list);
+t_bool	check_syntax(t_token *token_list, char **env);
 void	perform_expansion(t_token *token_list, char **env);
 void	join_cont_words(t_token *token_list);
 void	remove_whitespaces(t_token *token_list);
 char	**create_argv(t_token *token_list);
+t_bool	pipe_check(t_token *token_list);
+
+//---------------------------- Commands ---------------------------------
+
+int	get_command_count(t_token *token_list);
+t_bool	create_commands(t_token **commands, int command_count, t_token *token_list);
 
 char	*get_env(char ** env, char *var);
 void	set_env(char **env, char *var, char *value);

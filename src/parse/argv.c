@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   argv.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 11:42:22 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/12 12:41:05 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/14 09:47:10 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	remove_whitespaces(t_token *token_list)
 	t_token	*temp;
 
 	temp = token_list;
-	while (temp->next->type != TAIL)
+	while (temp->next != NULL)
 	{
 		if (temp->next->type == WHITESPACE)
-			remove_token(token_list, temp->next);
+			destroy_token(remove_token(token_list, temp->next));
 		else
 			temp = temp->next;
 	}

@@ -14,11 +14,15 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/builtins/unset.c \
 	$(SRC)/builtins/export.c \
 	$(SRC)/parse/token.c \
+	$(SRC)/parse/token2.c \
 	$(SRC)/parse/tokenizer.c \
 	$(SRC)/debug/debug.c \
 	$(SRC)/parse/quotes.c \
+	$(SRC)/parse/syntax.c \
 	$(SRC)/parse/expansion.c \
 	$(SRC)/parse/argv.c \
+	$(SRC)/parse/commands.c \
+	$(SRC)/pipe/pipe.c \
 
 OBJS = $(SRCS:.c=.o)
 
