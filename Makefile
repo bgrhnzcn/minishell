@@ -23,6 +23,7 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/parse/argv.c \
 	$(SRC)/parse/commands.c \
 	$(SRC)/pipe/pipe.c \
+	$(SRC)/exec/exec.c \
 
 OBJS = $(SRCS:.c=.o)
 
@@ -43,7 +44,7 @@ $(LIBFT):
 
 clean:
 	cd $(SRC) && rm -rf builtins/*.o debug/*.o \
-				parse/*.o pipe/*.o string/*.o *.o
+			parse/*.o pipe/*.o string/*.o exec/*.o *.o
 	make -C libft fclean
 
 fclean: clean

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:50:22 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/14 13:44:19 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/14 21:40:23 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_bool	add_token_after(t_token *before, t_token *new)
 	before->next = new;
 	new->next->prev = new;
 	new->prev = before;
+	return (true);
 }
 
 t_token	*remove_sublist(t_token *list_start, t_token *list_end)

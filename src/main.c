@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/14 11:17:49 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/15 01:02:13 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,50 +63,6 @@ char	*get_input(t_shell *shell)
 	return (input);
 }
 
-int	buildins(t_shell *shell, char **argv)
-{
-	if (ft_strequ(argv[0], "exit"))
-		mini_exit(shell, EXIT_SUCCESS);
-	if (ft_strequ(argv[0], "env"))
-		mini_env(shell->env);
-	else if (ft_strequ(argv[0], "pwd"))
-		mini_pwd(shell->env);
-	else if (ft_strequ(argv[0], "cd"))
-		mini_cd(shell->env, argv[1]);
-	else if (ft_strequ(argv[0], "export"))
-		mini_export(shell, argv);
-	else if (ft_strequ(argv[0], "unset"))
-		mini_unset(shell, argv[1]);
-	else
-		return (1);
-	return (0);
-}
-
-void	executer(t_shell *shell, char **argv)
-{
-	char	**paths;
-	char	*test;
-
-	if (!buildins(shell, argv))
-		return ;
-	else
-	{
-		paths = ft_split(get_env(shell->env, "PATH"), ':');
-		test = ft_calloc(300, sizeof (char));
-		ft_strlcat(test, "/bin/", 300);
-		ft_strlcat(test, argv[0], 300);
-		shell->pid = fork();
-		if (shell->pid == 0)
-		{
-			if (execve(test, argv, shell->env))
-				printf("%s: %s\n", "minishell", strerror(errno));
-			ft_free_str_arr(argv);
-			exit(EXIT_SUCCESS);
-		}
-		else
-			wait(NULL);
-	}
-}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -134,13 +90,13 @@ int	main(int argc, char **argv, char **envp)
 		perform_expansion(&shell.token_list, shell.env);
 		join_cont_words(&shell.token_list);
 		remove_whitespaces(&shell.token_list);
-		if (pipe_check(&shell.token_list) != error);
-			//print_tokens(&shell.token_list);
-		//shell.argv = create_argv(shell.token_list.next);
+		if (pipe_check(&shell.token_list) != error)
+			print_tokens(&shell.token_list);
+		shell.argv = create_argv(shell.token_list.next);
 		//if (shell.input[0] == '\0')
 		//	;
 		//else
-		//	executer(&shell, shell.argv);
+			executer(&shell, shell.argv);
 		clear_tokens(&shell.token_list);
 	}
 	free(shell.input);

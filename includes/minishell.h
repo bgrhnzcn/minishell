@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/14 13:50:07 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:22:31 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ t_bool	add_token_after(t_token *before, t_token *new);
 t_token	*remove_token(t_token *tokens, t_token *token);
 t_token	*remove_sublist(t_token *list_start, t_token *list_end);
 
-
-
 //------------------------------ Parser ----------------------------------
 
 t_token	*parse_input(t_token *token_list, char *input);
@@ -92,8 +90,13 @@ t_bool	pipe_check(t_token *token_list);
 
 //---------------------------- Commands ---------------------------------
 
-int	get_command_count(t_token *token_list);
+int		get_command_count(t_token *token_list);
 t_bool	create_commands(t_token **commands, int command_count, t_token *token_list);
+
+//---------------------------- Executer ---------------------------------
+
+int		buildins(t_shell *shell, char **argv);
+void	executer(t_shell *shell, char **argv);
 
 char	*get_env(char ** env, char *var);
 void	set_env(char **env, char *var, char *value);
