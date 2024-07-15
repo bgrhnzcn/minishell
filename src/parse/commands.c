@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/14 14:11:23 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/15 13:29:00 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_bool	create_commands(t_token **commands, int command_count,
 		{
 			commands[i] = remove_sublist(start, temp->prev);
 			if (commands[i] == NULL)
-				return (printf("Error enountered while allocation.\n"),error);
+				return (printf("Error enountered while allocation.\n"), error);
 			i++;
 			if (temp->type == PIPE)
 				start = temp->next;

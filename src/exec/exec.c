@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/15 01:16:42 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:56:26 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,46 +31,73 @@ int	buildins(t_shell *shell, char **argv)
 	return (0);
 }
 
-static t_bool	search_in_path(char *path, char *command)
+static char	*search_in_path(const char *path, const char *command)
 {
 	DIR				*dir;
 	struct dirent	*dirent;
+	char			*cmd;
+	int				cmd_size;
 
 	dir = opendir(path);
 	if (dir == NULL)
-		return (error);
+		return (NULL);
+	cmd_size = ft_strlen(path) + ft_strlen(command) + 2;
+	dirent = readdir(dir);
 	while (dirent != NULL)
 	{
-		printf("%s\n", dirent->d_name);
+		if (ft_strequ(command, dirent->d_name))
+		{
+			cmd = ft_calloc(cmd_size, sizeof (char));
+			if (cmd == NULL)
+				break ;
+			ft_strlcat(cmd, path, cmd_size);
+			ft_strlcat(cmd, "/", cmd_size);
+			ft_strlcat(cmd, command, cmd_size);
+			closedir(dir);
+			return (cmd);
+		}
 		dirent = readdir(dir);
 	}
+	closedir(dir);
+	return (NULL);
 }
 
 void	executer(t_shell *shell, char **argv)
 {
 	char	**paths;
-	char	*test;
+	char	*cmd;
 	int		path_index;
 
 	if (!buildins(shell, argv))
+	{
+		ft_free_str_arr(argv);
 		return ;
+	}
 	else
 	{
-		paths = ft_split(get_env(shell->env, "PATH"), ':');
+		cmd = get_env(shell->env, "PATH");
+		if (cmd == NULL)
+			return ;
+		paths = ft_split(cmd, ':');
+		free(cmd);
 		path_index = 0;
 		while (paths[path_index] != NULL)
-			search_in_path(paths[path_index++], argv[0]);
-		test = ft_calloc(300, sizeof (char));
-		ft_strlcat(test, argv[0], 300);
+		{
+			cmd = search_in_path(paths[path_index++], argv[0]);
+			if (cmd != NULL)
+				break ;
+		}
+		ft_free_str_arr(paths);
 		shell->pid = fork();
 		if (shell->pid == 0)
 		{
-			if (execve(test, argv, shell->env))
-				printf("%s: %s\n", "minishell", strerror(errno));
-			ft_free_str_arr(argv);
+			if (execve(cmd, argv, shell->env))
+				perror("minishell: ");
 			exit(EXIT_SUCCESS);
 		}
 		else
 			wait(NULL);
+		free(cmd);
+		ft_free_str_arr(argv);
 	}
 }
