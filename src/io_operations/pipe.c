@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/16 16:42:16 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/16 22:29:14 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,8 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 	command_count = get_command_count(token_list);
 	if (command_count == 1)
 	{
-		pid = fork();
-		if (pid == 0)
-		{
-			apply_redirs(shell, commands[0]);
-			return (executer(shell, create_argv(commands[0]->next)), true);
-		}
+		apply_redirs(shell, token_list);
+		return (executer(shell, create_argv(token_list->next)), true);
 	}
 	commands = ft_calloc(command_count, sizeof (t_token *));
 	if (commands == NULL)
