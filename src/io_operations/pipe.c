@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/15 21:44:37 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:42:16 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,23 @@ static void	mini_pipe(t_token **commands, int command_count, int *pipes[2])
 	(void)pipes;
 }
 
-t_bool	pipe_check(t_token *token_list)
+t_bool	pipe_check(t_shell *shell, t_token *token_list)
 {
 	t_token	**commands;
 	int		command_count;
 	int		**pipes;
-	int		i;
+	int		pid;
 
 	command_count = get_command_count(token_list);
 	if (command_count == 1)
-		//return (apply_redirect(token_list), true);
-		return (UNIMPLEMENTED("pipe.c - one command\n"), true);
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			apply_redirs(shell, commands[0]);
+			return (executer(shell, create_argv(commands[0]->next)), true);
+		}
+	}
 	commands = ft_calloc(command_count, sizeof (t_token *));
 	if (commands == NULL)
 		return (UNIMPLEMENTED("pipe.c - malloc\n"), error);

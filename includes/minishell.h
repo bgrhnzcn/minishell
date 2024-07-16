@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/14 23:22:31 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:56:36 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,11 @@ void	perform_expansion(t_token *token_list, char **env);
 void	join_cont_words(t_token *token_list);
 void	remove_whitespaces(t_token *token_list);
 char	**create_argv(t_token *token_list);
-t_bool	pipe_check(t_token *token_list);
+t_bool	pipe_check(t_shell *shell, t_token *token_list);
+
+//------------------------- I/O Opeartions ------------------------------
+
+void	apply_redirs(t_shell *shell, t_token *command);
 
 //---------------------------- Commands ---------------------------------
 

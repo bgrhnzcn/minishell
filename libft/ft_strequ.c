@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strequ.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 00:37:11 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/30 21:48:21 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/16 19:04:17 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_bool	ft_strequ(const char *s1, const char *s2)
 {
 	if (!s1 || !s2)
-		return (error);
+		return (false);
 	if (ft_strlen(s1) != ft_strlen(s2))
 		return (false);
 	while (*s1)
