@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/16 15:56:36 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/19 14:35:23 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <string.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
@@ -63,6 +64,8 @@ typedef struct s_shell
 	char		**argv;
 	t_token		token_list;
 	pid_t		pid;
+	int			fdin;
+	int			fdout;
 }	t_shell;
 
 //---------------------------- Tokenizer ---------------------------------

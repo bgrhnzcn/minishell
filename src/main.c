@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/16 22:24:55 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:32:03 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ int	main(int argc, char **argv, char **envp)
 		join_cont_words(&shell.token_list);
 		remove_whitespaces(&shell.token_list);
 		pipe_check(&shell, &shell.token_list);
-		shell.argv = create_argv(shell.token_list.next);
-		executer(&shell, shell.argv);
+		//shell.argv = create_argv(shell.token_list.next);
+		//executer(&shell, shell.argv);
 		clear_tokens(&shell.token_list);
 	}
 	free(shell.input);
