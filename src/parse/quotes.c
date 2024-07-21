@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:53:32 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/14 09:54:27 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:54:36 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static t_bool	double_quote(t_token *tokens)
 				temp->type = WORD;
 			temp = temp->prev;
 		}
+		if (tokens->next == closing_quote)
+			add_token_after(tokens, new_token(WORD, ft_strdup("")));
 		remove_token(tokens, closing_quote);
 		remove_token(tokens, tokens);
 	}

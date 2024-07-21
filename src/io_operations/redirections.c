@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/19 14:43:56 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/21 14:28:20 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,14 @@ void	apply_redirs(t_shell *shell, t_token *command)
 	{
 		if (temp->type == INPUT || temp->type == HEREDOC)
 		{
-			found_output(shell, temp);
+			found_input(shell, temp);
 			remove_token(command, temp->next);
 			remove_token(command, temp);
+			print_tokens(command);
 		}
 		if (temp->type == OUTPUT || temp->type == APPEND)
 		{
-			found_input(shell, temp);
+			found_output(shell, temp);
 			remove_token(command, temp->next);
 			remove_token(command, temp);
 		}

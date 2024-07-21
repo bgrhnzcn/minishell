@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/21 03:24:09 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:54:58 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	apply_redirs(t_shell *shell, t_token *command);
 //---------------------------- Commands ---------------------------------
 
 int		get_command_count(t_token *token_list);
-t_bool	create_commands(t_token **commands, int command_count, t_token *token_list);
+t_token	**create_commands(int command_count, t_token *token_list);
 
 //---------------------------- Executer ---------------------------------
 

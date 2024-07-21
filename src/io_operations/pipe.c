@@ -6,11 +6,23 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/21 03:25:14 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/21 15:17:41 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	save_std_io(t_shell *shell)
+{
+	shell->saved_stdin = dup(STDIN_FILENO);
+	shell->saved_stdout = dup(STDOUT_FILENO);	
+}
+
+static void	restore_std_io(t_shell *shell)
+{
+	dup2(shell->saved_stdin, STDIN_FILENO);
+	dup2(shell->saved_stdout, STDOUT_FILENO);
+}
 
 static void	mini_pipe(t_token **commands, int command_count, int *pipes[2])
 {
@@ -42,14 +54,10 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 	}
 	else
 	{
-		commands = ft_calloc(command_count, sizeof (t_token *));
+		commands = create_commands(command_count, token_list);
 		if (commands == NULL)
-			return (UNIMPLEMENTED("pipe.c - malloc\n"), error);
-		if (create_commands(commands, command_count, token_list) == error)
-			return (UNIMPLEMENTED("pipe.c - commands\n"), error);
+			return (error);
 		i = 0;
-		shell->saved_stdin = dup(STDIN_FILENO);
-		shell->saved_stdout = dup(STDOUT_FILENO);
 		while (i < command_count - 1)
 		{
 			if (pipe(p) == -1)
@@ -57,11 +65,12 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 				perror("pipe cant open\n");
 				exit(127);
 			}
+			save_std_io(shell);
 			shell->pid = fork();
 			if (shell->pid == 0)
 			{
 				close(p[0]);
-				apply_redirs(shell, token_list);
+				apply_redirs(shell, commands[i]);
 				dup2(p[1], STDOUT_FILENO);
 				close(p[1]);
 				executer(shell, create_argv(commands[i]->next));
@@ -75,15 +84,14 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		shell->pid = fork();
 		if (shell->pid == 0)
 		{
-			apply_redirs(shell, token_list);
 			close(p[0]);
 			close(p[1]);
+			apply_redirs(shell, commands[i]);
 			executer(shell, create_argv(commands[i]->next));
 			exit(127);
 		}
+		restore_std_io(shell);
 		waitpid(shell->pid, &status, 0);
-		dup2(shell->saved_stdin, STDIN_FILENO);
-		dup2(shell->saved_stdout, STDOUT_FILENO);
 		return (true);
 	}
 }
