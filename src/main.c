@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/19 14:32:03 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/21 01:58:38 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,24 @@ char	*create_prompt(t_shell *shell)
 	char	*cwd;
 
 	cwd = NULL;
-	prompt = ft_calloc(200, sizeof(char));
-	ft_strlcat(prompt, "minishell@", 200);
+	prompt = ft_calloc(300, sizeof(char));
+	ft_strlcat(prompt, ANSI_COLOR_GREEN"minishell"ANSI_COLOR_RESET, 300);
+	ft_strlcat(prompt, "@", 300);
 	cwd = get_env(shell->env, "PWD");
 	if (cwd == NULL)
 	{
 		cwd = getcwd(NULL, 0);
-		ft_strlcat(prompt, "..", 200);
-		ft_strlcat(prompt, ft_strrchr(cwd, '/'), 200);
-		ft_strlcat(prompt, " > ", 200);
+		ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
+		ft_strlcat(prompt, ft_strrchr(cwd, '/') + 1, 300);
+		ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
+		ft_strlcat(prompt, "> ", 300);
 		free(cwd);
+		return (prompt);
 	}
-	else
-	{
-		ft_strlcat(prompt, "..", 200);
-		ft_strlcat(prompt, ft_strrchr(cwd, '/'), 200);
-		ft_strlcat(prompt, "> ", 200);
-	}
+	ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
+	ft_strlcat(prompt, ft_strrchr(cwd, '/') + 1, 300);
+	ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
+	ft_strlcat(prompt, "> ", 300);
 	free(cwd);
 	return (prompt);
 }
@@ -62,7 +63,6 @@ char	*get_input(t_shell *shell)
 	free(prompt);
 	return (input);
 }
-
 
 int	main(int argc, char **argv, char **envp)
 {

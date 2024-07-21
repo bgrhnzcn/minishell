@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/19 14:35:23 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/21 03:24:09 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@
 # include "sys/types.h"
 # include "libft.h"
 
-# define ENV_LIMIT 1000
+# define ENV_LIMIT			1000
+# define ANSI_COLOR_BLUE	"\e[0;94m"
+# define ANSI_COLOR_RESET	"\x1b[0m"
+# define ANSI_COLOR_GREEN	"\e[1;92m"
 
 # define UNIMPLEMENTED(str) printf(str)
 
@@ -64,6 +67,8 @@ typedef struct s_shell
 	char		**argv;
 	t_token		token_list;
 	pid_t		pid;
+	int			saved_stdin;
+	int			saved_stdout;
 	int			fdin;
 	int			fdout;
 }	t_shell;

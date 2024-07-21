@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/16 16:33:42 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/21 02:42:44 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	buildins(t_shell *shell, char **argv)
 {
 	if (ft_strequ(argv[0], "exit"))
-		mini_exit(shell, EXIT_SUCCESS);
+		mini_exit(shell, EXIT_FAILURE);
 	if (ft_strequ(argv[0], "env"))
 		mini_env(shell->env);
 	else if (ft_strequ(argv[0], "pwd"))
@@ -87,17 +87,12 @@ void	executer(t_shell *shell, char **argv)
 			if (cmd != NULL)
 				break ;
 		}
+		printf("cmd: %s, argv[1]: %s", cmd, argv[1]);
 		ft_free_str_arr(paths);
-		shell->pid = fork();
-		if (shell->pid == 0)
-		{
-			if (execve(cmd, argv, shell->env))
-				perror("minishell: ");
-			exit(EXIT_SUCCESS);
-		}
-		else
-			wait(NULL);
+		if (execve(cmd, argv, shell->env))
+			perror("minishell: ");
 		free(cmd);
 		ft_free_str_arr(argv);
+		exit(EXIT_SUCCESS);
 	}
 }
