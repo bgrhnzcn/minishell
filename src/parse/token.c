@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:31:46 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/16 22:24:55 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:53:26 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_token	*new_token(t_token_type type, char *text)
 		return (NULL);
 	token->type = type;
 	token->text = text;
+	token->next = NULL;
 	if (token->text == NULL)
 		return (free(token), NULL);
 	return (token);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/21 01:58:38 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:56:04 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,22 @@ char	*create_prompt(t_shell *shell)
 
 	cwd = NULL;
 	prompt = ft_calloc(300, sizeof(char));
-	ft_strlcat(prompt, ANSI_COLOR_GREEN"minishell"ANSI_COLOR_RESET, 300);
+	//ft_strlcat(prompt, ANSI_COLOR_GREEN"minishell"ANSI_COLOR_RESET, 300);
 	ft_strlcat(prompt, "@", 300);
 	cwd = get_env(shell->env, "PWD");
 	if (cwd == NULL)
 	{
 		cwd = getcwd(NULL, 0);
-		ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
+		//ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
 		ft_strlcat(prompt, ft_strrchr(cwd, '/') + 1, 300);
-		ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
+		//ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
 		ft_strlcat(prompt, "> ", 300);
 		free(cwd);
 		return (prompt);
 	}
-	ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
+	//ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
 	ft_strlcat(prompt, ft_strrchr(cwd, '/') + 1, 300);
-	ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
+	//ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
 	ft_strlcat(prompt, "> ", 300);
 	free(cwd);
 	return (prompt);
@@ -51,6 +51,7 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->token_list.type = HEAD;
 	shell->token_list.text = "";
 	shell->token_list.prev = NULL;
+	shell->token_list.next = NULL;
 }
 
 char	*get_input(t_shell *shell)
