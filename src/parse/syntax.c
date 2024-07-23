@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:17:46 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/14 09:48:33 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:35:32 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,18 @@ static t_bool	check_pipe(t_token *token_list)
 		temp = temp->prev;
 	}
 	if (temp == NULL)
-		return (printf("syntax error near unexpected token '|'\n"), error);
+		return (printf("syntax error near unexpected token '|'\n"),
+			EXIT_FAILURE);
 	temp = token_list->next;
 	while (temp != NULL)
 	{
 		if (temp->type != PIPE
 			&& temp->type != TAIL
 			&& temp->type != WHITESPACE)
-			return (true);
+			return (EXIT_SUCCESS);
 		temp = temp->next;
 	}
-	return (printf("syntax error near unexpected token '|'\n"), error);
+	return (printf("syntax error near unexpected token '|'\n"), EXIT_FAILURE);
 }
 
 static t_bool	check_redirections_hlpr2(t_token *temp,
@@ -58,10 +59,11 @@ static t_bool	check_redirections_hlpr2(t_token *temp,
 		if (var[0] == 0)
 		{
 			free(var);
-			return (printf("%s: ambiguous redirect\n", temp->text), error);
+			return (printf("%s: ambiguous redirect\n", temp->text),
+				EXIT_FAILURE);
 		}
 	}
-	return (true);
+	return (EXIT_SUCCESS);
 }
 
 static t_bool	check_redirections(t_token *token_list, char **env)
@@ -73,22 +75,22 @@ static t_bool	check_redirections(t_token *token_list, char **env)
 	{
 		if (temp->type == DOLLAR || temp->type == WORD)
 		{
-			if (check_redirections_hlpr2(temp, token_list->type, env) == error)
-				return (error);
+			if (check_redirections_hlpr2(temp, token_list->type, env))
+				return (EXIT_FAILURE);
 			while (temp->type == DOLLAR || temp->type == WORD)
 			{
 				if (token_list->type == HEREDOC)
 					temp->type = WORD;
 				temp = temp->next;
 			}
-			return (true);
+			return (EXIT_SUCCESS);
 		}
 		if (is_end_operation(temp->type))
 			return (printf("syntax error near unexpected token '%s'\n",
-					temp->text), error);
+					temp->text), EXIT_FAILURE);
 		temp = temp->next;
 	}
-	return (true);
+	return (EXIT_SUCCESS);
 }
 
 t_bool	check_syntax(t_token *token_list, char **env)
@@ -101,11 +103,11 @@ t_bool	check_syntax(t_token *token_list, char **env)
 		if ((is_end_operation(temp->type)
 				&& temp->type != PIPE
 				&& temp->type != TAIL)
-			&& check_redirections(temp, env) == error)
-			return (error);
-		if (temp->type == PIPE && check_pipe(temp) == error)
-			return (error);
+			&& check_redirections(temp, env))
+			return (EXIT_FAILURE);
+		if (temp->type == PIPE && check_pipe(temp))
+			return (EXIT_FAILURE);
 		temp = temp->next;
 	}
-	return (true);
+	return (EXIT_SUCCESS);
 }

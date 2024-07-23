@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 14:19:50 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/22 14:56:09 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/23 17:36:59 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <fcntl.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
@@ -87,8 +88,8 @@ t_token	*remove_sublist(t_token *list_start, t_token *list_end);
 
 //------------------------------ Parser ----------------------------------
 
-t_token	*parse_input(t_token *token_list, char *input);
-void 	check_quotes(t_token *token_list);
+t_bool	parse_input(t_token *token_list, char *input);
+t_bool	check_quotes(t_token *token_list);
 t_bool	check_syntax(t_token *token_list, char **env);
 void	perform_expansion(t_token *token_list, char **env);
 void	join_cont_words(t_token *token_list);

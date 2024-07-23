@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 16:08:16 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/22 14:46:53 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/23 17:33:22 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static t_token	*create_token_type(char *input, int i, int input_len)
 		return (create_token_word(input, i, input_len));
 }
 
-t_token	*parse_input(t_token *token_list, char *input)
+t_bool	parse_input(t_token *token_list, char *input)
 {
 	int		i;
 	int		input_len;
@@ -108,18 +108,21 @@ t_token	*parse_input(t_token *token_list, char *input)
 
 	i = 0;
 	input_len = ft_strlen(input);
+	if (input_len == 0)
+		return (EXIT_FAILURE);
 	while (i < input_len)
 	{
 		temp = create_token_type(input, i, input_len);
 		if (temp == NULL)
-			return (printf("Error happened while generating tokens.\n"), NULL);
+			return (ft_putstr_fd("Malloc Error.\n", STDERR_FILENO),
+				EXIT_FAILURE);
 		i += ft_strlen(temp->text);
-		if (add_token_last(token_list, temp) == error)
-			return (printf("Error happened while generating tokens.\n"), NULL);
+		if (add_token_last(token_list, temp))
+			return (ft_putstr_fd("Malloc Error.\n", STDERR_FILENO),
+				EXIT_FAILURE);
 	}
 	if (add_token_last(token_list,
-			new_token(TAIL, ft_strdup("newLine"))) == error)
-		return (ft_putstr_fd("Error happened while generating tokens\n.",
-				STDERR_FILENO), NULL);
-	return (NULL);
+			new_token(TAIL, ft_strdup("newLine"))))
+		return (ft_putstr_fd("Malloc Error.\n", STDERR_FILENO), EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

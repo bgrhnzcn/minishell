@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/21 14:28:20 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/24 00:23:56 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	apply_redirs(t_shell *shell, t_token *command)
 			found_input(shell, temp);
 			remove_token(command, temp->next);
 			remove_token(command, temp);
-			print_tokens(command);
 		}
 		if (temp->type == OUTPUT || temp->type == APPEND)
 		{

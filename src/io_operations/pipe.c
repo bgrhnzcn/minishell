@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/22 14:49:07 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/24 00:58:03 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		shell->pid = fork();
 		if (shell->pid == 0)
 		{
+			print_tokens(token_list);
 			apply_redirs(shell, token_list);
 			executer(shell, create_argv(token_list->next));
 			exit(127);
@@ -58,6 +59,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		if (commands == NULL)
 			return (error);
 		i = 0;
+		save_std_io(shell);
 		while (i < command_count - 1)
 		{
 			if (pipe(p) == -1)
@@ -65,20 +67,20 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 				perror("pipe cant open\n");
 				exit(127);
 			}
-			save_std_io(shell);
 			shell->pid = fork();
 			if (shell->pid == 0)
 			{
 				close(p[0]);
-				apply_redirs(shell, commands[i]);
 				dup2(p[1], STDOUT_FILENO);
 				close(p[1]);
+				apply_redirs(shell, commands[i]);
 				executer(shell, create_argv(commands[i]->next));
 				exit(127);
 			}
 			close(p[1]);
 			dup2(p[0], STDIN_FILENO);
 			close(p[0]);
+			wait(&status);
 			i++;
 		}
 		shell->pid = fork();
@@ -91,7 +93,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 			exit(127);
 		}
 		restore_std_io(shell);
-		waitpid(shell->pid, &status, 0);
+		wait(&status);
 		return (true);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:50:22 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/22 14:52:00 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/23 14:11:46 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,7 @@ t_bool	add_token_last(t_token *token_list, t_token *token)
 	if (temp == NULL || token == NULL)
 		return (error);
 	while (temp->next != NULL)
-	{
 		temp = temp->next;
-		printf("text: %s, temp: %p ,temp.next: %p\n", temp->text, temp, temp->next);
-	}
 	temp->next = token;	
 	token->prev = temp;
 	return (false);

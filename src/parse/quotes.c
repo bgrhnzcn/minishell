@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:53:32 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/21 14:54:36 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:30:02 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_bool	double_quote(t_token *tokens)
 	while (temp != NULL && temp->type != DOUBLE_QUOTE)
 		temp = temp->next;
 	if (temp == NULL)
-		return (ft_putstr_fd("Unclosed Quotes.\n", STDERR_FILENO), error);
+		return (ft_putstr_fd("DeQuotes.\n", STDERR_FILENO), EXIT_FAILURE);
 	else
 	{
 		closing_quote = temp;
@@ -37,7 +37,7 @@ static t_bool	double_quote(t_token *tokens)
 		remove_token(tokens, closing_quote);
 		remove_token(tokens, tokens);
 	}
-	return (false);
+	return (EXIT_SUCCESS);
 }
 
 static t_bool	single_quote(t_token *tokens)
@@ -49,7 +49,7 @@ static t_bool	single_quote(t_token *tokens)
 	while (temp != NULL && temp->type != QUOTE)
 		temp = temp->next;
 	if (temp == NULL)
-		return (ft_putstr_fd("Unclosed Quotes.\n", STDERR_FILENO), error);
+		return (ft_putstr_fd("DeQuotes.\n", STDERR_FILENO), EXIT_FAILURE);
 	else
 	{
 		closing_quote = temp;
@@ -59,13 +59,15 @@ static t_bool	single_quote(t_token *tokens)
 			temp->type = WORD;
 			temp = temp->prev;
 		}
+		if (tokens->next == closing_quote)
+			add_token_after(tokens, new_token(WORD, ft_strdup("")));
 		remove_token(tokens, closing_quote);
 		remove_token(tokens, tokens);
 	}
-	return (false);
+	return (EXIT_SUCCESS);
 }
 
-void	check_quotes(t_token *token_list)
+t_bool	check_quotes(t_token *token_list)
 {
 	t_token	*temp;
 
@@ -74,16 +76,17 @@ void	check_quotes(t_token *token_list)
 	{
 		if (temp->type == DOUBLE_QUOTE)
 		{
-			if (double_quote(temp) == error)
-				return ;
+			if (double_quote(temp))
+				return (EXIT_FAILURE);
 			temp = token_list;
 		}
 		else if (temp->type == QUOTE)
 		{
-			if (single_quote(temp) == error)
-				return ;
+			if (single_quote(temp))
+				return (EXIT_FAILURE);
 			temp = token_list;
 		}
 		temp = temp->next;
 	}
+	return (EXIT_SUCCESS);
 }

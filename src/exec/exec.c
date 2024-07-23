@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/21 02:42:44 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:06:22 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	executer(t_shell *shell, char **argv)
 			if (cmd != NULL)
 				break ;
 		}
-		printf("cmd: %s, argv[1]: %s", cmd, argv[1]);
 		ft_free_str_arr(paths);
 		if (execve(cmd, argv, shell->env))
 			perror("minishell: ");
