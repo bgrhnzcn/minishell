@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/24 00:23:56 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:48:36 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	found_input(t_shell *shell, t_token *temp)
 		shell->fdin = open(temp->next->text, O_RDONLY, 0644);
 	if (shell->fdin == -1)
 		perror ("input error");
-    dup2(shell->fdin, STDIN_FILENO) == -1;
+    dup2(shell->fdin, STDIN_FILENO);
 }
 
 static void	found_output(t_shell *shell, t_token *temp)
@@ -41,7 +41,7 @@ static void	found_output(t_shell *shell, t_token *temp)
 		shell->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (shell->fdout == -1)
 		perror("output error");
-	dup2(shell->fdout, STDOUT_FILENO) == -1;
+	dup2(shell->fdout, STDOUT_FILENO);
 }
 
 void	apply_redirs(t_shell *shell, t_token *command)

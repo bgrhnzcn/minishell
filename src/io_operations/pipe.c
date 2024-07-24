@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/24 00:58:03 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:55:43 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,6 @@ static void	restore_std_io(t_shell *shell)
 	dup2(shell->saved_stdout, STDOUT_FILENO);
 }
 
-static void	mini_pipe(t_token **commands, int command_count, int *pipes[2])
-{
-	(void)command_count;
-	(void)commands;
-	(void)pipes;
-}
-
 t_bool	pipe_check(t_shell *shell, t_token *token_list)
 {
 	t_token	**commands;
@@ -45,7 +38,6 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		shell->pid = fork();
 		if (shell->pid == 0)
 		{
-			print_tokens(token_list);
 			apply_redirs(shell, token_list);
 			executer(shell, create_argv(token_list->next));
 			exit(127);
@@ -86,12 +78,13 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		shell->pid = fork();
 		if (shell->pid == 0)
 		{
-			close(p[0]);
-			close(p[1]);
+			shell->fdout = shell->saved_stdout;
 			apply_redirs(shell, commands[i]);
 			executer(shell, create_argv(commands[i]->next));
 			exit(127);
 		}
+		close(p[0]);
+		close(p[1]);
 		restore_std_io(shell);
 		wait(&status);
 		return (true);
