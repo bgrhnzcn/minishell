@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/24 15:48:36 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/25 20:05:19 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	found_input(t_shell *shell, t_token *temp)
 		shell->fdin = open(temp->next->text, O_RDONLY, 0644);
 	if (shell->fdin == -1)
 		perror ("input error");
-    dup2(shell->fdin, STDIN_FILENO);
+	dup2(shell->fdin, STDIN_FILENO);
 }
 
 static void	found_output(t_shell *shell, t_token *temp)
@@ -33,10 +33,7 @@ static void	found_output(t_shell *shell, t_token *temp)
 	if (shell->fdout != -1)
 		close(shell->fdout);
 	if (temp->type == APPEND)
-	{
-		if (temp->next)
-			shell->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	}
+		shell->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (temp->type == OUTPUT)
 		shell->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (shell->fdout == -1)
@@ -47,6 +44,7 @@ static void	found_output(t_shell *shell, t_token *temp)
 void	apply_redirs(t_shell *shell, t_token *command)
 {
 	t_token	*temp;
+	t_token	*temp2;
 
 	temp = command;
 	while (temp != NULL)
@@ -54,14 +52,20 @@ void	apply_redirs(t_shell *shell, t_token *command)
 		if (temp->type == INPUT || temp->type == HEREDOC)
 		{
 			found_input(shell, temp);
+			temp2 = temp->next->next;
 			remove_token(command, temp->next);
 			remove_token(command, temp);
+			temp = temp2;
+			continue ;
 		}
 		if (temp->type == OUTPUT || temp->type == APPEND)
 		{
 			found_output(shell, temp);
+			temp2 = temp->next->next;
 			remove_token(command, temp->next);
 			remove_token(command, temp);
+			temp = temp2;
+			continue ;
 		}
 		temp = temp->next;
 	}

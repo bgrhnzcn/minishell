@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/24 15:55:43 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/25 20:14:39 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 			}
 			close(p[1]);
 			dup2(p[0], STDIN_FILENO);
-			close(p[0]);
 			wait(&status);
+			close(p[0]);
 			i++;
 		}
 		shell->pid = fork();
@@ -90,24 +90,3 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		return (true);
 	}
 }
-
-/*static void	pipe_exec(char **run, t_cmds *temp, int i)
-{
-	int		p[2];
-
-	pipecheck(p);
-	temp->pid = fork();
-	if (temp->pid == 0)
-	{
-		set_signal(CHILD_P);
-		close(p[0]);
-		set_input(temp, i);
-		set_output(temp, p, i);
-		close(p[1]);
-		check_built_f(temp);
-		builtornot(temp, run);
-	}
-	close(p[1]);
-	dup2(p[0], 0);
-	close(p[0]);
-}*/

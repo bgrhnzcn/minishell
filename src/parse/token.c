@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:31:46 by buozcan           #+#    #+#             */
-/*   Updated: 2024/07/22 14:53:26 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/25 19:57:20 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	destroy_token(t_token *token)
 void	print_token(t_token *token)
 {
 	printf(
-			"[ INFO ] Token\n{\n\t.type = %s,\n\t.text = %s,\n\t.adress = %p,\n\t.next = %p,\n\t.prev = %p\n}\n",
+			"[ INFO ] Token\n{\n\t.type\t= %s,\n\t.text\t= %s,\n\t.adress\t= %p,\n\t.next\t= %p,\n\t.prev\t= %p\n}\n",
 			g_token_type_str[token->type],
 			token->text,
 			token,
