@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -I./includes/ -I./libft/ -I./readline/include/
+CFLAGS = -g -Wall -Wextra -L./readline/lib -I./includes/ -I./libft/ -I./readline/include/
 
 SRC = src
 
@@ -40,7 +40,7 @@ LIBFT = libft/libft.a
 all: $(NAME)
 
 $(NAME): $(READLINE) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -l$(READLINE) -ltinfo
 
 $(LIBFT):
 	make -C libft && make -C libft clean
@@ -49,6 +49,7 @@ clean:
 	cd $(SRC) && rm -rf builtins/*.o debug/*.o \
 			parse/*.o io_operations/*.o string/*.o exec/*.o *.o
 	make -C libft fclean
+	rm -rf ./readline
 
 fclean: clean
 	rm -f ${NAME}
