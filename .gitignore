@@ -51,4 +51,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+readline/
+readline-8.2/
+readline-8.2.tar.gz
 .vscode/

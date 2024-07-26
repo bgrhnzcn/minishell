@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/26 15:35:13 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:58:04 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,22 +72,26 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 			}
 			close(p[1]);
 			dup2(p[0], STDIN_FILENO);
-			wait(&status);
 			close(p[0]);
 			i++;
 		}
 		shell->pid = fork();
+		shell->fdout = shell->saved_stdout;
 		if (shell->pid == 0)
 		{
-			shell->fdout = shell->saved_stdout;
 			apply_redirs(shell, commands[i]);
 			executer(shell, create_argv(commands[i]->next));
 			exit(127);
 		}
 		close(p[0]);
 		close(p[1]);
+		i = 0;
+		while (i < command_count)
+		{
+			wait(&status);
+			i++;
+		}
 		restore_std_io(shell);
-		wait(&status);
 		return (true);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/26 13:06:23 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:27:54 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ char	*get_input(t_shell *shell)
 	char	*prompt;
 
 	prompt = create_prompt(shell);
+	printf(ANSI_COLOR_RED"readline_v: %s "ANSI_COLOR_RESET, rl_library_version);
 	input = readline(prompt);
 	free(prompt);
 	return (input);

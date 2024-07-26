@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/26 12:52:52 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:49:33 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,6 @@ void	executer(t_shell *shell, char **argv)
 			perror("minishell");
 		free(cmd);
 		ft_free_str_arr(argv);
-		exit(EXIT_SUCCESS);
+		exit(127);
 	}
 }
