@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/23 17:39:10 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:06:23 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->token_list.text = "";
 	shell->token_list.prev = NULL;
 	shell->token_list.next = NULL;
+	shell->fdout = STDOUT_FILENO;
+	shell->fdin = STDIN_FILENO;
 }
 
 char	*get_input(t_shell *shell)

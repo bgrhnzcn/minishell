@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/24 15:44:30 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/26 12:52:52 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	executer(t_shell *shell, char **argv)
 	char	**paths;
 	char	*cmd;
 	int		path_index;
+	int		err;
 
 	if (!buildins(shell, argv))
 	{
@@ -88,8 +89,8 @@ void	executer(t_shell *shell, char **argv)
 				break ;
 		}
 		ft_free_str_arr(paths);
-		if (execve(cmd, argv, shell->env))
-			perror("minishell: ");
+		if (execve(cmd, argv, shell->env));
+			perror("minishell");
 		free(cmd);
 		ft_free_str_arr(argv);
 		exit(EXIT_SUCCESS);

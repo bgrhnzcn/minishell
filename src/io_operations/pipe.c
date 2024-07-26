@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/25 20:14:39 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/26 15:35:13 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		{
 			apply_redirs(shell, token_list);
 			executer(shell, create_argv(token_list->next));
+			rl_replace_line("TEXT\n", 0);
 			exit(127);
 		}
 		waitpid(shell->pid, &status, 0);

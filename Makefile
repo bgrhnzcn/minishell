@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -I./includes/ -I./libft/
+CFLAGS = -g -Wall -Wextra -I./includes/ -I./libft/ -I./readline/include/
 
 SRC = src
 
@@ -33,11 +33,13 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = minishell
 
+READLINE = readline
+
 LIBFT = libft/libft.a
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
+$(NAME): $(READLINE) $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
 $(LIBFT):
@@ -55,6 +57,15 @@ re: fclean all
 
 run: $(NAME)
 	./minishell
+
+$(READLINE):
+	@clear
+	@echo "Compiling readline please wait"
+	@curl -s -O https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz
+	@tar -xvf readline-8.2.tar.gz 2>&1 | awk '{printf "."; fflush()}'
+	@cd readline-8.2 && ./configure --prefix=${PWD}/readline 2>&1 | awk '{printf "."; fflush()}'
+	@cd readline-8.2 && make install 2>&1 | awk '{printf "."; fflush()}'
+	
 
 leak: re
 	@bash ./minishell.sh
