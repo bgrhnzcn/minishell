@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -L./readline/lib -I./includes/ -I./libft/ -I./readline/include/
+CFLAGS = -g -Wall -Wextra -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
 
 SRC = src
 
@@ -33,23 +33,22 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = minishell
 
-READLINE = readline
+READLINE_V = lib/readline-8.2/lib/libreadline.a
 
-LIBFT = libft/libft.a
+LIBFT = lib/libft/libft.a
 
 all: $(NAME)
 
-$(NAME): $(READLINE) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -l$(READLINE) -ltinfo
+$(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
 $(LIBFT):
-	make -C libft && make -C libft clean
+	make -C lib/libft && make -C lib/libft clean
 
 clean:
 	cd $(SRC) && rm -rf builtins/*.o debug/*.o \
 			parse/*.o io_operations/*.o string/*.o exec/*.o *.o
-	make -C libft fclean
-	rm -rf ./readline
+	make -C lib/libft fclean
 
 fclean: clean
 	rm -f ${NAME}
@@ -59,14 +58,20 @@ re: fclean all
 run: $(NAME)
 	./minishell
 
-$(READLINE):
-	@clear
-	@echo "Compiling readline please wait"
-	@curl -s -O https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz
-	@tar -xvf readline-8.2.tar.gz 2>&1 | awk '{printf "."; fflush()}'
-	@cd readline-8.2 && ./configure --prefix=${PWD}/readline 2>&1 | awk '{printf "."; fflush()}'
-	@cd readline-8.2 && make install 2>&1 | awk '{printf "."; fflush()}'
-	
+$(READLINE_V):
+	@if [ ! -d "./lib/readline-8.2" ]; then\
+		echo "Downloading Readline-8.2...";\
+		curl https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz -o readline-8.2.tar.gz;\
+		mkdir ./lib/readline-8.2;\
+		tar xvfz readline-8.2.tar.gz > /dev/null 2> /dev/null;\
+		rm readline-8.2.tar.gz;\
+	fi;\
+	if [ ! -f "./$(READLINE_V)" ]; then\
+		echo "Compiling Readline-8.2...";\
+		cd readline-8.2 && ./configure --prefix=$(PWD)/lib/readline-8.2 2>&1 | awk '{printf "."; fflush()}';\
+		cd .. && make -C readline-8.2 install 2>&1 | awk '{printf "."; fflush()}';\
+		rm -rf readline-8.2;\
+	fi;
 
 leak: re
 	@bash ./minishell.sh
