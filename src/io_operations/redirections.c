@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/26 16:29:09 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:13:00 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	found_output(t_shell *shell, t_token *temp)
 	dup2(shell->fdout, STDOUT_FILENO);
 }
 
-void	apply_redirs(t_shell *shell, t_token *command)
+t_bool	apply_redirs(t_shell *shell, t_token *command)
 {
 	t_token	*temp;
 	t_token	*temp2;
@@ -61,6 +61,7 @@ void	apply_redirs(t_shell *shell, t_token *command)
 		}
 		temp = temp->next;
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	clear_redirs(t_shell *shell)

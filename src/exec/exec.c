@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/26 16:49:33 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:30:00 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ int	buildins(t_shell *shell, char **argv)
 	else if (ft_strequ(argv[0], "export"))
 		mini_export(shell, argv);
 	else if (ft_strequ(argv[0], "unset"))
-		mini_unset(shell, argv[1]);
+		mini_unset(shell, argv);
+	else if (ft_strequ(argv[0], "echo"))
+		mini_echo(argv);
 	else
-		return (1);
-	return (0);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 static char	*search_in_path(const char *path, const char *command)
@@ -62,12 +64,26 @@ static char	*search_in_path(const char *path, const char *command)
 	return (NULL);
 }
 
+char	**split_path(t_shell *shell)
+{
+	char	**paths;
+	char	*cmd;
+
+	cmd = get_env(shell->env, "PATH");
+	if (cmd == NULL)
+		return (NULL);
+	paths = ft_split(cmd, ':');
+	if (paths == NULL)
+		return (free(cmd), NULL);
+	free(cmd);
+	return (paths);
+}
+
 void	executer(t_shell *shell, char **argv)
 {
 	char	**paths;
 	char	*cmd;
 	int		path_index;
-	int		err;
 
 	if (!buildins(shell, argv))
 	{
@@ -76,11 +92,7 @@ void	executer(t_shell *shell, char **argv)
 	}
 	else
 	{
-		cmd = get_env(shell->env, "PATH");
-		if (cmd == NULL)
-			return ;
-		paths = ft_split(cmd, ':');
-		free(cmd);
+		paths = split_path(shell);
 		path_index = 0;
 		while (paths[path_index] != NULL)
 		{

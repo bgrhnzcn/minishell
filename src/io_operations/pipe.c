@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/27 19:53:39 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/07/28 14:26:18 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,27 @@ static void	restore_std_io(t_shell *shell)
 	dup2(shell->saved_stdout, STDOUT_FILENO);
 }
 
+t_bool	single_command(t_shell *shell, t_token *token_list)
+{
+	char	**argv;
+	int		status;
+
+	save_std_io(shell);
+	apply_redirs(shell, token_list);
+	argv = create_argv(token_list->next);
+	if (!buildins(shell, argv))
+		return (restore_std_io(shell), status = 0, true);
+	shell->pid = fork();
+	if (shell->pid == 0)
+	{
+		executer(shell, argv);
+		exit(127);
+	}
+	restore_std_io(shell);
+	waitpid(shell->pid, &status, 0);
+	return (true);
+}
+
 t_bool	pipe_check(t_shell *shell, t_token *token_list)
 {
 	t_token	**commands;
@@ -34,17 +55,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 
 	command_count = get_command_count(token_list);
 	if (command_count == 1)
-	{
-		shell->pid = fork();
-		if (shell->pid == 0)
-		{
-			apply_redirs(shell, token_list);
-			executer(shell, create_argv(token_list->next));
-			exit(127);
-		}
-		waitpid(shell->pid, &status, 0);
-		return (true);
-	}
+		single_command(shell, token_list);
 	else
 	{
 		commands = create_commands(command_count, token_list);

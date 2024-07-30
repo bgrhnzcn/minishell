@@ -13,6 +13,7 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/builtins/cd.c \
 	$(SRC)/builtins/unset.c \
 	$(SRC)/builtins/export.c \
+	$(SRC)/builtins/echo.c \
 	$(SRC)/parse/token.c \
 	$(SRC)/parse/token2.c \
 	$(SRC)/parse/tokenizer.c \
