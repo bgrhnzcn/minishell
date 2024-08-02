@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:50:22 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/23 14:11:46 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/02 19:08:35 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_token	*remove_sublist(t_token *list_start, t_token *list_end)
 	list_start->prev = sub_list;
 	sub_list->next = list_start;
 	list_end->next = NULL;
-	if (add_token_last(sub_list, new_token(TAIL, ft_strdup(""))) == error)
+	if (add_token_last(sub_list, new_token(TAIL, ft_strdup(""))))
 	{
 		clear_tokens(sub_list);
 		return (printf("Error occured while creating command list.\n"), NULL);
@@ -49,10 +49,10 @@ t_bool	add_token_last(t_token *token_list, t_token *token)
 
 	temp = token_list;
 	if (temp == NULL || token == NULL)
-		return (error);
+		return (EXIT_FAILURE);
 	while (temp->next != NULL)
 		temp = temp->next;
 	temp->next = token;	
 	token->prev = temp;
-	return (false);
+	return (EXIT_SUCCESS);
 }

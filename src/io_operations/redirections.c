@@ -3,45 +3,117 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/28 13:13:00 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/02 22:29:39 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	found_input(t_shell *shell, t_token *temp)
+static void handle_heredoc(t_cmd *cmd, t_token *temp) 
 {
-	if (shell->fdin != -1)
-		close (shell->fdin);
+	char *delimiter;
+	char *line;
+	char *temp_file = ft_strdup("/tmp/.here_doc");
+	int temp_fd;
+
+	delimiter = temp->next->text;
+	temp_fd = open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (temp_fd < 0)
+	{
+		perror("Error opening temporary file");
+		return;
+	}
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			break;
+		if (ft_strequ(line, delimiter))
+		{
+			free(line);
+			break;
+		}
+		ft_putstr_fd(line, temp_fd);
+		free(line);
+	}
+	close(temp_fd);
+	cmd->fdin = open(temp_file, O_RDONLY);
+	if (cmd->fdin == -1)
+		perror("input error");
+}
+
+static t_bool	found_input(t_cmd *cmd, t_token *temp)
+{
+	if (cmd->fdin != -1)
+		close(cmd->fdin);
 	if (temp->type == HEREDOC)
-		shell->fdin = open(temp->next->text, O_RDONLY, 0644);
+		handle_heredoc(cmd, temp);
 	else if (temp->type == INPUT)
-		shell->fdin = open(temp->next->text, O_RDONLY, 0644);
-	if (shell->fdin == -1)
-		perror ("input error");
-	dup2(shell->fdin, STDIN_FILENO);
+		cmd->fdin = open(temp->next->text, O_RDONLY, 0644);
+	if (cmd->fdin == -1)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(temp->next->text, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		cmd->fd_fail = true;
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
-static void	found_output(t_shell *shell, t_token *temp)
+static t_bool	found_output(t_cmd *cmd, t_token *temp)
 {
-	if (shell->fdout != -1)
-		close(shell->fdout);
+	if (cmd->fdout != -1)
+		close(cmd->fdout);
 	if (temp->type == APPEND)
-		shell->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		cmd->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (temp->type == OUTPUT)
-		shell->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (shell->fdout == -1)
-		perror("output error");
-	dup2(shell->fdout, STDOUT_FILENO);
+		cmd->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (cmd->fdout == -1)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(temp->next->text, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		cmd->fd_fail = true;
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
-t_bool	apply_redirs(t_shell *shell, t_token *command)
+t_bool	apply_redirs(t_cmd *cmd)
+{
+	printf("apply_redirs: %d\n", cmd->fd_fail);
+	if (cmd->fd_fail == true)
+	{
+		if (cmd->fdin != -1)
+			close(cmd->fdin);
+		if (cmd->fdout != -1)
+			close(cmd->fdout);
+		return (EXIT_FAILURE);
+	}
+	if (cmd->fdin != -1)
+	{
+		dup2(cmd->fdin, STDIN_FILENO);
+		close(cmd->fdin);
+	}
+	if (cmd->fdout != -1)
+	{
+		dup2(cmd->fdout, STDOUT_FILENO);
+		close(cmd->fdout);
+	}
+	return (EXIT_SUCCESS);
+}
+
+t_bool	get_redirs(t_cmd *cmd, t_token *command)
 {
 	t_token	*temp;
 	t_token	*temp2;
+	t_bool	status;
 
 	temp = command;
 	while (temp != NULL)
@@ -50,22 +122,18 @@ t_bool	apply_redirs(t_shell *shell, t_token *command)
 			|| (temp->type == OUTPUT || temp->type == APPEND))
 		{
 			if (temp->type == INPUT || temp->type == HEREDOC)
-				found_input(shell, temp);
+				status = found_input(cmd, temp);
 			if (temp->type == OUTPUT || temp->type == APPEND)
-				found_output(shell, temp);
+				status = found_output(cmd, temp);
 			temp2 = temp->next->next;
 			remove_token(command, temp->next);
 			remove_token(command, temp);
 			temp = temp2;
+			if (status == EXIT_FAILURE)
+				return (EXIT_FAILURE);
 			continue ;
 		}
 		temp = temp->next;
 	}
 	return (EXIT_SUCCESS);
-}
-
-void	clear_redirs(t_shell *shell)
-{
-	shell->fdin = STDIN_FILENO;
-	shell->fdout = STDOUT_FILENO;
 }
