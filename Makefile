@@ -17,7 +17,6 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/parse/token.c \
 	$(SRC)/parse/token2.c \
 	$(SRC)/parse/tokenizer.c \
-	$(SRC)/debug/debug.c \
 	$(SRC)/parse/quotes.c \
 	$(SRC)/parse/syntax.c \
 	$(SRC)/parse/expansion.c \
@@ -25,6 +24,7 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/parse/commands.c \
 	$(SRC)/io_operations/pipe.c \
 	$(SRC)/io_operations/redirections.c \
+	$(SRC)/io_operations/utils.c \
 	$(SRC)/exec/exec.c \
 
 OBJS = $(SRCS:.c=.o)
@@ -41,8 +41,8 @@ LIBFT = lib/libft/libft.a
 all: $(NAME)
 
 $(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
-
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline -ltinfo
+#															linux-only
 $(LIBFT):
 	make -C lib/libft && make -C lib/libft clean
 

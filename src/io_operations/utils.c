@@ -1,42 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 15:23:18 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/05/28 16:10:34 by bgrhnzcn         ###   ########.fr       */
+/*   Created: 2024/08/02 18:31:59 by bgrhnzcn          #+#    #+#             */
+/*   Updated: 2024/08/02 21:31:49 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	debug_str(t_string str)
+void	free_cmd(t_cmd *cmd)
 {
-	size_t	i;
-
-	i = 0;
-	printf("Size Without NULL: %ld\n", ft_vector_len(&str) - 1);
-	printf("Size With NULL: %ld\n", ft_vector_len(&str));
-	while (str[i])
-	{
-		printf("%c, ", str[i]);
-		i++;
-	}
-	printf("\n");
+	if (cmd->argv)
+		free(cmd->argv);
+	free(cmd);
 }
 
-void	debug_env(t_str_vec env)
+void	save_std_io(t_shell *shell)
 {
-	size_t	i;
+	shell->saved_stdin = dup(STDIN_FILENO);
+	shell->saved_stdout = dup(STDOUT_FILENO);
+}
 
-	i = 0;
-	printf("%ld\n", ft_vector_len(&env) - 1);
-	while (env[i] != NULL)
-	{
-		printf("%ld.: %s\n", i + 1, env[i]);
-		i++;
-	}
-	exit(EXIT_SUCCESS);
+void	restore_std_io(t_shell *shell)
+{
+	dup2(shell->saved_stdin, STDIN_FILENO);
+	dup2(shell->saved_stdout, STDOUT_FILENO);
 }

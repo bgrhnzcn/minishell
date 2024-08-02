@@ -3,34 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/28 13:30:00 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/02 23:24:23 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	buildins(t_shell *shell, char **argv)
+t_bool	single_command(t_shell *shell, t_cmd *cmd)
 {
-	if (ft_strequ(argv[0], "exit"))
-		mini_exit(shell, EXIT_FAILURE);
-	if (ft_strequ(argv[0], "env"))
-		mini_env(shell->env);
-	else if (ft_strequ(argv[0], "pwd"))
-		mini_pwd(shell->env);
-	else if (ft_strequ(argv[0], "cd"))
-		mini_cd(shell->env, argv[1]);
-	else if (ft_strequ(argv[0], "export"))
-		mini_export(shell, argv);
-	else if (ft_strequ(argv[0], "unset"))
-		mini_unset(shell, argv);
-	else if (ft_strequ(argv[0], "echo"))
-		mini_echo(argv);
-	else
-		return (EXIT_FAILURE);
+	int		status;
+
+	if (!buildins(shell, cmd))
+		return (status = 0, EXIT_SUCCESS);
+	shell->pid = fork();
+	if (shell->pid == 0)
+	{
+		if (!apply_redirs(cmd))
+			executer(shell, cmd->argv);
+		free_cmd(cmd);
+		exit(127);
+	}
+	free_cmd(cmd);
+	waitpid(shell->pid, &status, 0);
 	return (EXIT_SUCCESS);
+}
+
+int	buildins(t_shell *shell, t_cmd *cmd)
+{
+	save_std_io(shell);
+	if (ft_strequ(cmd->argv[0], "exit") && !apply_redirs(cmd))
+		mini_exit(shell, EXIT_SUCCESS);
+	if (ft_strequ(cmd->argv[0], "env") && !apply_redirs(cmd))
+		mini_env(shell->env);
+	else if (ft_strequ(cmd->argv[0], "pwd") && !apply_redirs(cmd))
+		mini_pwd(shell->env);
+	else if (ft_strequ(cmd->argv[0], "cd") && !apply_redirs(cmd))
+		mini_cd(shell->env, cmd->argv[1]);
+	else if (ft_strequ(cmd->argv[0], "export") && !apply_redirs(cmd))
+		mini_export(shell, cmd->argv);
+	else if (ft_strequ(cmd->argv[0], "unset") && !apply_redirs(cmd))
+		mini_unset(shell, cmd->argv);
+	else if (ft_strequ(cmd->argv[0], "echo") && !apply_redirs(cmd))
+		mini_echo(cmd->argv);
+	else
+		return (restore_std_io(shell), EXIT_FAILURE);
+	return (restore_std_io(shell), EXIT_SUCCESS);
 }
 
 static char	*search_in_path(const char *path, const char *command)
@@ -85,26 +105,18 @@ void	executer(t_shell *shell, char **argv)
 	char	*cmd;
 	int		path_index;
 
-	if (!buildins(shell, argv))
+	paths = split_path(shell);
+	path_index = 0;
+	while (paths[path_index] != NULL)
 	{
-		ft_free_str_arr(argv);
-		return ;
+		cmd = search_in_path(paths[path_index++], argv[0]);
+		if (cmd != NULL)
+			break ;
 	}
-	else
-	{
-		paths = split_path(shell);
-		path_index = 0;
-		while (paths[path_index] != NULL)
-		{
-			cmd = search_in_path(paths[path_index++], argv[0]);
-			if (cmd != NULL)
-				break ;
-		}
-		ft_free_str_arr(paths);
-		if (execve(cmd, argv, shell->env));
-			perror("minishell");
-		free(cmd);
-		ft_free_str_arr(argv);
-		exit(127);
-	}
+	ft_free_str_arr(paths);
+	if (execve(cmd, argv, shell->env));
+		perror("minishell");
+	free(cmd);
+	ft_free_str_arr(argv);
+	exit(127);
 }
