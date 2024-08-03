@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:31:46 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/02 17:11:30 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/03 22:44:07 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ t_token	*remove_token(t_token *tokens, t_token *token)
 
 void	destroy_token(t_token *token)
 {
-	free(token->text);
+	if (token->text != NULL)
+		free(token->text);
 	free(token);
 }
 
@@ -82,12 +83,11 @@ void	clear_tokens(t_token *token_list)
 	t_token	*token;
 	t_token	*temp;
 
-	token = token_list->next;
+	token = token_list;
 	while (token != NULL)
 	{
 		temp = token->next;
-		free(token->text);
-		free(token);
+		destroy_token(token);
 		token = temp;
 	}
 	token_list->next = NULL;

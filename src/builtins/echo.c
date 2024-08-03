@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:53:03 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/07/28 13:24:23 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/03 23:28:47 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_bool check_echo(char *s)
+static t_bool	check_echo(char *s)
 {
 	if (!*s)
 		return (false);

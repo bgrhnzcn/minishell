@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/02 23:24:23 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/03 23:06:35 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,11 @@ static char	*search_in_path(const char *path, const char *command)
 				break ;
 			ft_strlcat(cmd, path, cmd_size);
 			ft_strlcat(cmd, "/", cmd_size);
-			ft_strlcat(cmd, command, cmd_size);
-			closedir(dir);
-			return (cmd);
+			return (ft_strlcat(cmd, command, cmd_size), closedir(dir), cmd);
 		}
 		dirent = readdir(dir);
 	}
-	closedir(dir);
-	return (NULL);
+	return (closedir(dir), NULL);
 }
 
 char	**split_path(t_shell *shell)
@@ -114,7 +111,7 @@ void	executer(t_shell *shell, char **argv)
 			break ;
 	}
 	ft_free_str_arr(paths);
-	if (execve(cmd, argv, shell->env));
+	if (execve(cmd, argv, shell->env))
 		perror("minishell");
 	free(cmd);
 	ft_free_str_arr(argv);

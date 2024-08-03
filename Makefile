@@ -48,7 +48,7 @@ $(LIBFT):
 
 clean:
 	cd $(SRC) && rm -rf builtins/*.o debug/*.o \
-			parse/*.o io_operations/*.o string/*.o exec/*.o *.o
+						parse/*.o io_operations/*.o exec/*.o *.o
 	make -C lib/libft fclean
 
 fclean: clean

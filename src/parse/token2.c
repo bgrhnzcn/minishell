@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:50:22 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/02 19:08:35 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/03 18:28:24 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_bool	add_token_last(t_token *token_list, t_token *token)
 		return (EXIT_FAILURE);
 	while (temp->next != NULL)
 		temp = temp->next;
-	temp->next = token;	
+	temp->next = token;
 	token->prev = temp;
 	return (EXIT_SUCCESS);
 }

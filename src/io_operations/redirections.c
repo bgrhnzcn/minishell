@@ -6,35 +6,36 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/02 22:29:39 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/03 23:23:12 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void handle_heredoc(t_cmd *cmd, t_token *temp) 
+static void	handle_heredoc(t_cmd *cmd, t_token *temp)
 {
-	char *delimiter;
-	char *line;
-	char *temp_file = ft_strdup("/tmp/.here_doc");
-	int temp_fd;
+	char	*delimiter;
+	char	*line;
+	char	*temp_file = ft_strdup("/tmp/.here_doc");
+	int		temp_fd;
 
 	delimiter = temp->next->text;
 	temp_fd = open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (temp_fd < 0)
 	{
 		perror("Error opening temporary file");
-		return;
+		return ;
 	}
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
-			break;
+			break ;
 		if (ft_strequ(line, delimiter))
 		{
 			free(line);
-			break;
+			ft_putstr_fd("\n", temp_fd);
+			break ;
 		}
 		ft_putstr_fd(line, temp_fd);
 		free(line);
@@ -70,7 +71,8 @@ static t_bool	found_output(t_cmd *cmd, t_token *temp)
 	if (cmd->fdout != -1)
 		close(cmd->fdout);
 	if (temp->type == APPEND)
-		cmd->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		cmd->fdout = open(temp->next->text,
+				O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (temp->type == OUTPUT)
 		cmd->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (cmd->fdout == -1)
@@ -87,7 +89,6 @@ static t_bool	found_output(t_cmd *cmd, t_token *temp)
 
 t_bool	apply_redirs(t_cmd *cmd)
 {
-	printf("apply_redirs: %d\n", cmd->fd_fail);
 	if (cmd->fd_fail == true)
 	{
 		if (cmd->fdin != -1)
@@ -98,7 +99,11 @@ t_bool	apply_redirs(t_cmd *cmd)
 	}
 	if (cmd->fdin != -1)
 	{
-		dup2(cmd->fdin, STDIN_FILENO);
+		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			return (EXIT_FAILURE);
+		}
 		close(cmd->fdin);
 	}
 	if (cmd->fdout != -1)

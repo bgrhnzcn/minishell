@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/02 23:24:19 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/03 23:47:44 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,14 +157,14 @@ t_token	*new_token(t_token_type type, char *text);
  *
  * @param token The token to be printed.
  */
-void	print_token(t_token *token);
+// void	print_token(t_token *token);
 
 /**
  * @brief Prints the details of all tokens in a token list.
  *
  * @param token_list The token list to be printed.
  */
-void	print_tokens(t_token *token_list);
+// void	print_tokens(t_token *token_list);
 
 /**
  * @brief Clears all tokens in a token list.
@@ -316,7 +316,19 @@ void	save_std_io(t_shell *shell);
  */
 void	restore_std_io(t_shell *shell);
 
+/**
+ * @brief Waits for all child processes to terminate.
+ * 
+ * This function waits for all child processes to terminate before returning.
+ * It ensures that the parent process does not exit before all child processes
+ * have completed their execution.
+ */
+void	wait_all_childs(void);
+
 //---------------------------- Commands ---------------------------------
+
+//void	print_commands(t_cmd *commands, int command_count);
+//void	print_command(t_cmd *command, int i);
 
 /**
  * @brief Gets the number of commands in the token list.
@@ -362,13 +374,15 @@ int		buildins(t_shell *shell, t_cmd *cmd);
  * @brief Executes a single command in the minishell.
  *
  * This function is responsible for executing a single command in the minishell.
- * It takes a pointer to the shell structure and a pointer to the command structure as parameters.
+ * It takes a pointer to the shell structure and a pointer to the command
+ * structure as parameters.
  *
  * @param shell A pointer to the shell structure.
  * @param cmd A pointer to the command structure.
- * @return The boolean result indicating the success or failure of the command execution.
+ * @return The boolean result indicating the success or
+ * failure of the command execution.
  */
-t_bool single_command(t_shell *shell, t_cmd *cmd);
+t_bool	single_command(t_shell *shell, t_cmd *cmd);
 
 /**
  * @brief Executes the built-in commands or external programs.

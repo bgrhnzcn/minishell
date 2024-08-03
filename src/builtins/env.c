@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/02 19:02:15 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/03 23:29:21 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	find_env_index(char **env, char *var)
 char	*get_env(char **env, char *var)
 {
 	char	*res;
-	int	i;
+	int		i;
 
 	i = find_env_index(env, var);
 	if (i == error)
@@ -77,7 +77,7 @@ int	init_env(t_shell *shell, char **envp)
 
 	i = 0;
 	shell->env = ft_calloc(ENV_LIMIT, sizeof (char *));
-	if (shell->env  == NULL)
+	if (shell->env == NULL)
 		return (1);
 	while (envp[i] != NULL && i < ENV_LIMIT)
 	{

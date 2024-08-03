@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/02 19:58:15 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/03 22:58:54 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void	clear_splitted(t_token **splitted, int command_count)
 	while (i < command_count)
 	{
 		clear_tokens(splitted[i]);
-		destroy_token(splitted[i]);
 		i++;
 	}
 	free(splitted);
@@ -71,6 +70,37 @@ static t_token	**split_commands(int command_count, t_token *token_list)
 	return (splitted);
 }
 
+/*
+void	print_command(t_cmd *command, int i)
+{
+	int	j;
+
+	printf("command %d:\n", i);
+	printf("fdin: %d\n", command->fdin);
+	printf("fdout: %d\n", command->fdout);
+	printf("fd_fail: %d\n", command->fd_fail);
+	j = 0;
+	while (command->argv[j] != NULL)
+	{
+		printf("argv[%d]: %s\n", j, command->argv[j]);
+		j++;
+	}
+}
+
+void	print_commands(t_cmd *commands, int command_count)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < command_count)
+	{
+		print_command(&commands[i], i);
+		i++;
+	}
+}
+*/
+
 t_cmd	*create_commands(int command_count, t_token *token_list)
 {
 	t_cmd	*commands;
@@ -91,8 +121,8 @@ t_cmd	*create_commands(int command_count, t_token *token_list)
 		commands[i].fd_fail = false;
 		if (get_redirs(&commands[i], splitted[i]))
 			return (free(commands),
-					clear_splitted(splitted, command_count),
-					NULL);
+				clear_splitted(splitted, command_count),
+				NULL);
 		commands[i].argv = create_argv(splitted[i]);
 		i++;
 	}
