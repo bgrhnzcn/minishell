@@ -41,8 +41,8 @@ LIBFT = lib/libft/libft.a
 all: $(NAME)
 
 $(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline -ltinfo
-#															linux-only
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
+#														-ltinfo	linux-only
 $(LIBFT):
 	make -C lib/libft && make -C lib/libft clean
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   argv.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 11:42:22 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/02 17:50:33 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/05 14:18:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	**create_argv(t_token *token_list)
 	temp = token_list;
 	counter = 0;
 	argv_size = get_argv_size(token_list) + 1;
-	argv = malloc(argv_size * sizeof (char *));
+	argv = ft_calloc(argv_size, sizeof (char *));
 	if (argv == NULL)
 		return (NULL);
 	while (counter < argv_size && temp != NULL)

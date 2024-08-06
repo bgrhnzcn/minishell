@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/03 23:45:29 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:25:57 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 	t_cmd	*commands;
 	int		*pipes;
 	int		command_count;
+	int		i;
 
 	command_count = get_command_count(token_list);
 	if (command_count == 1)
@@ -109,5 +110,12 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		commands = create_commands(command_count, token_list);
 		create_pipes(&pipes, command_count);
 		call_pipe(shell, commands, command_count, pipes);
+		i = 0;
+		while (i < command_count)
+		{
+			ft_free_str_arr(commands[i].argv);
+			i++;
+		}
+		free(commands);
 	}
 }
