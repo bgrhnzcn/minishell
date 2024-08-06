@@ -2,6 +2,12 @@ CC = gcc
 
 CFLAGS = -g -Wall -Wextra -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
 
+DYLIBS = -lreadline
+
+ifeq ($(shell uname), Linux)
+	DYLIBS += -ltinfo
+endif
+
 SRC = src
 
 OBJ = obj
@@ -41,8 +47,8 @@ LIBFT = lib/libft/libft.a
 all: $(NAME)
 
 $(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
-#														-ltinfo	linux-only
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(DYLIBS)
+
 $(LIBFT):
 	make -C lib/libft && make -C lib/libft clean
 

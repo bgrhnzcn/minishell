@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 18:31:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/05 15:00:18 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/06 23:41:24 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,19 @@ void	wait_all_childs(void)
 		if (wpid == -1)
 			break ;
 	}
+}
+
+char	**split_path(t_shell *shell)
+{
+	char	**paths;
+	char	*cmd;
+
+	cmd = get_env(shell->env, "PATH");
+	if (cmd == NULL)
+		return (NULL);
+	paths = ft_split(cmd, ':');
+	if (paths == NULL)
+		return (free(cmd), NULL);
+	free(cmd);
+	return (paths);
 }

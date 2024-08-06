@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/05 14:59:24 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/07 00:01:02 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	buildins(t_shell *shell, t_cmd *cmd)
+{
+	save_std_io(shell);
+	if (ft_strequ(cmd->argv[0], "exit") && !apply_redirs(cmd))
+		mini_exit(shell, EXIT_SUCCESS);
+	if (ft_strequ(cmd->argv[0], "env") && !apply_redirs(cmd))
+		mini_env(shell->env);
+	else if (ft_strequ(cmd->argv[0], "pwd") && !apply_redirs(cmd))
+		mini_pwd(shell->env);
+	else if (ft_strequ(cmd->argv[0], "cd") && !apply_redirs(cmd))
+		mini_cd(shell->env, cmd->argv[1]);
+	else if (ft_strequ(cmd->argv[0], "export") && !apply_redirs(cmd))
+		mini_export(shell, cmd->argv);
+	else if (ft_strequ(cmd->argv[0], "unset") && !apply_redirs(cmd))
+		mini_unset(shell, cmd->argv);
+	else if (ft_strequ(cmd->argv[0], "echo") && !apply_redirs(cmd))
+		mini_echo(cmd->argv);
+	else
+		return (restore_std_io(shell), EXIT_FAILURE);
+	return (restore_std_io(shell), EXIT_SUCCESS);
+}
 
 int	get_command_count(t_token *token_list)
 {

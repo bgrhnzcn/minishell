@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/03 23:47:44 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/06 23:42:08 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,6 +355,9 @@ t_cmd	*create_commands(int command_count, t_token *token_list);
 void	free_cmd(t_cmd *cmd);
 
 //---------------------------- Executer ---------------------------------
+
+char	**split_path(t_shell *shell);
+
 /**
  * Executes the built-in commands in the minishell.
  *

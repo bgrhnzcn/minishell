@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/05 14:59:50 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/07 00:06:29 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,31 +26,8 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd)
 		free_cmd(cmd);
 		exit(127);
 	}
-	free_cmd(cmd);
 	waitpid(shell->pid, &status, 0);
 	return (EXIT_SUCCESS);
-}
-
-int	buildins(t_shell *shell, t_cmd *cmd)
-{
-	save_std_io(shell);
-	if (ft_strequ(cmd->argv[0], "exit") && !apply_redirs(cmd))
-		mini_exit(shell, EXIT_SUCCESS);
-	if (ft_strequ(cmd->argv[0], "env") && !apply_redirs(cmd))
-		mini_env(shell->env);
-	else if (ft_strequ(cmd->argv[0], "pwd") && !apply_redirs(cmd))
-		mini_pwd(shell->env);
-	else if (ft_strequ(cmd->argv[0], "cd") && !apply_redirs(cmd))
-		mini_cd(shell->env, cmd->argv[1]);
-	else if (ft_strequ(cmd->argv[0], "export") && !apply_redirs(cmd))
-		mini_export(shell, cmd->argv);
-	else if (ft_strequ(cmd->argv[0], "unset") && !apply_redirs(cmd))
-		mini_unset(shell, cmd->argv);
-	else if (ft_strequ(cmd->argv[0], "echo") && !apply_redirs(cmd))
-		mini_echo(cmd->argv);
-	else
-		return (restore_std_io(shell), EXIT_FAILURE);
-	return (restore_std_io(shell), EXIT_SUCCESS);
 }
 
 static char	*search_in_path(const char *path, const char *command)
@@ -81,27 +58,34 @@ static char	*search_in_path(const char *path, const char *command)
 	return (closedir(dir), NULL);
 }
 
-char	**split_path(t_shell *shell)
+static void	execute_relative(t_shell *shell, char **argv)
 {
-	char	**paths;
+	char	*pwd;
 	char	*cmd;
+	char	*temp;
 
-	cmd = get_env(shell->env, "PATH");
-	if (cmd == NULL)
-		return (NULL);
-	paths = ft_split(cmd, ':');
-	if (paths == NULL)
-		return (free(cmd), NULL);
+	pwd = get_env(shell->env, "PWD");
+	temp = ft_strjoin(pwd + 4, "/");
+	free(pwd);
+	cmd = ft_strjoin(temp, argv[0]);
+	free(temp);
+	if (execve(cmd, argv, shell->env))
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(argv[0], STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+	}
 	free(cmd);
-	return (paths);
 }
 
-void	executer(t_shell *shell, char **argv)
+static void	execute_path(t_shell *shell, char **argv)
 {
 	char	**paths;
 	char	*cmd;
 	int		path_index;
-
+	
 	paths = split_path(shell);
 	path_index = 0;
 	while (paths[path_index] != NULL)
@@ -111,9 +95,21 @@ void	executer(t_shell *shell, char **argv)
 			break ;
 	}
 	ft_free_str_arr(paths);
-	if (execve(cmd, argv, shell->env))
-		perror("minishell");
+	if (cmd != NULL && execve(cmd, argv, shell->env))
+	{
+		ft_putstr_fd("Command \'", STDERR_FILENO);
+		ft_putstr_fd(argv[0], STDERR_FILENO);
+		ft_putstr_fd("\' not found.\n", STDERR_FILENO);
+	}
 	free(cmd);
+}
+
+void	executer(t_shell *shell, char **argv)
+{
+	if (ft_strchr(argv[0], '/'))
+		execute_relative(shell, argv);
+	else
+		execute_path(shell, argv);
 	ft_free_str_arr(argv);
 	exit(127);
 }
