@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/07 00:01:02 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:41:30 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	get_command_count(t_token *token_list)
+{
+	t_token	*temp;
+	int		command_count;
+
+	temp = token_list;
+	command_count = 1;
+	while (temp != NULL)
+	{
+		if (temp->type == PIPE)
+			command_count++;
+		temp = temp->next;
+	}
+	return (command_count);
+}
 
 int	buildins(t_shell *shell, t_cmd *cmd)
 {
@@ -32,22 +48,6 @@ int	buildins(t_shell *shell, t_cmd *cmd)
 	else
 		return (restore_std_io(shell), EXIT_FAILURE);
 	return (restore_std_io(shell), EXIT_SUCCESS);
-}
-
-int	get_command_count(t_token *token_list)
-{
-	t_token	*temp;
-	int		command_count;
-
-	temp = token_list;
-	command_count = 1;
-	while (temp != NULL)
-	{
-		if (temp->type == PIPE)
-			command_count++;
-		temp = temp->next;
-	}
-	return (command_count);
 }
 
 static void	clear_splitted(t_token **splitted, int command_count)
