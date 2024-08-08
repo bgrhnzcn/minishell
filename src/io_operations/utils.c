@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 18:31:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/06 23:41:24 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 20:07:48 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	free_cmd(t_cmd *cmd)
 {
+	if (cmd == NULL)
+		return ;
 	if (cmd->argv)
 		ft_free_str_arr(cmd->argv);
 	free(cmd);

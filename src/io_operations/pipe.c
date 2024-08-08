@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/07 15:58:51 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/08 20:31:13 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,20 @@ static void	create_pipes(int **p, int command_count)
 	}
 }
 
+void	free_cmds(t_cmd *commands, int command_count)
+{
+	int	i;
+
+	i = 0;
+	while (i < command_count)
+	{
+		if (commands[i].argv)
+			ft_free_str_arr(commands[i].argv);
+		i++;
+	}
+	free(commands);
+}
+
 static void	call_pipe(t_shell *shell, t_cmd *commands,
 	int command_count, int *pipes)
 {
@@ -81,11 +95,15 @@ static void	call_pipe(t_shell *shell, t_cmd *commands,
 				dup2(pipes[i * 2 + 3], STDOUT_FILENO);
 			if (i != -1)
 				dup2(pipes[i * 2], STDIN_FILENO);
-			if (!apply_redirs(&commands[i + 1]))
-				executer(shell, commands[i + 1].argv);
-			free_cmd(&commands[i + 1]);
-			printf("minishell: %s: command not found\n",
-				commands[i + 1].argv[0]);
+			if (commands[i + 1].argv[0] != NULL)
+			{
+				if (!apply_redirs(&commands[i + 1]))
+					executer(shell, commands[i + 1].argv);
+				printf("minishell: %s: command not found\n",
+					commands[i + 1].argv[0]);
+			}
+			free_cmds(commands, command_count);
+			commands = NULL;
 			clear_pipes(pipes, command_count);
 			exit(127);
 		}
@@ -100,7 +118,6 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 	t_cmd	*commands;
 	int		*pipes;
 	int		command_count;
-	int		i;
 
 	command_count = get_command_count(token_list);
 	commands = create_commands(command_count, token_list);
@@ -111,11 +128,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 		create_pipes(&pipes, command_count);
 		call_pipe(shell, commands, command_count, pipes);
 	}
-	i = 0;
-	while (i < command_count)
-	{
-		ft_free_str_arr(commands[i].argv);
-		i++;
-	}
-	free(commands);
+	free_cmds(commands, command_count);
+	commands = NULL;
+	return (EXIT_SUCCESS);
 }

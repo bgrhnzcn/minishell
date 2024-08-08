@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/05 15:01:54 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/08 20:28:51 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,14 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(&shell, envp);
 	while (true)
 	{
-		free(shell.input);
+		if (shell.input != NULL)
+			free(shell.input);
 		shell.input = get_input(&shell);
+		if (ft_strequ(shell.input, ""))
+			continue ;
 		add_history(shell.input);
-		parse(&shell);
+		if (parse(&shell))
+			continue ;
 		pipe_check(&shell, &shell.token_list);
 		clear_tokens(shell.token_list.next);
 		shell.token_list.next = NULL;

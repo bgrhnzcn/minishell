@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
+CFLAGS = -g -Wall -Wextra -fsanitize=address -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
 
 DYLIBS = -lreadline
 

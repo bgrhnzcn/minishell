@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/07 16:41:30 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/08 20:30:30 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ static t_token	**split_commands(int command_count, t_token *token_list)
 	return (splitted);
 }
 
-/*
 void	print_command(t_cmd *command, int i)
 {
 	int	j;
@@ -121,7 +120,6 @@ void	print_commands(t_cmd *commands, int command_count)
 		i++;
 	}
 }
-*/
 
 t_cmd	*create_commands(int command_count, t_token *token_list)
 {

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/06 23:42:08 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 20:19:55 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,14 +157,14 @@ t_token	*new_token(t_token_type type, char *text);
  *
  * @param token The token to be printed.
  */
-// void	print_token(t_token *token);
+void	print_token(t_token *token);
 
 /**
  * @brief Prints the details of all tokens in a token list.
  *
  * @param token_list The token list to be printed.
  */
-// void	print_tokens(t_token *token_list);
+void	print_tokens(t_token *token_list);
 
 /**
  * @brief Clears all tokens in a token list.
@@ -327,8 +327,8 @@ void	wait_all_childs(void);
 
 //---------------------------- Commands ---------------------------------
 
-//void	print_commands(t_cmd *commands, int command_count);
-//void	print_command(t_cmd *command, int i);
+void	print_commands(t_cmd *commands, int command_count);
+void	print_command(t_cmd *command, int i);
 
 /**
  * @brief Gets the number of commands in the token list.
