@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 20:29:27 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 23:11:17 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,14 @@ static t_bool	found_input(t_cmd *cmd, t_token *temp)
 	if (temp->type == HEREDOC)
 		handle_heredoc(cmd, temp);
 	else if (temp->type == INPUT)
-		cmd->fdin = open(temp->next->text, O_RDONLY, 0644);
+		cmd->fdin = open(temp->text + 1, O_RDONLY, 0644);
 	if (cmd->fdin == -1)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(temp->next->text, STDERR_FILENO);
+		if (temp->type == HEREDOC)
+			ft_putstr_fd(temp->text + 2, STDERR_FILENO);
+		else
+			ft_putstr_fd(temp->text + 1, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 		cmd->fd_fail = true;
@@ -71,14 +74,17 @@ static t_bool	found_output(t_cmd *cmd, t_token *temp)
 	if (cmd->fdout != -1)
 		close(cmd->fdout);
 	if (temp->type == APPEND)
-		cmd->fdout = open(temp->next->text,
+		cmd->fdout = open(temp->text + 2,
 				O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (temp->type == OUTPUT)
-		cmd->fdout = open(temp->next->text, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		cmd->fdout = open(temp->text + 1, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (cmd->fdout == -1)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(temp->next->text, STDERR_FILENO);
+		if (temp->type == APPEND)
+			ft_putstr_fd(temp->text + 2, STDERR_FILENO);
+		else
+			ft_putstr_fd(temp->text + 1, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 		cmd->fd_fail = true;
@@ -114,13 +120,12 @@ t_bool	apply_redirs(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-t_bool	get_redirs(t_cmd *cmd, t_token *command)
+t_bool	get_redirs(t_cmd *cmd)
 {
 	t_token	*temp;
-	t_token	*temp2;
 	t_bool	status;
 
-	temp = command;
+	temp = cmd->redir_list;
 	while (temp != NULL)
 	{
 		if ((temp->type == INPUT || temp->type == HEREDOC)
@@ -130,13 +135,11 @@ t_bool	get_redirs(t_cmd *cmd, t_token *command)
 				status = found_input(cmd, temp);
 			if (temp->type == OUTPUT || temp->type == APPEND)
 				status = found_output(cmd, temp);
-			temp2 = temp->next->next;
-			destroy_token(remove_token(command, temp->next));
-			destroy_token(remove_token(command, temp));
-			temp = temp2;
 			if (status == EXIT_FAILURE)
+			{
+				cmd->fd_fail = true;
 				return (EXIT_FAILURE);
-			continue ;
+			}
 		}
 		temp = temp->next;
 	}

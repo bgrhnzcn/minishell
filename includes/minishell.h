@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 20:19:55 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 22:27:27 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,10 +118,11 @@ typedef struct s_token
  */
 typedef struct s_cmd
 {
-	char	**argv;		/**< Array of arguments for the command. */
-	int		fdin;		/**< File descriptor for input redirection. */
-	int		fdout;		/**< File descriptor for output redirection. */
-	t_bool	fd_fail;	/**< Flag indicating if file descriptor failure. */
+	t_token	*redir_list;	/**< List of redirection tokens. */
+	char	**argv;			/**< Array of arguments for the command. */
+	int		fdin;			/**< File descriptor for input redirection. */
+	int		fdout;			/**< File descriptor for output redirection. */
+	t_bool	fd_fail;		/**< Flag indicating if file descriptor failure. */
 }	t_cmd;
 
 /**
@@ -244,6 +245,8 @@ t_bool	check_quotes(t_token *token_list);
  */
 t_bool	check_syntax(t_token *token_list, char **env);
 
+void	merge_redirs(t_token *token_list);
+
 /**
  * @brief Performs variable expansion in the token list.
  *
@@ -292,7 +295,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list);
  * @param command The token representing the command.
  * @return True if the redirections were obtained successfully, false otherwise.
  */
-t_bool	get_redirs(t_cmd *cmd, t_token *command);
+t_bool	get_redirs(t_cmd *cmd);
 
 /**
  * @brief Applies the input/output redirections for a command.

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 11:42:22 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/08 20:17:48 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 22:44:23 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static int	get_argv_size(t_token *token_list)
 char	**create_argv(t_token *token_list)
 {
 	t_token	*temp;
+	t_token	*temp2;
 	char	**argv;
 	int		argv_size;
 	int		counter;
@@ -53,14 +54,15 @@ char	**create_argv(t_token *token_list)
 	counter = 0;
 	argv_size = get_argv_size(token_list) + 1;
 	argv = ft_calloc(argv_size, sizeof (char *));
-	if (argv == NULL)
-		return (NULL);
 	while (counter < argv_size && temp != NULL)
 	{
 		if (temp->type == WORD)
 		{
-			argv[counter] = ft_strdup(temp->text);
-			counter++;
+			argv[counter++] = ft_strdup(temp->text);
+			temp2 = temp->next;
+			destroy_token(remove_token(token_list, temp));
+			temp = temp2;
+			continue ;
 		}
 		temp = temp->next;
 	}

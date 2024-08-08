@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 20:31:13 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 23:38:50 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	free_cmds(t_cmd *commands, int command_count)
 	i = 0;
 	while (i < command_count)
 	{
+		if (commands[i].redir_list)
+			clear_tokens(commands[i].redir_list);
 		if (commands[i].argv)
 			ft_free_str_arr(commands[i].argv);
 		i++;
@@ -84,8 +86,8 @@ static void	call_pipe(t_shell *shell, t_cmd *commands,
 {
 	int	i;
 
-	i = -1;
-	while (i < command_count - 1)
+	i = -2;
+	while (++i < command_count - 1)
 	{
 		shell->pid = fork();
 		if (shell->pid == 0)
@@ -95,7 +97,9 @@ static void	call_pipe(t_shell *shell, t_cmd *commands,
 				dup2(pipes[i * 2 + 3], STDOUT_FILENO);
 			if (i != -1)
 				dup2(pipes[i * 2], STDIN_FILENO);
-			if (commands[i + 1].argv[0] != NULL)
+			if (!get_redirs(&commands[i + 1]) &&
+				commands[i + 1].argv[0] != NULL &&
+				!ft_strequ(commands[i + 1].argv[0], ""))
 			{
 				if (!apply_redirs(&commands[i + 1]))
 					executer(shell, commands[i + 1].argv);
@@ -103,11 +107,9 @@ static void	call_pipe(t_shell *shell, t_cmd *commands,
 					commands[i + 1].argv[0]);
 			}
 			free_cmds(commands, command_count);
-			commands = NULL;
 			clear_pipes(pipes, command_count);
 			exit(127);
 		}
-		i++;
 	}
 	clear_pipes(pipes, command_count);
 	wait_all_childs();
@@ -121,6 +123,8 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 
 	command_count = get_command_count(token_list);
 	commands = create_commands(command_count, token_list);
+	if (commands == NULL)
+		return (EXIT_FAILURE);
 	if (command_count == 1)
 		single_command(shell, commands);
 	else

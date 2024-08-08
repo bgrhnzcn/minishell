@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 20:26:51 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 23:34:15 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd)
 	{
 		if (cmd != NULL)
 		{
-			if (cmd->argv[0] != NULL)
+			if (!get_redirs(cmd) && cmd->argv[0] != NULL &&
+				!ft_strequ(cmd->argv[0], ""))
 			{
 				if (!apply_redirs(cmd))
 					executer(shell, cmd->argv);
-				free_cmd(cmd);
 			}
+			free_cmd(cmd);
 		}
 		exit(127);
 	}

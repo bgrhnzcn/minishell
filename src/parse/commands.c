@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 20:30:30 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 23:13:54 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ void	print_command(t_cmd *command, int i)
 void	print_commands(t_cmd *commands, int command_count)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (i < command_count)
@@ -139,13 +138,10 @@ t_cmd	*create_commands(int command_count, t_token *token_list)
 		commands[i].fdin = -1;
 		commands[i].fdout = -1;
 		commands[i].fd_fail = false;
-		if (get_redirs(&commands[i], splitted[i]))
-			return (free(commands),
-				clear_splitted(splitted, command_count),
-				NULL);
 		commands[i].argv = create_argv(splitted[i]);
+		commands[i].redir_list = splitted[i];
 		i++;
 	}
-	clear_splitted(splitted, command_count);
+	free(splitted);
 	return (commands);
 }

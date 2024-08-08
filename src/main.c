@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 20:28:51 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 23:32:45 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ t_bool	parse(t_shell *shell)
 	perform_expansion(&shell->token_list, shell->env);
 	join_cont_words(&shell->token_list);
 	remove_whitespaces(&shell->token_list);
+	merge_redirs(&shell->token_list);
 	return (EXIT_SUCCESS);
 }
 
@@ -107,8 +108,17 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		add_history(shell.input);
 		if (parse(&shell))
+		{
+			clear_tokens(shell.token_list.next);
+			shell.token_list.next = NULL;
 			continue ;
-		pipe_check(&shell, &shell.token_list);
+		}
+		if (pipe_check(&shell, &shell.token_list))
+		{
+			clear_tokens(shell.token_list.next);
+			shell.token_list.next = NULL;
+			continue ;
+		}
 		clear_tokens(shell.token_list.next);
 		shell.token_list.next = NULL;
 	}

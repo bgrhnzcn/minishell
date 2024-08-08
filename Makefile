@@ -1,7 +1,7 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -fsanitize=address -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
-
+CFLAGS = -g -Wall -Wextra -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
+#-fsanitize=address
 DYLIBS = -lreadline
 
 ifeq ($(shell uname), Linux)
@@ -80,8 +80,13 @@ $(READLINE_V):
 		rm -rf readline-8.2;\
 	fi;
 
+ifeq ($(shell uname), Linux)
+leak: re
+	@valgrind --leak-check=full --track-origins=yes ./minishell
+else
 leak: re
 	@bash ./minishell.sh
 	@make run
+endif
 
 .PHONY: all re fclean clean

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 16:42:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/03 22:36:43 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 23:41:04 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	create_joined_words(t_token *tokens)
 		temp_text = ft_strjoin(tokens->text, temp->text);
 		if (temp_text == NULL)
 			printf("Error encountered while word collaping.\n");
-		remove_token(tokens, temp);
+		destroy_token(remove_token(tokens, temp));
 		free(tokens->text);
 		tokens->text = temp_text;
 		temp = tokens->next;
@@ -72,6 +72,28 @@ void	join_cont_words(t_token *token_list)
 	{
 		if (temp->type == WORD)
 			create_joined_words(temp);
+		temp = temp->next;
+	}
+}
+
+void	merge_redirs(t_token *token_list)
+{
+	t_token	*temp;
+	char	*temp_text;
+
+	temp = token_list;
+	while (temp != NULL)
+	{
+		if (temp->type == INPUT ||
+			temp->type == APPEND ||
+			temp->type == OUTPUT ||
+			temp->type == HEREDOC)
+		{
+			temp_text = ft_strjoin(temp->text, temp->next->text);
+			free(temp->text);
+			temp->text = temp_text;
+			destroy_token(remove_token(temp, temp->next));
+		}
 		temp = temp->next;
 	}
 }

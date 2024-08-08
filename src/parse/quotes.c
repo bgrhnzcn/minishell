@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:53:32 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/07/23 17:30:02 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/08 23:40:30 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static t_bool	double_quote(t_token *tokens)
 		}
 		if (tokens->next == closing_quote)
 			add_token_after(tokens, new_token(WORD, ft_strdup("")));
-		remove_token(tokens, closing_quote);
-		remove_token(tokens, tokens);
+		destroy_token(remove_token(tokens, closing_quote));
+		destroy_token(remove_token(tokens, tokens));
 	}
 	return (EXIT_SUCCESS);
 }
@@ -61,8 +61,8 @@ static t_bool	single_quote(t_token *tokens)
 		}
 		if (tokens->next == closing_quote)
 			add_token_after(tokens, new_token(WORD, ft_strdup("")));
-		remove_token(tokens, closing_quote);
-		remove_token(tokens, tokens);
+		destroy_token(remove_token(tokens, closing_quote));
+		destroy_token(remove_token(tokens, tokens));
 	}
 	return (EXIT_SUCCESS);
 }
