@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 23:38:50 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:44:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,9 @@ static void	call_pipe(t_shell *shell, t_cmd *commands,
 				commands[i + 1].argv[0] != NULL &&
 				!ft_strequ(commands[i + 1].argv[0], ""))
 			{
-				if (!apply_redirs(&commands[i + 1]))
+				if (!apply_redirs(&commands[i + 1]) &&
+				//Changes in here
+					buildins(shell, &commands[i + 1]))
 					executer(shell, commands[i + 1].argv);
 				printf("minishell: %s: command not found\n",
 					commands[i + 1].argv[0]);

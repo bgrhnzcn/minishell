@@ -12,7 +12,7 @@ SRC = src
 
 OBJ = obj
 
-SRCS = $(SRC)/main.c \
+SRCS = $(SRC)/exec/main.c \
 	$(SRC)/builtins/env.c \
 	$(SRC)/builtins/pwd.c \
 	$(SRC)/builtins/exit.c \
@@ -33,10 +33,10 @@ SRCS = $(SRC)/main.c \
 	$(SRC)/io_operations/utils.c \
 	$(SRC)/exec/exec.c \
 
-OBJS = $(SRCS:.c=.o)
-
-#$(OBJ)/%.o: $(SRC)/%.c
+#$(OBJ)/%.o: $(SRC)/*/%.c
 #	@$(CC) $(CFLAGS) -o $@ -c $?
+
+OBJS = $(SRCS:.c=.o)
 
 NAME = minishell
 

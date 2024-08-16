@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 16:42:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 23:41:04 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:06:32 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	join_cont_words(t_token *token_list)
 void	merge_redirs(t_token *token_list)
 {
 	t_token	*temp;
+	t_token	*temp2;
 	char	*temp_text;
 
 	temp = token_list;
@@ -92,7 +93,10 @@ void	merge_redirs(t_token *token_list)
 			temp_text = ft_strjoin(temp->text, temp->next->text);
 			free(temp->text);
 			temp->text = temp_text;
+			temp2 = temp->next->next;
 			destroy_token(remove_token(temp, temp->next));
+			temp->next = temp2;
+			temp2->prev = temp;
 		}
 		temp = temp->next;
 	}

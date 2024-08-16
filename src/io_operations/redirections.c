@@ -3,55 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 23:11:17 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:26:47 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_heredoc(t_cmd *cmd, t_token *temp)
-{
-	char	*delimiter;
-	char	*line;
-	char	*temp_file = ft_strdup("/tmp/.here_doc");
-	int		temp_fd;
+void	handle_heredoc(const char *delimiter, const char *temp_file_path) {
+    char *line;
+    int temp_fd;
+    pid_t pid;
 
-	delimiter = temp->next->text;
-	temp_fd = open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	temp_fd = open(temp_file_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (temp_fd < 0)
 	{
 		perror("Error opening temporary file");
 		return ;
 	}
-	while (1)
+	pid = fork();
+	if (pid == -1)
 	{
-		line = readline("> ");
-		if (!line)
-			break ;
-		if (ft_strequ(line, delimiter))
-		{
-			free(line);
-			ft_putstr_fd("\n", temp_fd);
-			break ;
-		}
-		ft_putstr_fd(line, temp_fd);
-		free(line);
+		perror("fork failed");
+		close(temp_fd);
+		return ;
 	}
-	close(temp_fd);
-	cmd->fdin = open(temp_file, O_RDONLY);
-	if (cmd->fdin == -1)
-		perror("input error");
+	else if (pid == 0)
+	{
+		while (1)
+		{
+			write(STDOUT_FILENO, "> ", 2);
+			line = (char *)malloc(1024);
+			if (!line)
+			{
+				perror("Memory allocation failed");
+				exit(EXIT_FAILURE);
+			}
+			size_t bytes_read = read(STDIN_FILENO, line, 1024);
+			if (bytes_read < 0)
+			{
+				perror("Error reading line");
+				free(line);
+				exit(EXIT_FAILURE);
+			}
+			if (line[bytes_read - 1] == '\n')
+				line[bytes_read - 1] = '\0';
+			if (strcmp(line, delimiter) == 0)
+			{
+
+				free(line);
+				break;
+			}
+			write(temp_fd, line, strlen(line));
+			write(temp_fd, "\n", 1); 
+			free(line);
+		}
+		close(temp_fd); 
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		wait(NULL);
+		temp_fd = open(temp_file_path, O_RDONLY);
+		if (temp_fd == -1)
+		{
+			perror("Error reopening temporary file");
+			return;
+		}
+		if (dup2(temp_fd, STDIN_FILENO) == -1)
+			perror("Error redirecting stdin");
+		close(temp_fd); 
+	}
 }
 
 static t_bool	found_input(t_cmd *cmd, t_token *temp)
 {
+	char *temp_file = ft_strdup("/tmp/.here_doc");
 	if (cmd->fdin != -1)
 		close(cmd->fdin);
 	if (temp->type == HEREDOC)
-		handle_heredoc(cmd, temp);
+	{
+		handle_heredoc(temp->text + 2, temp_file);
+		cmd->fdin = open(temp_file, O_RDONLY, 0644);
+	}
 	else if (temp->type == INPUT)
 		cmd->fdin = open(temp->text + 1, O_RDONLY, 0644);
 	if (cmd->fdin == -1)
