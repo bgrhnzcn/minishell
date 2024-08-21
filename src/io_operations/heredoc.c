@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 16:04:00 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 16:08:47 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:46:35 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void	handle_heredoc_hlpr(t_cmd *cmd, const char *delimiter)
 	close(cmd->heredoc_pipe[0]);
 	while (1)
 	{
+		signal_cont(HEREDOC_P);
 		line = readline("> ");
 		if (ft_strequ(line, delimiter))
 		{

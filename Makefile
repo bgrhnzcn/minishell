@@ -41,8 +41,8 @@ NAME = minishell
 
 OBJS = $(SRCS:$(SRC)/%.c=$(OBJ)/%.o)
 
-$(OBJ)/%.o: %.c
-	$(CC) $(CFLAGS) -c -I./lib/readline-8.2/include $? 
+$(OBJ)/%.o: $(SRC)/%.c
+	$(CC) $(CFLAGS) -o $@ -c -I./lib/readline-8.2/include $? 
 
 all: $(NAME)
 
@@ -51,7 +51,7 @@ READLINE_V = lib/readline-8.2/lib/libreadline.a
 LIBFT = lib/libft/libft.a
 
 $(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) -lreadline -I./lib/readline-8.2/include $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) -L./lib/readline-8.2/lib -lreadline -I./lib/readline-8.2/include $(OBJS) $(LIBFT)
 
 $(LIBFT):
 	make -C lib/libft && make -C lib/libft clean
