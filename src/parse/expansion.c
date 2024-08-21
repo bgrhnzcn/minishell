@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 16:42:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/16 16:06:32 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/20 19:17:35 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ static void	token_dollar2word(char **env, t_token *dollar)
 	char	*temp;
 	char	*curr_text;
 
+	if (ft_strequ(dollar->text, "$"))
+	{
+		dollar->type = WORD;
+		return ;
+	}
 	temp = get_env(env, dollar->text + 1);
 	curr_text = dollar->text;
 	dollar->text = ft_substr(temp, ft_strlen(curr_text),
@@ -85,10 +90,10 @@ void	merge_redirs(t_token *token_list)
 	temp = token_list;
 	while (temp != NULL)
 	{
-		if (temp->type == INPUT ||
-			temp->type == APPEND ||
-			temp->type == OUTPUT ||
-			temp->type == HEREDOC)
+		if (temp->type == INPUT
+			|| temp->type == APPEND
+			|| temp->type == OUTPUT
+			|| temp->type == HEREDOC)
 		{
 			temp_text = ft_strjoin(temp->text, temp->next->text);
 			free(temp->text);

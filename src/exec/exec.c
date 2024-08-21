@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/16 19:29:55 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/20 17:43:27 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,18 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd)
 {
 	int		status;
 
+	if (get_redirs(cmd))
+		return (EXIT_FAILURE);
 	if (cmd != NULL && !buildins(shell, cmd))
-		return (status = 0, EXIT_SUCCESS);
+		return (EXIT_SUCCESS);
 	shell->pid = fork();
 	if (shell->pid == 0)
 	{
 		if (cmd != NULL)
 		{
-			if (!get_redirs(cmd) && cmd->argv[0] != NULL &&
-				!ft_strequ(cmd->argv[0], ""))
-			{
-				if (!apply_redirs(cmd))
-					executer(shell, cmd->argv);
-			}
+			if (cmd->argv[0] != NULL && !ft_strequ(cmd->argv[0], "")
+				&& !apply_redirs(cmd))
+				executer(shell, cmd->argv);
 			free_cmd(cmd);
 		}
 		exit(127);
@@ -67,6 +66,7 @@ static char	*search_in_path(const char *path, const char *command)
 
 static void	execute_relative(t_shell *shell, char **argv)
 {
+	int		err;
 	char	*pwd;
 	char	*cmd;
 	char	*temp;
@@ -81,11 +81,12 @@ static void	execute_relative(t_shell *shell, char **argv)
 	free(temp);
 	if (execve(cmd, argv, shell->env))
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(argv[0], STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
+		err = errno;
+		print_error(argv[0], err);
+		if (err == ENOENT)
+			shell->status = 127;
+		else if (err == EACCES)
+			shell->status = 126;
 	}
 	free(cmd);
 }
@@ -94,9 +95,9 @@ static void	execute_path(t_shell *shell, char **argv)
 {
 	char	**paths;
 	char	*cmd;
+	paths = split_path(shell);
 	int		path_index;
 
-	paths = split_path(shell);
 	path_index = 0;
 	while (paths[path_index] != NULL)
 	{
@@ -110,6 +111,7 @@ static void	execute_path(t_shell *shell, char **argv)
 		ft_putstr_fd("Command \'", STDERR_FILENO);
 		ft_putstr_fd(argv[0], STDERR_FILENO);
 		ft_putstr_fd("\' not found.\n", STDERR_FILENO);
+		shell->status = 127;
 	}
 	free(cmd);
 }

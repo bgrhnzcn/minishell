@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/16 16:02:16 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/20 18:52:33 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,12 @@ typedef struct s_token
  */
 typedef struct s_cmd
 {
-	t_token	*redir_list;	/**< List of redirection tokens. */
-	char	**argv;			/**< Array of arguments for the command. */
-	int		fdin;			/**< File descriptor for input redirection. */
-	int		fdout;			/**< File descriptor for output redirection. */
-	t_bool	fd_fail;		/**< Flag indicating if file descriptor failure. */
+	t_token	*redir_list;		/**< List of redirection tokens. */
+	char	**argv;				/**< Array of arguments for the command. */
+	int		fdin;				/**< File descriptor for input redirection. */
+	int		fdout;				/**< File descriptor for output redirection. */
+	int		heredoc_pipe[2];	/**< Pipe for heredoc redirection. */
+	t_bool	fd_fail;			/**< Flag indicating if file descriptor failure. */
 }	t_cmd;
 
 /**
@@ -133,13 +134,12 @@ typedef struct s_shell
 {
 	t_token	token_list;		/**< The list of tokens. */
 	char	**env;			/**< Array of environment variables. */
-	char	**argv;			/**< Array of command-line arguments. */
 	char	*input;			/**< The input string. */
 	pid_t	pid;			/**< Process ID of the shell. */
 	int		saved_stdin;	/**< Saved standard input file descriptor. */
 	int		saved_stdout;	/**< Saved standard output file descriptor. */
-	int		fdin;			/**< Current input file descriptor. */
-	int		fdout;			/**< Current output file descriptor. */
+	int		*pipes;			/**< Array of pipe file descriptors. */
+	int		status;			/**< Status of the last command. */
 }	t_shell;
 
 //---------------------------- Tokenizer ---------------------------------
@@ -153,19 +153,19 @@ typedef struct s_shell
  */
 t_token	*new_token(t_token_type type, char *text);
 
-/**
- * @brief Prints the details of a token.
- *
- * @param token The token to be printed.
- */
-void	print_token(t_token *token);
-
-/**
- * @brief Prints the details of all tokens in a token list.
- *
- * @param token_list The token list to be printed.
- */
-void	print_tokens(t_token *token_list);
+///**
+// * @brief Prints the details of a token.
+// *
+// * @param token The token to be printed.
+// */
+//void	print_token(t_token *token);
+//
+///**
+// * @brief Prints the details of all tokens in a token list.
+// *
+// * @param token_list The token list to be printed.
+// */
+//void	print_tokens(t_token *token_list);
 
 /**
  * @brief Clears all tokens in a token list.
@@ -245,6 +245,11 @@ t_bool	check_quotes(t_token *token_list);
  */
 t_bool	check_syntax(t_token *token_list, char **env);
 
+/**
+ * @brief Merges consecutive redirection tokens into a single token.
+ *
+ * @param token_list The token list.
+ */
 void	merge_redirs(t_token *token_list);
 
 /**
@@ -289,6 +294,13 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list);
 //------------------------- I/O Operations ------------------------------
 
 /**
+ * @brief Gets the heredoc input for a command.
+ *
+ * @param cmd The command structure.
+ */
+void	get_heredoc(t_cmd *cmd);
+
+/**
  * @brief Gets the input/output redirections for a command.
  *
  * @param cmd The command structure.
@@ -326,12 +338,57 @@ void	restore_std_io(t_shell *shell);
  * It ensures that the parent process does not exit before all child processes
  * have completed their execution.
  */
-void	wait_all_childs(void);
+
+/**
+ * @brief Prints an error message to the console.
+ *
+ * @param cmd The command that caused the error.
+ * @param err The error code.
+ */
+void	print_error(char *cmd, int err);
+
+/**
+ * @brief Creates pipes for inter-process communication.
+ *
+ * @param p The pointer to the array of pipe file descriptors.
+ * @param command_count The number of commands that require pipes.
+ */
+void	create_pipes(int **p, int command_count);
+
+/**
+ * @brief Clears the allocated memory for pipes.
+ *
+ * @param pipes The array of pipe file descriptors.
+ * @param command_count The number of commands that require pipes.
+ */
+void	clear_pipes(int *pipes, int command_count);
+
+/**
+ * @brief Closes the specified pipes, leaving one pipe open.
+ *
+ * @param pipes The array of pipe file descriptors.
+ * @param command_count The number of commands that require pipes.
+ * @param not_close The index of the pipe that should not be closed.
+ */
+void	close_pipes(int *pipes, int command_count, int not_close);
 
 //---------------------------- Commands ---------------------------------
 
-void	print_commands(t_cmd *commands, int command_count);
-void	print_command(t_cmd *command, int i);
+///**
+// * @brief Prints the commands in the token list.
+// *
+// * @param commands The array of commands.
+// * @param command_count The number of commands.
+// */
+//void	print_commands(t_cmd *commands, int command_count);
+//
+///**
+// * @brief Prints a single command.
+// *
+// * @param command The command structure.
+// * @param i The index of the command.
+// */
+//void	print_command(t_cmd *command, int i);
 
 /**
  * @brief Gets the number of commands in the token list.
@@ -357,8 +414,22 @@ t_cmd	*create_commands(int command_count, t_token *token_list);
  */
 void	free_cmd(t_cmd *cmd);
 
+/**
+ * @brief Frees the memory allocated for an array of command structures.
+ *
+ * @param commands The array of commands.
+ * @param command_count The number of commands.
+ */
+void	free_cmds(t_cmd *commands, int command_count);
+
 //---------------------------- Executer ---------------------------------
 
+/**
+ * @brief Splits the PATH environment variable into an array of paths.
+ *
+ * @param shell The minishell structure.
+ * @return The array of paths.
+ */
 char	**split_path(t_shell *shell);
 
 /**
@@ -397,6 +468,15 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd);
  * @param argv The array of command-line arguments.
  */
 void	executer(t_shell *shell, char **argv);
+
+/**
+ * @brief Waits for all child processes to terminate.
+ *
+ * This function waits for all child processes to terminate before returning.
+ * It ensures that the parent process does not exit before all child processes
+ * have completed their execution.
+ */
+void	wait_all_childs(void);
 
 /**
  * @brief Gets the value of an environment variable.
@@ -485,6 +565,6 @@ void	mini_unset(t_shell *shell, char **argv);
  * @param shell The minishell structure.
  * @param status The exit status.
  */
-void	mini_exit(t_shell *shell, int status);
+void	mini_exit(t_shell *shell, t_cmd *cmd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 23:32:45 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:58:21 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->token_list.text = "";
 	shell->token_list.prev = NULL;
 	shell->token_list.next = NULL;
-	shell->fdout = STDOUT_FILENO;
-	shell->fdin = STDIN_FILENO;
 }
 
 char	*get_input(t_shell *shell)
@@ -73,7 +71,7 @@ t_bool	parse(t_shell *shell)
 	char	*input_trimmed;
 
 	input_trimmed = ft_strtrim(shell->input, g_whitespaces);
-	if (parse_input(&shell->token_list, input_trimmed))
+	if (parse_input(&shell->token_list, input_trimmed, shell->status))
 		return (free(input_trimmed),
 			clear_tokens(shell->token_list.next),
 			shell->token_list.next = NULL, EXIT_FAILURE);
@@ -111,6 +109,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			clear_tokens(shell.token_list.next);
 			shell.token_list.next = NULL;
+			shell.status = 2;
 			continue ;
 		}
 		if (pipe_check(&shell, &shell.token_list))

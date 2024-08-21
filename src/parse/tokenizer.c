@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 16:08:16 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/08 23:39:44 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/20 19:14:31 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,16 @@ static t_token	*create_token_word(char *input, int i, int input_len)
 	return (new_token(WORD, ft_substr(input, start_i, i - start_i)));
 }
 
-static t_token	*create_token_dollar(char *input, int i, int input_len)
+static t_token	*create_token_dollar(char *input, int i,
+	int input_len)
 {
 	int	start_i;
 
 	start_i = i;
 	while (i < input_len)
 	{
+		if (input[i + 1] && input[i + 1] == '?')
+			return (new_token(DOLLAR, ft_strdup("?")));
 		if ((i == start_i + 1 && !(ft_isalpha(input[i]) || input[i] == '_')))
 			break ;
 		if (i != start_i && !(ft_isalnum(input[i]) || input[i] == '_'))
@@ -73,7 +76,8 @@ static t_token	*create_token_dollar(char *input, int i, int input_len)
 	return (new_token(DOLLAR, ft_substr(input, start_i, i - start_i)));
 }
 
-static t_token	*create_token_type(char *input, int i, int input_len)
+static t_token	*create_token_type(char *input, int i,
+	int input_len)
 {
 	t_token_type	type;
 

@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
+CFLAGS = -g -Wall -Wextra -Werror -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
 #-fsanitize=address
 DYLIBS = -lreadline
 
@@ -13,6 +13,8 @@ SRC = src
 OBJ = obj
 
 SRCS = $(SRC)/exec/main.c \
+	$(SRC)/exec/exec.c \
+	$(SRC)/exec/exec_utils.c \
 	$(SRC)/builtins/env.c \
 	$(SRC)/builtins/pwd.c \
 	$(SRC)/builtins/exit.c \
@@ -28,10 +30,11 @@ SRCS = $(SRC)/exec/main.c \
 	$(SRC)/parse/expansion.c \
 	$(SRC)/parse/argv.c \
 	$(SRC)/parse/commands.c \
+	$(SRC)/parse/parse_utils.c \
 	$(SRC)/io_operations/pipe.c \
+	$(SRC)/io_operations/io_utils.c \
 	$(SRC)/io_operations/redirections.c \
-	$(SRC)/io_operations/utils.c \
-	$(SRC)/exec/exec.c \
+	$(SRC)/io_operations/heredoc.c \
 
 #$(OBJ)/%.o: $(SRC)/*/%.c
 #	@$(CC) $(CFLAGS) -o $@ -c $?
