@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:08:54 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/03 23:25:53 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:06:22 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,6 @@ static int	valid_identifier(const char *str)
 		i++;
 	}
 	return (1);
-}
-
-static int av_count(char **av)
-{
-	int i;
-
-	i = 0;
-	while(av[i])
-		i++;
-	return (i);
 }
 
 void mini_export(t_shell *shell, char **argv)

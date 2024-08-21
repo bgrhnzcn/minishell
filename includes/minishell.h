@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 18:52:33 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:03:24 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "libft.h"
 # include "sys/types.h"
 # include "sys/wait.h"
+# include <sys/ioctl.h>
 # include <stdio.h>
 # include <dirent.h>
 # include <errno.h>
@@ -39,6 +40,9 @@
  * The maximum number of environment variables allowed.
  */
 # define ENV_LIMIT			1000
+# define MAIN_P				0
+# define CHILD_P			1
+# define HEREDOC_P			2
 
 /**
  * @def ANSI_COLOR_BLUE
@@ -63,6 +67,8 @@
  * ANSI escape code to reset color.
  */
 # define ANSI_COLOR_RESET	"\x1b[0m"
+
+extern int	g_global_exit;
 
 /**
  * @var g_whitespaces
@@ -338,6 +344,7 @@ void	restore_std_io(t_shell *shell);
  * It ensures that the parent process does not exit before all child processes
  * have completed their execution.
  */
+void	signal_cont(int status);
 
 /**
  * @brief Prints an error message to the console.

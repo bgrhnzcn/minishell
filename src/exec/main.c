@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 17:58:21 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:06:01 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_global_exit = 0;
 
 char	*create_prompt(t_shell *shell)
 {
@@ -71,7 +73,7 @@ t_bool	parse(t_shell *shell)
 	char	*input_trimmed;
 
 	input_trimmed = ft_strtrim(shell->input, g_whitespaces);
-	if (parse_input(&shell->token_list, input_trimmed, shell->status))
+	if (parse_input(&shell->token_list, input_trimmed))
 		return (free(input_trimmed),
 			clear_tokens(shell->token_list.next),
 			shell->token_list.next = NULL, EXIT_FAILURE);
@@ -99,6 +101,7 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(&shell, envp);
 	while (true)
 	{
+		signal_cont(MAIN_P);
 		if (shell.input != NULL)
 			free(shell.input);
 		shell.input = get_input(&shell);

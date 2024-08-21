@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -Wextra -Werror -L./lib/readline-8.2/lib -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
+CFLAGS = -g -Wall -Wextra -Werror -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
 #-fsanitize=address
 DYLIBS = -lreadline
 
@@ -14,6 +14,7 @@ OBJ = obj
 
 SRCS = $(SRC)/exec/main.c \
 	$(SRC)/exec/exec.c \
+	$(SRC)/exec/signals.c \
 	$(SRC)/exec/exec_utils.c \
 	$(SRC)/builtins/env.c \
 	$(SRC)/builtins/pwd.c \
@@ -36,21 +37,21 @@ SRCS = $(SRC)/exec/main.c \
 	$(SRC)/io_operations/redirections.c \
 	$(SRC)/io_operations/heredoc.c \
 
-#$(OBJ)/%.o: $(SRC)/*/%.c
-#	@$(CC) $(CFLAGS) -o $@ -c $?
-
-OBJS = $(SRCS:.c=.o)
-
 NAME = minishell
+
+OBJS = $(SRCS:$(SRC)/%.c=$(OBJ)/%.o)
+
+$(OBJ)/%.o: %.c
+	$(CC) $(CFLAGS) -c -I./lib/readline-8.2/include $? 
+
+all: $(NAME)
 
 READLINE_V = lib/readline-8.2/lib/libreadline.a
 
 LIBFT = lib/libft/libft.a
 
-all: $(NAME)
-
 $(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(DYLIBS)
+	$(CC) $(CFLAGS) -o $(NAME) -lreadline -I./lib/readline-8.2/include $(OBJS) $(LIBFT)
 
 $(LIBFT):
 	make -C lib/libft && make -C lib/libft clean
