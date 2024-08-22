@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 16:08:20 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/22 20:09:30 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,15 @@ t_bool	apply_redirs(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-static t_bool	get_inputs(t_cmd *cmd)
+static t_bool	get_inputs(t_shell *shell, t_cmd *cmd)
 {
 	t_token	*temp;
 	t_bool	status;
 
 	temp = cmd->redir_list;
 	status = EXIT_SUCCESS;
-	get_heredoc(cmd);
+	if (get_heredoc(shell, cmd) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	while (temp != NULL)
 	{
 		if (temp->type == INPUT)
@@ -118,14 +119,14 @@ static t_bool	get_inputs(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-t_bool	get_redirs(t_cmd *cmd)
+t_bool	get_redirs(t_shell *shell, t_cmd *cmd)
 {
 	t_token	*temp;
 	t_bool	status;
 
 	temp = cmd->redir_list;
 	status = EXIT_SUCCESS;
-	if (get_inputs(cmd))
+	if (get_inputs(shell, cmd))
 		return (EXIT_FAILURE);
 	while (temp != NULL)
 	{

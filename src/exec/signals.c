@@ -17,20 +17,21 @@ static void	ft_heredoc_signal(int signal)
 	if (signal == SIGINT)
 	{
 		g_global_exit = 999;
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
+		rl_on_new_line();
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	}
 }
 
-void signal_cont(int status)
+void	signal_cont(t_shell *shell, int status)
 {
-	if (status == MAIN_P)
+	if (status == MAIN_P && !shell->is_heredoc_open)
 	{
 		signal(SIGINT, &ft_main_signal);
 		signal(SIGQUIT, SIG_IGN);
 	}
-	else if (status == CHILD_P)
+	else if (status == CHILD_P && !shell->is_heredoc_open)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);

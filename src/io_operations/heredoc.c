@@ -6,21 +6,23 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 16:04:00 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/21 16:46:35 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/22 20:09:53 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_heredoc_hlpr(t_cmd *cmd, const char *delimiter)
+static void	handle_heredoc_hlpr(t_shell *shell, t_cmd *cmd, const char *delimiter)
 {
 	char	*line;
 
 	close(cmd->heredoc_pipe[0]);
+	signal_cont(shell, HEREDOC_P);
 	while (1)
 	{
-		signal_cont(HEREDOC_P);
 		line = readline("> ");
+		if (g_global_exit == 999)
+			exit(2);
 		if (ft_strequ(line, delimiter))
 		{
 			free(line);
@@ -33,7 +35,7 @@ static void	handle_heredoc_hlpr(t_cmd *cmd, const char *delimiter)
 	exit(EXIT_SUCCESS);
 }
 
-static void	handle_heredoc(const char *delimiter, t_cmd *cmd)
+static void	handle_heredoc(t_shell *shell, const char *delimiter, t_cmd *cmd, int *status)
 {
 	pid_t	pid;
 
@@ -48,24 +50,31 @@ static void	handle_heredoc(const char *delimiter, t_cmd *cmd)
 		return ;
 	}
 	pid = fork();
+	shell->is_heredoc_open = true;
 	if (pid == 0)
-		handle_heredoc_hlpr(cmd, delimiter);
+		handle_heredoc_hlpr(shell, cmd, delimiter);
 	else
 	{
-		waitpid(pid, NULL, 0);
+		waitpid(pid, status, 0);
 		close(cmd->heredoc_pipe[1]);
 	}
 }
 
-void	get_heredoc(t_cmd *cmd)
+int	get_heredoc(t_shell *shell, t_cmd *cmd)
 {
 	t_token	*temp;
+	int		status;
 
 	temp = cmd->redir_list;
+	status = 0;
 	while (temp != NULL)
 	{
 		if (temp->type == HEREDOC)
-			handle_heredoc(temp->text + 2, cmd);
+			handle_heredoc(shell, temp->text + 2, cmd, &status);
+		if (status >> 8 == 2)
+			return(EXIT_FAILURE);
 		temp = temp->next;
+		printf("%d\n",status >> 8);
 	}
+	return (EXIT_SUCCESS);
 }

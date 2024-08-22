@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 17:43:27 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/22 19:22:19 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd)
 {
 	int		status;
 
+	g_global_exit = 0;
 	if (get_redirs(cmd))
 		return (EXIT_FAILURE);
 	if (cmd != NULL && !buildins(shell, cmd))

@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/21 16:43:06 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/22 19:48:09 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	run_process(t_shell *shell, t_cmd *commands,
 	shell->pid = fork();
 	if (shell->pid == 0)
 	{
-		signal_cont(CHILD_P);
+		signal_cont(shell, CHILD_P);
 		close_pipes(shell->pipes, command_count, i);
 		if (i != command_count - 2)
 			dup2(shell->pipes[i * 2 + 3], STDOUT_FILENO);
@@ -42,6 +42,7 @@ static t_bool	call_pipe(t_shell *shell, t_cmd *commands,
 {
 	int	i;
 
+	g_global_exit = 0;
 	i = -1;
 	while (i < command_count - 1)
 	{
@@ -70,11 +71,15 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list)
 	if (commands == NULL)
 		return (EXIT_FAILURE);
 	if (command_count == 1)
-		single_command(shell, commands);
+	{
+		if (single_command(shell, commands) == EXIT_FAILURE)
+			return (free_cmds(commands, command_count), EXIT_FAILURE);
+	}
 	else
 	{
 		create_pipes(&shell->pipes, command_count);
-		call_pipe(shell, commands, command_count);
+		if (call_pipe(shell, commands, command_count))
+			return (free_cmds(commands, command_count), EXIT_FAILURE);
 	}
 	free_cmds(commands, command_count);
 	commands = NULL;

@@ -21,7 +21,10 @@ SRCS = $(SRC)/exec/main.c \
 	$(SRC)/builtins/exit.c \
 	$(SRC)/builtins/cd.c \
 	$(SRC)/builtins/unset.c \
+	$(SRC)/builtins/unset_utils.c \
+	$(SRC)/builtins/unset_utils2.c \
 	$(SRC)/builtins/export.c \
+	$(SRC)/builtins/export_utils.c \
 	$(SRC)/builtins/echo.c \
 	$(SRC)/parse/token.c \
 	$(SRC)/parse/token2.c \
