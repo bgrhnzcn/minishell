@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/22 19:22:19 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/23 18:32:41 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd)
 	shell->pid = fork();
 	if (shell->pid == 0)
 	{
+		signal_cont(CHILD_P);
 		if (cmd != NULL)
 		{
 			if (cmd->argv[0] != NULL && !ft_strequ(cmd->argv[0], "")

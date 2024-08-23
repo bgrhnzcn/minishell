@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 09:53:32 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/08 23:40:30 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:51:53 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_bool	double_quote(t_token *tokens)
+static t_bool	double_quote(t_token *tokens, t_token *temp)
 {
-	t_token	*temp;
 	t_token	*closing_quote;
 
 	temp = tokens->next;
@@ -30,6 +29,8 @@ static t_bool	double_quote(t_token *tokens)
 		{
 			if (temp->type != DOLLAR)
 				temp->type = WORD;
+			else
+				temp->type = QUOTED_DOLLAR;
 			temp = temp->prev;
 		}
 		if (tokens->next == closing_quote)
@@ -76,7 +77,7 @@ t_bool	check_quotes(t_token *token_list)
 	{
 		if (temp->type == DOUBLE_QUOTE)
 		{
-			if (double_quote(temp))
+			if (double_quote(temp, NULL))
 				return (EXIT_FAILURE);
 			temp = token_list;
 		}

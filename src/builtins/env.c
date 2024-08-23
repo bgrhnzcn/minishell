@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/03 23:29:21 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:17:01 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ int	find_env_index(char **env, char *var)
 	char	*temp;
 
 	i = 0;
-	while (i < ft_strarrlen(env) - 1)
+	while (i < ft_strarrlen(env))
 	{
 		temp = ft_substr(env[i], 0, (int)(ft_strchr(env[i], '=') - env[i]));
 		if (temp == NULL)
-			return (error);
+			return (-1);
 		if (ft_strequ(temp, var))
 			return (free(temp), i);
 		free(temp);
 		i++;
 	}
-	return (error);
+	return (-1);
 }
 
 char	*get_env(char **env, char *var)
@@ -37,7 +37,7 @@ char	*get_env(char **env, char *var)
 	int		i;
 
 	i = find_env_index(env, var);
-	if (i == error)
+	if (i == -1)
 		return (ft_strdup(""));
 	res = ft_strdup(env[i]);
 	if (res == NULL)
@@ -55,7 +55,6 @@ void	set_env(char **env, char *var, char *value)
 	if (i == ENV_LIMIT - 1)
 		return ;
 	env_size = ft_strlen(var) + ft_strlen(value) + 2;
-	printf("var: %s\n", var);
 	temp = get_env(env, var);
 	if (temp != NULL)
 	{

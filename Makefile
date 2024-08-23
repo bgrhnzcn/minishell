@@ -60,8 +60,8 @@ $(LIBFT):
 	make -C lib/libft && make -C lib/libft clean
 
 clean:
-	cd $(SRC) && rm -rf builtins/*.o debug/*.o \
-						parse/*.o io_operations/*.o exec/*.o *.o
+	cd $(OBJ) && rm -f	builtins/*.o parse/*.o \
+						io_operations/*.o exec/*.o
 	make -C lib/libft fclean
 
 fclean: clean

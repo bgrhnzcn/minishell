@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/22 20:09:10 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/23 18:47:52 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 # define MAIN_P				0
 # define CHILD_P			1
 # define HEREDOC_P			2
+# define AFTER_IN_P			3
 
 /**
  * @def ANSI_COLOR_BLUE
@@ -101,6 +102,7 @@ typedef enum e_token_type
 	QUOTE,
 	DOUBLE_QUOTE,
 	DOLLAR,
+	QUOTED_DOLLAR,
 	WHITESPACE,
 	COMMAND,
 	TAIL
@@ -305,7 +307,7 @@ t_bool	pipe_check(t_shell *shell, t_token *token_list);
  *
  * @param cmd The command structure.
  */
-int	get_heredoc(t_shell *shell, t_cmd *cmd);
+int	get_heredoc(t_cmd *cmd);
 
 /**
  * @brief Gets the input/output redirections for a command.
@@ -314,7 +316,7 @@ int	get_heredoc(t_shell *shell, t_cmd *cmd);
  * @param command The token representing the command.
  * @return True if the redirections were obtained successfully, false otherwise.
  */
-t_bool	get_redirs(t_shell *shell, t_cmd *cmd);
+t_bool	get_redirs(t_cmd *cmd);
 
 /**
  * @brief Applies the input/output redirections for a command.
@@ -345,7 +347,7 @@ void	restore_std_io(t_shell *shell);
  * It ensures that the parent process does not exit before all child processes
  * have completed their execution.
  */
-void	signal_cont(t_shell *shell, int status);
+void	signal_cont(int status);
 
 /**
  * @brief Prints an error message to the console.

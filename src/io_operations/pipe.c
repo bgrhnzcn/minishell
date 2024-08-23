@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/22 19:48:09 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/23 18:25:40 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	run_process(t_shell *shell, t_cmd *commands,
 	shell->pid = fork();
 	if (shell->pid == 0)
 	{
-		signal_cont(shell, CHILD_P);
+		signal_cont(CHILD_P);
 		close_pipes(shell->pipes, command_count, i);
 		if (i != command_count - 2)
 			dup2(shell->pipes[i * 2 + 3], STDOUT_FILENO);

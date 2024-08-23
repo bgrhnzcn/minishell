@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/22 19:24:08 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/23 19:13:12 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ char	*get_input(t_shell *shell)
 	char	*input;
 	char	*prompt;
 
+	signal_cont(MAIN_P);
 	prompt = create_prompt(shell);
 	input = readline(prompt);
 	if (input == NULL)
@@ -102,12 +103,12 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(&shell, envp);
 	while (true)
 	{
-		signal_cont(MAIN_P);
 		if (shell.input != NULL)
 			free(shell.input);
 		shell.input = get_input(&shell);
 		if (ft_strequ(shell.input, ""))
 			continue ;
+		signal_cont(AFTER_IN_P);
 		add_history(shell.input);
 		if (parse(&shell))
 		{

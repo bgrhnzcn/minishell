@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 16:42:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 19:17:35 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:23:47 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	token_dollar2word(char **env, t_token *dollar)
 		return ;
 	}
 	temp = get_env(env, dollar->text + 1);
+	//add splitted versions of value.
+	//continue in here.
 	curr_text = dollar->text;
 	dollar->text = ft_substr(temp, ft_strlen(curr_text),
 			ft_strlen(temp) - ft_strlen(curr_text));
@@ -55,6 +57,31 @@ static void	create_joined_words(t_token *tokens)
 	}
 }
 
+static void	token_quoted_dollar2word(t_token *dollar, char **env)
+{
+	char	*temp;
+	char	*curr_text;
+
+	if (ft_strequ(dollar->text, "$"))
+	{
+		dollar->type = WORD;
+		return ;
+	}
+	temp = get_env(env, dollar->text + 1);
+	curr_text = dollar->text;
+	dollar->text = ft_substr(temp, ft_strlen(curr_text),
+			ft_strlen(temp) - ft_strlen(curr_text));
+	if (dollar->text == NULL)
+	{
+		dollar->text = curr_text;
+		printf("Error occured while converting dollar symbols\n");
+	}
+	else
+		free(curr_text);
+	free(temp);
+	dollar->type = WORD;
+}
+
 void	perform_expansion(t_token *token_list, char **env)
 {
 	t_token	*temp;
@@ -64,6 +91,8 @@ void	perform_expansion(t_token *token_list, char **env)
 	{
 		if (temp->type == DOLLAR)
 			token_dollar2word(env, temp);
+		if (temp->type == QUOTED_DOLLAR)
+			token_quoted_dollar2word(env, temp);
 		temp = temp->next;
 	}
 }
