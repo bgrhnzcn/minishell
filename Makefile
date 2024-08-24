@@ -6,15 +6,19 @@ OBJ = obj
 
 SRC = src
 
-CFLAGS = -g -Wall -Wextra -Werror -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
+CFLAGS = -g -Wall -Wextra -Werror
 
-INCLUDE = -I./lib/readline-8.2/include
+READLINE_DIR = ./lib/readline-8.2
 
-READLINE_V = lib/readline-8.2/lib/libreadline.a
+READLINE_V = $(READLINE_DIR)/lib/libreadline.a
 
-LIBFT = lib/libft/libft.a
+LIBFT_DIR = ./lib/libft
 
-DYLIBS = -L./lib/readline-8.2/lib -lreadline
+LIBFT = $(LIBFT_DIR)/libft.a
+
+INCLUDES = -I$(READLINE_DIR)/include -I$(LIBFT_DIR) -I./includes/
+
+DYLIBS = -L$(READLINE_DIR)/lib -lreadline
 
 ifeq ($(shell uname), Linux)
 	DYLIBS += -ltinfo
@@ -53,63 +57,62 @@ OBJS = $(SRCS:$(SRC)/%.c=$(OBJ)/%.o)
 all: $(NAME)
 
 $(OBJ):
-	mkdir obj
-	mkdir obj/parse
-	mkdir obj/exec
-	mkdir obj/io_operations
-	mkdir obj/builtins
+	@mkdir obj
+	@mkdir obj/parse
+	@mkdir obj/exec
+	@mkdir obj/io_operations
+	@mkdir obj/builtins
+
+$(READLINE_DIR):
+	@echo "Downloading Readline-8.2..."
+	@curl https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz -o readline-8.2.tar.gz
+	@mkdir ./lib/readline-8.2
+	@tar xvfz readline-8.2.tar.gz > /dev/null 2> /dev/null
+	@rm readline-8.2.tar.gz
 
 clean:
-	rm -rf $(OBJ)
-	make -C lib/libft fclean
+	@rm -rf $(OBJ)
+	@make -C lib/libft fclean
 
 fclean: clean
-	rm -f ${NAME}
+	@rm -f ${NAME}
 
 re: fclean all
 
 run: $(NAME)
-	./minishell
+	@./minishell
 
-ifeq ($(shell uname), Linux)
-leak: re
-	@valgrind --leak-check=full --track-origins=yes ./minishell
-else
-leak: re
-	@bash ./minishell.sh
-	@make run
-endif
-
-ifeq ($(shell uname), Linux)
-debug: re
-	@gdb ./minishell
-else
-debug: re
-	@lldb ./minishell
-endif
-
-$(OBJ)/%.o: $(SRC)/%.c
-	$(CC) $(CFLAGS) -o $@ -c $(INCLUDE) $?
+$(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
+	$(CC) $(CFLAGS) -o $@ -c $(INCLUDES) $?
 
 $(LIBFT):
-	make -C lib/libft && make -C lib/libft clean
+	@make -C lib/libft && make -C lib/libft clean
 
-$(NAME): $(READLINE_V) $(LIBFT) $(OBJ) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(INCLUDE) $(OBJS) $(DYLIBS) $(LIBFT)
+$(NAME): $(LIBFT) $(OBJS) $(READLINE_V)
+	$(CC) $(CFLAGS) -o $(NAME) $(INCLUDES) $(OBJS) $(DYLIBS) $(LIBFT)
 
-$(READLINE_V):
-	@if [ ! -d "./lib/readline-8.2" ]; then\
-		echo "Downloading Readline-8.2...";\
-		curl https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz -o readline-8.2.tar.gz;\
-		mkdir ./lib/readline-8.2;\
-		tar xvfz readline-8.2.tar.gz > /dev/null 2> /dev/null;\
-		rm readline-8.2.tar.gz;\
-	fi;\
-	if [ ! -f "./$(READLINE_V)" ]; then\
-		echo "Compiling Readline-8.2...";\
-		cd readline-8.2 && ./configure --prefix=$(PWD)/lib/readline-8.2 2>&1 | awk '{printf "."; fflush()}';\
-		cd .. && make -C readline-8.2 install 2>&1 | awk '{printf "."; fflush()}';\
-		rm -rf readline-8.2;\
-	fi;
+$(READLINE_V): | $(READLINE_DIR)
+	@echo "Compiling Readline-8.2..."
+	@cd readline-8.2 && ./configure --prefix=$(PWD)/$(READLINE_DIR) 2>&1 | awk '{printf "."; fflush()}'
+	@cd readline-8.2 && make install 2>&1 | awk '{printf "."; fflush()}'
+	@printf "\n"
+	@rm -rf readline-8.2
+
+#ifeq ($(shell uname), Linux)
+#leak: re
+#	@valgrind --leak-check=full --track-origins=yes ./minishell
+#else
+#leak: re
+#	@bash ./minishell.sh
+#	@make run
+#endif
+#
+#ifeq ($(shell uname), Linux)
+#debug: re
+#	@gdb ./minishell
+#else
+#debug: re
+#	@lldb ./minishell
+#endif
 
 .PHONY: all re fclean clean
