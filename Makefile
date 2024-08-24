@@ -1,16 +1,24 @@
+NAME = minishell
+
 CC = gcc
 
+OBJ = obj
+
+SRC = src
+
 CFLAGS = -g -Wall -Wextra -Werror -I./includes/ -I./lib/libft/ -I./lib/readline-8.2/include/
-#-fsanitize=address
-DYLIBS = -lreadline
+
+INCLUDE = -I./lib/readline-8.2/include
+
+READLINE_V = lib/readline-8.2/lib/libreadline.a
+
+LIBFT = lib/libft/libft.a
+
+DYLIBS = -L./lib/readline-8.2/lib -lreadline
 
 ifeq ($(shell uname), Linux)
 	DYLIBS += -ltinfo
 endif
-
-SRC = src
-
-OBJ = obj
 
 SRCS = $(SRC)/exec/main.c \
 	$(SRC)/exec/exec.c \
@@ -40,28 +48,19 @@ SRCS = $(SRC)/exec/main.c \
 	$(SRC)/io_operations/redirections.c \
 	$(SRC)/io_operations/heredoc.c \
 
-NAME = minishell
-
 OBJS = $(SRCS:$(SRC)/%.c=$(OBJ)/%.o)
-
-$(OBJ)/%.o: $(SRC)/%.c
-	$(CC) $(CFLAGS) -o $@ -c -I./lib/readline-8.2/include $? 
 
 all: $(NAME)
 
-READLINE_V = lib/readline-8.2/lib/libreadline.a
-
-LIBFT = lib/libft/libft.a
-
-$(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) -L./lib/readline-8.2/lib -lreadline -I./lib/readline-8.2/include $(OBJS) $(LIBFT)
-
-$(LIBFT):
-	make -C lib/libft && make -C lib/libft clean
+$(OBJ):
+	mkdir obj
+	mkdir obj/parse
+	mkdir obj/exec
+	mkdir obj/io_operations
+	mkdir obj/builtins
 
 clean:
-	cd $(OBJ) && rm -f	builtins/*.o parse/*.o \
-						io_operations/*.o exec/*.o
+	rm -rf $(OBJ)
 	make -C lib/libft fclean
 
 fclean: clean
@@ -71,6 +70,32 @@ re: fclean all
 
 run: $(NAME)
 	./minishell
+
+ifeq ($(shell uname), Linux)
+leak: re
+	@valgrind --leak-check=full --track-origins=yes ./minishell
+else
+leak: re
+	@bash ./minishell.sh
+	@make run
+endif
+
+ifeq ($(shell uname), Linux)
+debug: re
+	@gdb ./minishell
+else
+debug: re
+	@lldb ./minishell
+endif
+
+$(OBJ)/%.o: $(SRC)/%.c
+	$(CC) $(CFLAGS) -o $@ -c $(INCLUDE) $?
+
+$(LIBFT):
+	make -C lib/libft && make -C lib/libft clean
+
+$(NAME): $(READLINE_V) $(LIBFT) $(OBJ) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(INCLUDE) $(OBJS) $(DYLIBS) $(LIBFT)
 
 $(READLINE_V):
 	@if [ ! -d "./lib/readline-8.2" ]; then\
@@ -86,14 +111,5 @@ $(READLINE_V):
 		cd .. && make -C readline-8.2 install 2>&1 | awk '{printf "."; fflush()}';\
 		rm -rf readline-8.2;\
 	fi;
-
-ifeq ($(shell uname), Linux)
-leak: re
-	@valgrind --leak-check=full --track-origins=yes ./minishell
-else
-leak: re
-	@bash ./minishell.sh
-	@make run
-endif
 
 .PHONY: all re fclean clean

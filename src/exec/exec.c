@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/23 18:32:41 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/24 17:44:32 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd)
 		signal_cont(CHILD_P);
 		if (cmd != NULL)
 		{
-			if (cmd->argv[0] != NULL && !ft_strequ(cmd->argv[0], "")
-				&& !apply_redirs(cmd))
+			if (cmd->argv[0] != NULL && !apply_redirs(cmd))
 				executer(shell, cmd->argv);
 			free_cmd(cmd);
 		}

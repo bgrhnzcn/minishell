@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 11:42:22 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/08 22:44:23 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/24 15:27:18 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,17 @@
 void	remove_whitespaces(t_token *token_list)
 {
 	t_token	*temp;
+	t_token	*place_holder;
 
 	temp = token_list;
-	while (temp->next != NULL)
+	while (temp != NULL)
 	{
-		if (temp->next->type == WHITESPACE)
-			destroy_token(remove_token(token_list, temp->next));
+		if (temp->type == WHITESPACE)
+		{
+			place_holder = temp->next;
+			destroy_token(remove_token(token_list, temp));
+			temp = place_holder;
+		}
 		else
 			temp = temp->next;
 	}

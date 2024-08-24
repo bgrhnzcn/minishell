@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 16:04:00 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/23 18:25:49 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/24 15:59:37 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	get_heredoc(t_cmd *cmd)
 		if (status >> 8 == 2)
 			return(EXIT_FAILURE);
 		temp = temp->next;
-		printf("%d\n",status >> 8);
 	}
 	return (EXIT_SUCCESS);
 }

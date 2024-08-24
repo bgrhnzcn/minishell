@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/23 18:47:52 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/24 14:50:19 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ static const char	g_whitespaces[7] = " \t\n\r\v\f";
  * @var g_token_type_str
  * Array of strings representing different token types.
  */
-static const char	g_token_type_str[13][20] = {
+static const char	g_token_type_str[14][20] = {
 	"HEAD",			"PIPE",		"OUTPUT",	"INPUT",		"APPEND",
 	"WORD",			"HEREDOC",	"QUOTE",	"DOUBLE_QUOTE",	"DOLLAR",
-	"WHITESPACE",	"COMMAND",	"TAIL"};
+	"QUOTED_DOLLAR", "WHITESPACE",	"COMMAND",	"TAIL"};
 
 /**
  * @enum t_token_type
@@ -162,19 +162,19 @@ typedef struct s_shell
  */
 t_token	*new_token(t_token_type type, char *text);
 
-///**
-// * @brief Prints the details of a token.
-// *
-// * @param token The token to be printed.
-// */
-//void	print_token(t_token *token);
-//
-///**
-// * @brief Prints the details of all tokens in a token list.
-// *
-// * @param token_list The token list to be printed.
-// */
-//void	print_tokens(t_token *token_list);
+/**
+ * @brief Prints the details of a token.
+ *
+ * @param token The token to be printed.
+ */
+void	print_token(t_token *token);
+
+/**
+ * @brief Prints the details of all tokens in a token list.
+ *
+ * @param token_list The token list to be printed.
+ */
+void	print_tokens(t_token *token_list);
 
 /**
  * @brief Clears all tokens in a token list.

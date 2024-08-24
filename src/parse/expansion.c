@@ -3,19 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 16:42:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/23 19:23:47 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/24 18:21:57 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void	split_dollar(char *env, t_token *dollar)
+{
+	t_token	*temp;
+	char	**split;
+	int		i;
+
+	temp = dollar;
+	env = ft_strchr(env, '=');
+	if (env + 1 == NULL)
+	{
+		dollar->type = WORD;
+		return ;
+	}
+	split = ft_split(env + 1, ' ');
+	i = 0;
+	while (split[i])
+	{
+		add_token_after(temp, new_token(WHITESPACE, ft_strdup(" ")));
+		add_token_after(temp, new_token(WORD, ft_strdup(split[i])));
+		temp = temp->next->next;
+		i++;
+	}
+	ft_free_str_arr(split);
+}
+
 static void	token_dollar2word(char **env, t_token *dollar)
 {
 	char	*temp;
-	char	*curr_text;
 
 	if (ft_strequ(dollar->text, "$"))
 	{
@@ -23,20 +47,15 @@ static void	token_dollar2word(char **env, t_token *dollar)
 		return ;
 	}
 	temp = get_env(env, dollar->text + 1);
-	//add splitted versions of value.
-	//continue in here.
-	curr_text = dollar->text;
-	dollar->text = ft_substr(temp, ft_strlen(curr_text),
-			ft_strlen(temp) - ft_strlen(curr_text));
-	if (dollar->text == NULL)
+	if (ft_strequ(temp, ""))
 	{
-		dollar->text = curr_text;
-		printf("Error occured while converting dollar symbols\n");
+		dollar->type = WHITESPACE;
+		return ;
 	}
-	else
-		free(curr_text);
+	split_dollar(temp, dollar);
+	if (dollar->text == NULL)
+		dollar->text = ft_strdup("");
 	free(temp);
-	dollar->type = WORD;
 }
 
 static void	create_joined_words(t_token *tokens)
@@ -57,7 +76,7 @@ static void	create_joined_words(t_token *tokens)
 	}
 }
 
-static void	token_quoted_dollar2word(t_token *dollar, char **env)
+static void	token_quoted_dollar2word(char **env, t_token *dollar)
 {
 	char	*temp;
 	char	*curr_text;
@@ -68,16 +87,13 @@ static void	token_quoted_dollar2word(t_token *dollar, char **env)
 		return ;
 	}
 	temp = get_env(env, dollar->text + 1);
-	curr_text = dollar->text;
-	dollar->text = ft_substr(temp, ft_strlen(curr_text),
-			ft_strlen(temp) - ft_strlen(curr_text));
-	if (dollar->text == NULL)
+	if (!ft_strequ(temp, ""))
 	{
-		dollar->text = curr_text;
-		printf("Error occured while converting dollar symbols\n");
+		curr_text = ft_strchr(temp, '=') + 1;
+		dollar->text = ft_strdup(curr_text);
 	}
 	else
-		free(curr_text);
+		dollar->text = ft_strdup(temp);
 	free(temp);
 	dollar->type = WORD;
 }
@@ -85,12 +101,23 @@ static void	token_quoted_dollar2word(t_token *dollar, char **env)
 void	perform_expansion(t_token *token_list, char **env)
 {
 	t_token	*temp;
+	t_token	*place_holder;
 
 	temp = token_list;
 	while (temp != NULL)
 	{
+		place_holder = temp->next;
 		if (temp->type == DOLLAR)
+		{
 			token_dollar2word(env, temp);
+			if (temp->type == WORD || temp->type == WHITESPACE)
+				continue ;
+			temp->prev->next = temp->next;
+			temp->next->prev = temp->prev;
+			destroy_token(remove_token(token_list, temp));
+			temp = place_holder;
+			continue ;
+		}
 		if (temp->type == QUOTED_DOLLAR)
 			token_quoted_dollar2word(env, temp);
 		temp = temp->next;
