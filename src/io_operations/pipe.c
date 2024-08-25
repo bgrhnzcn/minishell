@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/24 17:45:19 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/25 15:27:11 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static void	run_process(t_shell *shell, t_cmd *commands,
 	int command_count, int i)
 {
-	shell->pid = fork();
-	if (shell->pid == 0)
+	commands[i + 1].pid = fork();
+	if (commands[i + 1].pid == 0)
 	{
 		signal_cont(CHILD_P);
 		close_pipes(shell->pipes, command_count, i);
@@ -57,7 +57,7 @@ static t_bool	call_pipe(t_shell *shell, t_cmd *commands,
 		i++;
 	}
 	clear_pipes(shell->pipes, command_count);
-	wait_all_childs();
+	wait_all_childs(commands, command_count);
 	return (EXIT_SUCCESS);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/24 17:44:32 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/25 15:24:14 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 t_bool	single_command(t_shell *shell, t_cmd *cmd)
 {
-	int		status;
+	int status;
 
 	g_global_exit = 0;
 	if (get_redirs(cmd))
 		return (EXIT_FAILURE);
 	if (cmd != NULL && !buildins(shell, cmd))
 		return (EXIT_SUCCESS);
-	shell->pid = fork();
-	if (shell->pid == 0)
+	cmd->pid = fork();
+	if (cmd->pid == 0)
 	{
 		signal_cont(CHILD_P);
 		if (cmd != NULL)
@@ -33,7 +33,17 @@ t_bool	single_command(t_shell *shell, t_cmd *cmd)
 		}
 		exit(127);
 	}
-	waitpid(shell->pid, &status, 0);
+	waitpid(cmd->pid, &status, 0);
+	if (WIFEXITED(status))
+	{
+		g_global_exit = WEXITSTATUS(status);
+		return (EXIT_SUCCESS);
+	}
+	else if (WIFSIGNALED(status))
+	{
+			g_global_exit = 128 + WTERMSIG(status);
+			return (EXIT_SUCCESS);
+	}
 	return (EXIT_SUCCESS);
 }
 

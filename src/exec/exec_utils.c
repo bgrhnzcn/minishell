@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 18:31:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 17:38:38 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/25 15:36:30 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,21 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
-void	wait_all_childs(void)
+void	wait_all_childs(t_cmd *commands, int command_count)
 {
-	pid_t	wpid;
+	int	status;
+	int	i;
 
-	while (true)
+	i = 0;
+	while (i < command_count)
 	{
-		wpid = wait(NULL);
-		if (wpid == -1)
-			break ;
+		waitpid(commands[i].pid, &status, 0);
+		i++;
 	}
+	if (WIFEXITED(status))
+		g_global_exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_global_exit = 128 + WTERMSIG(status);
 }
 
 void	free_cmds(t_cmd *commands, int command_count)

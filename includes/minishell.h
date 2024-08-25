@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/24 14:50:19 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/25 15:12:25 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef struct s_token
  */
 typedef struct s_cmd
 {
+	pid_t	pid;
 	t_token	*redir_list;		/**< List of redirection tokens. */
 	char	**argv;				/**< Array of arguments for the command. */
 	int		fdin;				/**< File descriptor for input redirection. */
@@ -143,7 +144,6 @@ typedef struct s_shell
 	t_token	token_list;		/**< The list of tokens. */
 	char	**env;			/**< Array of environment variables. */
 	char	*input;			/**< The input string. */
-	pid_t	pid;			/**< Process ID of the shell. */
 	int		saved_stdin;	/**< Saved standard input file descriptor. */
 	int		saved_stdout;	/**< Saved standard output file descriptor. */
 	int		*pipes;			/**< Array of pipe file descriptors. */
@@ -486,7 +486,7 @@ void	executer(t_shell *shell, char **argv);
  * It ensures that the parent process does not exit before all child processes
  * have completed their execution.
  */
-void	wait_all_childs(void);
+void	wait_all_childs(t_cmd *commands, int command_count);
 
 /**
  * @brief Gets the value of an environment variable.

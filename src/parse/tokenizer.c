@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 16:08:16 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/20 19:14:31 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/25 14:52:18 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static t_token	*create_token_dollar(char *input, int i,
 	while (i < input_len)
 	{
 		if (input[i + 1] && input[i + 1] == '?')
-			return (new_token(DOLLAR, ft_strdup("?")));
+			return (new_token(DOLLAR, ft_strdup("$?")));
 		if ((i == start_i + 1 && !(ft_isalpha(input[i]) || input[i] == '_')))
 			break ;
 		if (i != start_i && !(ft_isalnum(input[i]) || input[i] == '_'))
