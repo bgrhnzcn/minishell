@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/24 15:50:59 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/26 17:32:00 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,14 @@ void	set_env(char **env, char *var, char *value)
 		return ;
 	env_size = ft_strlen(var) + ft_strlen(value) + 2;
 	temp = get_env(env, var);
-	if (temp != NULL)
+	if (ft_strequ(temp, ""))
+		free(temp);
+	else
 	{
 		i = find_env_index(env, var);
-		printf("%d.%s\n", i, temp);
 		free(temp);
 	}
+	free(env[i]);
 	env[i] = ft_calloc(env_size, sizeof(char));
 	ft_strlcat(env[i], var, env_size);
 	ft_strlcat(env[i], "=", env_size);

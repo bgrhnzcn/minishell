@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/25 15:17:12 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/26 17:33:00 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	buildins(t_shell *shell, t_cmd *cmd)
 	else if (ft_strequ(cmd->argv[0], "pwd") && !apply_redirs(cmd))
 		mini_pwd(shell->env);
 	else if (ft_strequ(cmd->argv[0], "cd") && !apply_redirs(cmd))
-		mini_cd(shell->env, cmd->argv[1]);
+		mini_cd(shell->env, cmd);
 	else if (ft_strequ(cmd->argv[0], "export") && !apply_redirs(cmd))
 		mini_export(shell, cmd->argv);
 	else if (ft_strequ(cmd->argv[0], "unset") && !apply_redirs(cmd))

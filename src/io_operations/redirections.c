@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:05:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/25 15:36:28 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/26 18:22:19 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static t_bool	found_input(t_cmd *cmd, t_token *temp)
 		ft_putstr_fd(temp->text + 1, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		g_global_exit = 1;
 		cmd->fd_fail = true;
 		return (EXIT_FAILURE);
 	}
@@ -58,6 +59,7 @@ static t_bool	found_output(t_cmd *cmd, t_token *temp)
 			ft_putstr_fd(temp->text + 1, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		g_global_exit = 1;
 		cmd->fd_fail = true;
 		return (EXIT_FAILURE);
 	}
@@ -90,35 +92,6 @@ t_bool	apply_redirs(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-static t_bool	get_inputs(t_cmd *cmd)
-{
-	t_token	*temp;
-	t_bool	status;
-
-	temp = cmd->redir_list;
-	status = EXIT_SUCCESS;
-	if (get_heredoc(cmd) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	while (temp != NULL)
-	{
-		if (temp->type == INPUT)
-			status = found_input(cmd, temp);
-		if (status == EXIT_FAILURE)
-		{
-			cmd->fd_fail = true;
-			return (EXIT_FAILURE);
-		}
-		temp = temp->next;
-	}
-	if (cmd->heredoc_pipe[0] != -1)
-	{
-		if (cmd->fdin != -1)
-			close(cmd->fdin);
-		cmd->fdin = cmd->heredoc_pipe[0];
-	}
-	return (EXIT_SUCCESS);
-}
-
 t_bool	get_redirs(t_cmd *cmd)
 {
 	t_token	*temp;
@@ -126,18 +99,22 @@ t_bool	get_redirs(t_cmd *cmd)
 
 	temp = cmd->redir_list;
 	status = EXIT_SUCCESS;
-	if (get_inputs(cmd))
-		return (EXIT_FAILURE);
+	get_heredoc(cmd);
 	while (temp != NULL)
 	{
 		if (temp->type == OUTPUT || temp->type == APPEND)
 			status = found_output(cmd, temp);
+		if (temp->type == INPUT)
+			status = found_input(cmd, temp);
 		if (status == EXIT_FAILURE)
-		{
-			cmd->fd_fail = true;
-			return (EXIT_FAILURE);
-		}
+			return (cmd->fd_fail = true, EXIT_FAILURE);
 		temp = temp->next;
+	}
+	if (cmd->heredoc_pipe[0] != -1)
+	{
+		if (cmd->fdin != -1)
+			close(cmd->fdin);
+		cmd->fdin = cmd->heredoc_pipe[0];
 	}
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@ OBJ = obj
 
 SRC = src
 
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g -fsanitize=address -Wall -Wextra -Werror
 
 READLINE_DIR = ./lib/readline-8.2
 
@@ -32,6 +32,7 @@ SRCS = $(SRC)/exec/main.c \
 	$(SRC)/builtins/pwd.c \
 	$(SRC)/builtins/exit.c \
 	$(SRC)/builtins/cd.c \
+	$(SRC)/builtins/cd_utils.c \
 	$(SRC)/builtins/unset.c \
 	$(SRC)/builtins/unset_utils.c \
 	$(SRC)/builtins/unset_utils2.c \
@@ -44,9 +45,9 @@ SRCS = $(SRC)/exec/main.c \
 	$(SRC)/parse/quotes.c \
 	$(SRC)/parse/syntax.c \
 	$(SRC)/parse/expansion.c \
+	$(SRC)/parse/expansion_utils.c \
 	$(SRC)/parse/argv.c \
 	$(SRC)/parse/commands.c \
-	$(SRC)/parse/parse_utils.c \
 	$(SRC)/io_operations/pipe.c \
 	$(SRC)/io_operations/io_utils.c \
 	$(SRC)/io_operations/redirections.c \

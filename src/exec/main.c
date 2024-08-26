@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/24 20:24:00 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/26 16:05:51 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,10 @@ char	*create_prompt(t_shell *shell)
 	ft_strlcat(prompt, ANSI_COLOR_GREEN"minishell"ANSI_COLOR_RESET, 300);
 	ft_strlcat(prompt, "@", 300);
 	cwd = get_env(shell->env, "PWD");
-	if (cwd == NULL)
+	if (ft_strequ(cwd, ""))
 	{
-		cwd = getcwd(NULL, 0);
-		ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
-		ft_strlcat(prompt, ft_strrchr(cwd, '/') + 1, 300);
-		ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
-		ft_strlcat(prompt, "> ", 300);
 		free(cwd);
-		return (prompt);
+		cwd = getcwd(NULL, 0);
 	}
 	ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
 	ft_strlcat(prompt, ft_strrchr(cwd, '/') + 1, 300);

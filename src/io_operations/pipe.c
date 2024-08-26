@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 12:15:17 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/25 15:27:11 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/26 18:08:45 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static void	run_process(t_shell *shell, t_cmd *commands,
 	{
 		signal_cont(CHILD_P);
 		close_pipes(shell->pipes, command_count, i);
-		if (i != command_count - 2)
+		if (!commands[i + 1].fd_fail && i != command_count - 2)
 			dup2(shell->pipes[i * 2 + 3], STDOUT_FILENO);
-		if (i != -1)
+		if (!commands[i + 1].fd_fail && i != -1)
 			dup2(shell->pipes[i * 2], STDIN_FILENO);
-		if (commands[i + 1].argv[0] != NULL
+		if (!commands[i + 1].fd_fail && commands[i + 1].argv[0] != NULL
 			&& !ft_strequ(commands[i + 1].argv[0], ""))
 		{
 			if (!apply_redirs(&commands[i + 1]))
@@ -33,7 +33,7 @@ static void	run_process(t_shell *shell, t_cmd *commands,
 		}
 		free_cmds(commands, command_count);
 		clear_pipes(shell->pipes, command_count);
-		exit(127);
+		exit(g_global_exit);
 	}
 }
 
@@ -46,8 +46,8 @@ static t_bool	call_pipe(t_shell *shell, t_cmd *commands,
 	i = -1;
 	while (i < command_count - 1)
 	{
-		if (get_redirs(&commands[i + 1]))
-			return (EXIT_FAILURE);
+		g_global_exit = 0;
+		get_redirs(&commands[i + 1]);
 		i++;
 	}
 	i = -1;

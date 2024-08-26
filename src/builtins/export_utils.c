@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:02:40 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/08/22 14:45:07 by olyetisk         ###   ########.fr       */
+/*   Updated: 2024/08/26 19:08:35 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static	int	find_existing_env_var(t_shell *shell, const char *identifier)
 		if (env_var)
 		{
 			len = env_var - shell->env[j];
-			if (strncmp(identifier, shell->env[j], len) == 0
-				&& strlen(identifier) == len)
+			if (ft_strncmp(identifier, shell->env[j], len) == 0
+				&& ft_strlen(identifier) == len)
 				return (j);
 		}
 		j++;
@@ -39,7 +39,7 @@ static	int	update_env_var(t_shell *shell, int j, const char *arg)
 	char	*new_env_var;
 
 	free(shell->env[j]);
-	new_env_var = strdup(arg);
+	new_env_var = ft_strdup(arg);
 	if (!new_env_var)
 		return 0;
 	shell->env[j] = new_env_var;
@@ -68,7 +68,7 @@ int	add_new_env(t_shell *shell, const char *arg)
 		return (0);
 	for (int j = 0; j < env_count; j++)
 		new_env[j] = shell->env[j];
-	new_env[env_count] = strdup(arg);
+	new_env[env_count] = ft_strdup(arg);
 	if (!new_env[env_count])
 	{
 		free(new_env);

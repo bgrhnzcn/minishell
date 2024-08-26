@@ -6,7 +6,7 @@
 /*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 16:04:00 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/24 15:59:37 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:46:33 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	handle_heredoc_hlpr(t_cmd *cmd, const char *delimiter)
 	{
 		signal_cont(HEREDOC_P);
 		line = readline("> ");
-		if (g_global_exit == 999)
-			exit(2);
+		if (g_global_exit == 130)
+			exit(130);
 		if (ft_strequ(line, delimiter))
 		{
 			free(line);
@@ -55,6 +55,7 @@ static void	handle_heredoc(const char *delimiter, t_cmd *cmd, int *status)
 	else
 	{
 		waitpid(pid, status, 0);
+		g_global_exit = WEXITSTATUS(*status);
 		close(cmd->heredoc_pipe[1]);
 	}
 }
@@ -70,8 +71,6 @@ int	get_heredoc(t_cmd *cmd)
 	{
 		if (temp->type == HEREDOC)
 			handle_heredoc(temp->text + 2, cmd, &status);
-		if (status >> 8 == 2)
-			return(EXIT_FAILURE);
 		temp = temp->next;
 	}
 	return (EXIT_SUCCESS);

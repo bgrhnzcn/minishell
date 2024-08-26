@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/25 15:12:25 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/26 18:59:23 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,15 @@ t_bool	check_syntax(t_token *token_list, char **env);
  */
 void	merge_redirs(t_token *token_list);
 
+void	split_dollar(char *env, t_token *dollar);
+
+/**
+ * @brief Creates a new token list with joined words.
+ *
+ * @param tokens The token list.
+ */
+void	create_joined_words(t_token *tokens);
+
 /**
  * @brief Performs variable expansion in the token list.
  *
@@ -348,6 +357,14 @@ void	restore_std_io(t_shell *shell);
  * have completed their execution.
  */
 void	signal_cont(int status);
+
+/**
+ * @brief Gets the exit code of a process.
+ *
+ * @param status The status of the process.
+ * @return The exit code of the process.
+ */
+int		process_exit_code(int status);
 
 /**
  * @brief Prints an error message to the console.
@@ -538,13 +555,30 @@ void	mini_env(char **env);
  */
 void	mini_pwd(char **env);
 
+void	cd_print_error(char *path, int err);
+
+/**
+ * @brief Changes the environment variables for the current working directory.
+ *
+ * @param env The array of environment variables.
+ * @param pwd The current working directory.
+ */
+void	cd_change_pwds(char **env, char *pwd);
+
+/**
+ * @brief Gets the current working directory.
+ *
+ * @param pwd The pointer to the current working directory.
+ */
+void	ft_get_cwd(char **pwd);
+
 /**
  * @brief Changes the current working directory.
  *
  * @param env The array of environment variables.
  * @param path The path to the directory.
  */
-void	mini_cd(char **env, char *path);
+void	mini_cd(char **env, t_cmd *cmd);
 
 /**
  * @brief Prints the arguments to the console.

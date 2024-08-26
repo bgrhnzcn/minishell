@@ -1,5 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/26 18:51:34 by bgrhnzcn          #+#    #+#             */
+/*   Updated: 2024/08/26 18:51:58 by bgrhnzcn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
+int	process_exit_code(int status)
+{
+	if (WIFEXITED(status))
+	{
+		g_global_exit = WEXITSTATUS(status);
+		return (EXIT_SUCCESS);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		g_global_exit = 128 + WTERMSIG(status);
+		return (EXIT_SUCCESS);
+	}
+	return (EXIT_FAILURE);
+}
 
 static void	ft_main_signal(int signal)
 {
@@ -27,7 +53,7 @@ static void	ft_heredoc_signal(int signal)
 {
 	if (signal == SIGINT)
 	{
-		g_global_exit = 999;
+		g_global_exit = 130;
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
