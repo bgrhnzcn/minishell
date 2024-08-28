@@ -6,7 +6,7 @@ OBJ = obj
 
 SRC = src
 
-CFLAGS = -g -fsanitize=address -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
 READLINE_DIR = ./lib/readline-8.2
 
@@ -25,6 +25,7 @@ ifeq ($(shell uname), Linux)
 endif
 
 SRCS = $(SRC)/exec/main.c \
+	$(SRC)/exec/main_utils.c \
 	$(SRC)/exec/exec.c \
 	$(SRC)/exec/signals.c \
 	$(SRC)/exec/exec_utils.c \
@@ -66,7 +67,8 @@ $(OBJ):
 
 $(READLINE_DIR):
 	@echo "Downloading Readline-8.2..."
-	@curl https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz -o readline-8.2.tar.gz
+	@curl https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz -o readline-8.2.tar.gz 2>&1 | awk '{printf "."; fflush()}'
+	@echo ""
 	@mkdir ./lib/readline-8.2
 	@tar xvfz readline-8.2.tar.gz > /dev/null 2> /dev/null
 	@rm readline-8.2.tar.gz
@@ -89,7 +91,7 @@ $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 $(LIBFT):
 	@make -C lib/libft && make -C lib/libft clean
 
-$(NAME): $(LIBFT) $(OBJS) $(READLINE_V)
+$(NAME): $(READLINE_V) $(LIBFT) $(OBJS) 
 	$(CC) $(CFLAGS) -o $(NAME) $(INCLUDES) $(OBJS) $(DYLIBS) $(LIBFT)
 
 $(READLINE_V): | $(READLINE_DIR)
@@ -99,21 +101,13 @@ $(READLINE_V): | $(READLINE_DIR)
 	@printf "\n"
 	@rm -rf readline-8.2
 
-#ifeq ($(shell uname), Linux)
-#leak: re
-#	@valgrind --leak-check=full --track-origins=yes ./minishell
-#else
-#leak: re
-#	@bash ./minishell.sh
-#	@make run
-#endif
-#
-#ifeq ($(shell uname), Linux)
-#debug: re
-#	@gdb ./minishell
-#else
-#debug: re
-#	@lldb ./minishell
-#endif
+ifeq ($(shell uname), Linux)
+leak: re
+	@valgrind --leak-check=full --track-origins=yes ./minishell
+else
+leak: re
+	@bash ./minishell.sh
+	@make run
+endif
 
 .PHONY: all re fclean clean

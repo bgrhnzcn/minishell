@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:08:54 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/22 14:50:42 by olyetisk         ###   ########.fr       */
+/*   Updated: 2024/08/28 16:29:37 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,12 @@ int	valid_identifier(const char *str)
 	return (1);
 }
 
-static	char	*get_identifier(const char *arg)
+static	char	*get_identifier(char *arg, char **equals_check)
 {
-	char	*equals_check;
 	char	*identifier;
 
-	equals_check = strchr(arg, '=');
-	if (!equals_check)
-		return (NULL);
-	identifier = strndup(arg, equals_check - arg);
+	*equals_check = ft_strchr(arg, '=');
+	identifier = ft_substr(arg, 0, *equals_check - arg);
 	if (!identifier || !valid_identifier(identifier))
 	{
 		free(identifier);
@@ -47,30 +44,50 @@ static	char	*get_identifier(const char *arg)
 	return (identifier);
 }
 
-void	mini_export(t_shell *shell, char **argv)
+static int		identifier_error(char **argv, char *identifier, int *i)
 {
-	int		i;
-	char	*identifier;
+	if (!identifier)
+	{
+		ft_putstr_fd("minishell: export: '", STDERR_FILENO);
+		ft_putstr_fd(argv[*i], STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		g_global_exit = 1;
+		(*i)++;
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
 
-	i = 1;
+static void	mini_export_hlpr(t_shell *shell, char **argv, int i, char *identifier)
+{
+	if (!check_env(shell, identifier, argv[i]))
+	{
+		if (!add_new_env(shell, argv[i]))
+		{
+			free (identifier);
+			return ;
+		}
+	}
+	free (identifier);
+}
+
+void	mini_export(t_shell *shell, char **argv, int i, char *identifier)
+{
+	char	*equals_check;
+
 	while (argv[i])
 	{
-		identifier = get_identifier(argv[i]);
-		if (!identifier)
+		identifier = get_identifier(argv[i], &equals_check);
+		if (identifier_error(argv, identifier, &i))
+			continue ;
+		if (equals_check == NULL)
 		{
-			printf("export: not an identifier: %s\n", argv[i]);
+			free(identifier);
 			i++;
 			continue ;
 		}
-		if (!check_env(shell, identifier, argv[i]))
-		{
-			if (!add_new_env(shell, argv[i]))
-			{
-				free (identifier);
-				return ;
-			}
-		}
-		free (identifier);
+		if (argv[i] != identifier)
+			mini_export_hlpr(shell, argv, i, identifier);
 		i++;
 	}
 }

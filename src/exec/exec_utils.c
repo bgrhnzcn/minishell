@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 18:31:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 18:53:19 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 16:07:02 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ char	**split_path(t_shell *shell)
 	char	*cmd;
 
 	cmd = get_env(shell->env, "PATH");
-	if (cmd == NULL)
-		return (NULL);
+	if (ft_strequ(cmd, ""))
+		return (free(cmd), NULL);
 	paths = ft_split(cmd, ':');
 	if (paths == NULL)
 		return (free(cmd), NULL);

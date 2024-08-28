@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 17:01:27 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/05 13:45:22 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:12:30 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	ft_free_str_arr(char **str_arr)
 	int	i;
 
 	i = 0;
+	if (str_arr == NULL)
+		return ;
 	while (str_arr[i])
 	{
 		free(str_arr[i]);

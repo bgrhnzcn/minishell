@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:31:46 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/24 15:21:11 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:53:26 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,30 +52,6 @@ void	destroy_token(t_token *token)
 	if (token->text != NULL)
 		free(token->text);
 	free(token);
-}
-
-void	print_token(t_token *token)
-{
-	printf(
-			"[ INFO ] Token\n{\n\t.type\t= %s,\n\t.text\t= %s,\n\t.adress\t= %p,\n\t.next\t= %p,\n\t.prev\t= %p\n}\n",
-			g_token_type_str[token->type],
-			token->text,
-			token,
-			token->next,
-			token->prev
-			);
-}
-
-void	print_tokens(t_token *token_list)
-{
-	t_token	*temp;
-
-	temp = token_list;
-	while (temp != NULL)
-	{
-		print_token(temp);
-		temp = temp->next;
-	}
 }
 
 void	clear_tokens(t_token *token_list)

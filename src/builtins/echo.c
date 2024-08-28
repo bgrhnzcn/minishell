@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:53:03 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/08/03 23:28:47 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:49:00 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static t_bool	check_echo(char *s)
 {
 	if (!*s)
-		return (false);
+		return (EXIT_FAILURE);
 	if (*s == '-' && *(s + 1))
 	{
 		while (*s == '-')
@@ -26,7 +26,7 @@ static t_bool	check_echo(char *s)
 	}
 	if (*s)
 		return (false);
-	return (true);
+	return (EXIT_SUCCESS);
 }
 
 void	mini_echo(char **av)

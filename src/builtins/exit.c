@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:35:55 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/20 17:27:48 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:43:10 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,12 @@ static int	str_isdigit(char *str)
 
 void	mini_exit(t_shell *shell, t_cmd *cmd)
 {
-	int	exit_status;
-
-	exit_status = 0;
-	if (shell->env)
-		ft_free_str_arr(shell->env);
-	if (shell->input)
-		free(shell->input);
 	if (cmd->argv[1])
 	{
 		if (cmd->argv[2] != NULL)
 		{
 			ft_putstr_fd("bash: exit: too many arguments\n", STDERR_FILENO);
-			shell->status = 1;
+			g_global_exit = 1;
 			return ;
 		}
 		if (str_isdigit(cmd->argv[1]))
@@ -53,10 +46,14 @@ void	mini_exit(t_shell *shell, t_cmd *cmd)
 			ft_putstr_fd("bash: exit: ", STDERR_FILENO);
 			ft_putstr_fd(cmd->argv[1], STDERR_FILENO);
 			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-			exit(2);
+			ft_free_str_arr(shell->env);
+			free(shell->input);
+			exit(255);
 		}
-		exit_status = ft_atoi(cmd->argv[1]);
+		g_global_exit = ft_atoi(cmd->argv[1]);
 	}
 	printf("exit\n");
-	exit(exit_status);
+	ft_free_str_arr(shell->env);
+	free(shell->input);
+	exit(g_global_exit);
 }

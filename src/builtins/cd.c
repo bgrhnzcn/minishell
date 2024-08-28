@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:13:02 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 18:36:37 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/27 13:56:12 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,6 @@ void	mini_cd(char **env, t_cmd *cmd)
 {
 	if (cmd->argv[1] == NULL)
 		cd_home(env);
-	else if (cmd->argv[2] != NULL)
-	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
-		g_global_exit = 1;
-		return ;
-	}
 	else
 		cd_path(env, cmd->argv[1]);
 }

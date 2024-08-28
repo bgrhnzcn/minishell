@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 17:37:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 17:33:00 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:56:13 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	buildins(t_shell *shell, t_cmd *cmd)
 	else if (ft_strequ(cmd->argv[0], "cd") && !apply_redirs(cmd))
 		mini_cd(shell->env, cmd);
 	else if (ft_strequ(cmd->argv[0], "export") && !apply_redirs(cmd))
-		mini_export(shell, cmd->argv);
+		mini_export(shell, cmd->argv, 1, NULL);
 	else if (ft_strequ(cmd->argv[0], "unset") && !apply_redirs(cmd))
 		mini_unset(shell, cmd->argv);
 	else if (ft_strequ(cmd->argv[0], "echo") && !apply_redirs(cmd))
@@ -94,34 +94,6 @@ static t_token	**split_commands(int command_count, t_token *token_list)
 	}
 	return (splitted);
 }
-
-//void	print_command(t_cmd *command, int i)
-//{
-//	int	j;
-//
-//	printf("command %d:\n", i);
-//	printf("fdin: %d\n", command->fdin);
-//	printf("fdout: %d\n", command->fdout);
-//	printf("fd_fail: %d\n", command->fd_fail);
-//	j = 0;
-//	while (command->argv[j] != NULL)
-//	{
-//		printf("argv[%d]: %s\n", j, command->argv[j]);
-//		j++;
-//	}
-//}
-//
-//void	print_commands(t_cmd *commands, int command_count)
-//{
-//	int	i;
-//
-//	i = 0;
-//	while (i < command_count)
-//	{
-//		print_command(&commands[i], i);
-//		i++;
-//	}
-//}
 
 t_cmd	*create_commands(int command_count, t_token *token_list)
 {

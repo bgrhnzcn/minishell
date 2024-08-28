@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 18:59:23 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:57:55 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,16 @@ typedef struct s_shell
 	int		*pipes;			/**< Array of pipe file descriptors. */
 	int		status;			/**< Status of the last command. */
 	t_bool	is_heredoc_open;
+	int		j;
 }	t_shell;
+
+//------------------------------- Main -----------------------------------
+
+char	*create_prompt(t_shell *shell);
+void	init_shell(t_shell *shell, char **envp);
+char	*get_input(t_shell *shell);
+t_bool	parse(t_shell *shell);
+
 
 //---------------------------- Tokenizer ---------------------------------
 
@@ -593,7 +602,7 @@ void	mini_echo(char **av);
  * @param shell The minishell structure.
  * @param argv The array of arguments.
  */
-void	mini_export(t_shell *shell, char **argv);
+void	mini_export(t_shell *shell, char **argv, int i, char *identifier);
 
 /**
  * @brief Removes an environment variable.

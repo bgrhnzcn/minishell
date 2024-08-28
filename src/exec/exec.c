@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 18:54:21 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 16:14:06 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,14 +103,16 @@ static void	execute_path(t_shell *shell, char **argv)
 
 	path_index = 0;
 	paths = split_path(shell);
-	while (paths[path_index] != NULL)
+	while (paths != NULL && paths[path_index] != NULL)
 	{
 		cmd = search_in_path(paths[path_index++], argv[0]);
 		if (cmd != NULL)
 			break ;
 	}
+	if (paths == NULL)
+		cmd = ft_strdup(argv[0]);
 	ft_free_str_arr(paths);
-	if (cmd == NULL || execve(cmd, argv, shell->env))
+	if (execve(cmd, argv, shell->env))
 	{
 		ft_putstr_fd("Command \'", STDERR_FILENO);
 		ft_putstr_fd(argv[0], STDERR_FILENO);

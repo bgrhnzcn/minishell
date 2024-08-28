@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:16:19 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 16:05:51 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:33:52 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,77 +14,26 @@
 
 int	g_global_exit = 0;
 
-char	*create_prompt(t_shell *shell)
+static t_bool	main_exec(t_shell *shell)
 {
-	char	*prompt;
-	char	*cwd;
-
-	cwd = NULL;
-	prompt = ft_calloc(300, sizeof(char));
-	ft_strlcat(prompt, ANSI_COLOR_GREEN"minishell"ANSI_COLOR_RESET, 300);
-	ft_strlcat(prompt, "@", 300);
-	cwd = get_env(shell->env, "PWD");
-	if (ft_strequ(cwd, ""))
+	if (pipe_check(shell, &shell->token_list))
 	{
-		free(cwd);
-		cwd = getcwd(NULL, 0);
+		clear_tokens(shell->token_list.next);
+		shell->token_list.next = NULL;
+		return (EXIT_FAILURE);
 	}
-	ft_strlcat(prompt, ANSI_COLOR_BLUE, 300);
-	ft_strlcat(prompt, ft_strrchr(cwd, '/') + 1, 300);
-	ft_strlcat(prompt, ANSI_COLOR_RESET, 300);
-	ft_strlcat(prompt, "> ", 300);
-	free(cwd);
-	return (prompt);
+	return (EXIT_SUCCESS);
 }
 
-void	init_shell(t_shell *shell, char **envp)
+static t_bool	main_parse(t_shell *shell)
 {
-	if (init_env(shell, envp))
+	if (parse(shell))
 	{
-		printf("Error: initialization of env is failed.\n");
-		exit(EXIT_FAILURE);
+		clear_tokens(shell->token_list.next);
+		shell->token_list.next = NULL;
+		shell->status = 2;
+		return (EXIT_FAILURE);
 	}
-	shell->input = malloc(1);
-	shell->token_list.type = HEAD;
-	shell->token_list.text = "";
-	shell->token_list.prev = NULL;
-	shell->token_list.next = NULL;
-}
-
-char	*get_input(t_shell *shell)
-{
-	char	*input;
-	char	*prompt;
-
-	signal_cont(MAIN_P);
-	prompt = create_prompt(shell);
-	input = readline(prompt);
-	if (input == NULL)
-		exit(3);
-	free(prompt);
-	return (input);
-}
-
-t_bool	parse(t_shell *shell)
-{
-	char	*input_trimmed;
-
-	input_trimmed = ft_strtrim(shell->input, g_whitespaces);
-	if (parse_input(&shell->token_list, input_trimmed))
-		return (free(input_trimmed),
-			clear_tokens(shell->token_list.next),
-			shell->token_list.next = NULL, EXIT_FAILURE);
-	free(input_trimmed);
-	if (check_quotes(&shell->token_list))
-		return (clear_tokens(shell->token_list.next),
-			shell->token_list.next = NULL, EXIT_FAILURE);
-	if (check_syntax(&shell->token_list, shell->env))
-		return (clear_tokens(shell->token_list.next),
-			shell->token_list.next = NULL, EXIT_FAILURE);
-	perform_expansion(&shell->token_list, shell->env);
-	join_cont_words(&shell->token_list);
-	remove_whitespaces(&shell->token_list);
-	merge_redirs(&shell->token_list);
 	return (EXIT_SUCCESS);
 }
 
@@ -105,19 +54,10 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		signal_cont(AFTER_IN_P);
 		add_history(shell.input);
-		if (parse(&shell))
-		{
-			clear_tokens(shell.token_list.next);
-			shell.token_list.next = NULL;
-			shell.status = 2;
+		if (main_parse(&shell))
 			continue ;
-		}
-		if (pipe_check(&shell, &shell.token_list))
-		{
-			clear_tokens(shell.token_list.next);
-			shell.token_list.next = NULL;
+		if (main_exec(&shell))
 			continue ;
-		}
 		clear_tokens(shell.token_list.next);
 		shell.token_list.next = NULL;
 	}
