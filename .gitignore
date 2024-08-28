@@ -56,3 +56,5 @@ minishell_tester/
 readline-8.2/
 readline-8.2.tar.gz
 .vscode/
+.DS_Store
+.DS_Store
