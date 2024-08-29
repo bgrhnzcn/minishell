@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:45:16 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/28 14:57:55 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/29 17:35:03 by olyetisk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -611,7 +611,6 @@ void	mini_export(t_shell *shell, char **argv, int i, char *identifier);
  * @param argv The array of arguments.
  */
 void	mini_unset(t_shell *shell, char **argv);
-char	**create_env_variable(t_shell *shell, const char *arg, int *found);
 void 	remove_env(t_shell *shell, const char *arg);
 int		count_env_variables(char **env);
 size_t	counter_argv(char *str);

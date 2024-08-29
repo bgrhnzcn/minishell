@@ -36,7 +36,6 @@ SRCS = $(SRC)/exec/main.c \
 	$(SRC)/builtins/cd_utils.c \
 	$(SRC)/builtins/unset.c \
 	$(SRC)/builtins/unset_utils.c \
-	$(SRC)/builtins/unset_utils2.c \
 	$(SRC)/builtins/export.c \
 	$(SRC)/builtins/export_utils.c \
 	$(SRC)/builtins/echo.c \
