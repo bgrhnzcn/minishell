@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:53:03 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/08/28 19:19:45 by olyetisk         ###   ########.fr       */
+/*   Updated: 2024/09/01 16:12:34 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_echo(char *s)
 {
 	int	i;
 
-	if (s == NULL || strlen(s) < 2)
+	if (s == NULL || ft_strlen(s) < 2)
 		return (0);
 	if (s[0] != '-' || s[1] != 'n')
 		return (0);

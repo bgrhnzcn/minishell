@@ -6,7 +6,7 @@ OBJ = obj
 
 SRC = src
 
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g -fsanitize=address -Wall -Wextra -Werror
 
 READLINE_DIR = ./lib/readline-8.2
 
@@ -27,8 +27,9 @@ endif
 SRCS = $(SRC)/exec/main.c \
 	$(SRC)/exec/main_utils.c \
 	$(SRC)/exec/exec.c \
-	$(SRC)/exec/signals.c \
 	$(SRC)/exec/exec_utils.c \
+	$(SRC)/exec/exec_err.c \
+	$(SRC)/exec/signals.c \
 	$(SRC)/builtins/env.c \
 	$(SRC)/builtins/pwd.c \
 	$(SRC)/builtins/exit.c \

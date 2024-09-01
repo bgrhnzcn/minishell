@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 15:10:20 by buozcan           #+#    #+#             */
-/*   Updated: 2024/08/29 18:56:41 by olyetisk         ###   ########.fr       */
+/*   Updated: 2024/09/01 19:12:59 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ char	*get_input(t_shell *shell)
 	prompt = create_prompt(shell);
 	input = readline(prompt);
 	if (input == NULL)
+	{
+		printf("exit\n");
 		exit(3);
+	}
 	free(prompt);
 	return (input);
 }
@@ -81,7 +84,6 @@ t_bool	parse(t_shell *shell)
 			shell->token_list.next = NULL, EXIT_FAILURE);
 	perform_expansion(&shell->token_list, shell->env);
 	join_cont_words(&shell->token_list);
-	print_tokens(&shell->token_list);
 	remove_whitespaces(&shell->token_list);
 	merge_redirs(&shell->token_list);
 	return (EXIT_SUCCESS);

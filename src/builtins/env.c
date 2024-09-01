@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:15:30 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 17:32:00 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/09/01 19:31:19 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,13 @@ void	set_env(char **env, char *var, char *value)
 	size_t	env_size;
 
 	i = ft_strarrlen(env);
-	if (i == ENV_LIMIT - 1)
-		return ;
 	env_size = ft_strlen(var) + ft_strlen(value) + 2;
 	temp = get_env(env, var);
 	if (ft_strequ(temp, ""))
+	{
 		free(temp);
+		return ;
+	}
 	else
 	{
 		i = find_env_index(env, var);

@@ -6,11 +6,32 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 18:31:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/28 16:07:02 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:42:35 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	set_cmd_and_temp(t_shell *shell, char **cmd, char **temp, char **argv)
+{
+	if (ft_strchr(argv[0], '/') == argv[0])
+	{
+		*cmd = ft_strdup("");
+		*temp = ft_strdup("");
+	}
+	else
+	{
+		*cmd = get_env(shell->env, "PWD");
+		if (ft_strequ(*cmd, ""))
+		{
+			free(*cmd);
+			*cmd = getcwd(NULL, 0);
+			*temp = ft_strjoin(*cmd, "/");
+		}
+		else
+			*temp = ft_strjoin(*cmd + 4, "/");
+	}
+}
 
 void	free_cmd(t_cmd *cmd)
 {
@@ -69,13 +90,4 @@ char	**split_path(t_shell *shell)
 		return (free(cmd), NULL);
 	free(cmd);
 	return (paths);
-}
-
-void	print_error(char *cmd, int err)
-{
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putstr_fd(strerror(err), STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
 }

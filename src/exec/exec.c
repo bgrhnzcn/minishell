@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 21:44:58 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/28 16:14:06 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:45:35 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,14 @@ static char	*search_in_path(const char *path, const char *command)
 static void	execute_relative(t_shell *shell, char **argv)
 {
 	int		err;
-	char	*pwd;
 	char	*cmd;
 	char	*temp;
 
-	if (ft_strchr(argv[0], '/') == argv[0])
-		pwd = ft_strdup("");
-	else
-		pwd = get_env(shell->env, "PWD");
-	temp = ft_strjoin(pwd + 4, "/");
-	free(pwd);
+	set_cmd_and_temp(shell, &cmd, &temp, argv);
+	free(cmd);
 	cmd = ft_strjoin(temp, argv[0]);
 	free(temp);
-	if (execve(cmd, argv, shell->env))
+	if (!is_dir(cmd, argv[0]) && execve(cmd, argv, shell->env))
 	{
 		err = errno;
 		print_error(argv[0], err);
