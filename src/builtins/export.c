@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:08:54 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/28 16:29:37 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/29 17:17:07 by olyetisk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ int	valid_identifier(const char *str)
 			return (0);
 		i++;
 	}
+	if ((str[i] == '=' && str[i + 1] == '\0')
+		|| (str[i] == '=' && str[i + 1] != '\0'))
+		return (0);
 	return (1);
 }
 
@@ -44,7 +47,7 @@ static	char	*get_identifier(char *arg, char **equals_check)
 	return (identifier);
 }
 
-static int		identifier_error(char **argv, char *identifier, int *i)
+static int	identifier_error(char **argv, char *identifier, int *i)
 {
 	if (!identifier)
 	{
@@ -58,7 +61,8 @@ static int		identifier_error(char **argv, char *identifier, int *i)
 	return (EXIT_SUCCESS);
 }
 
-static void	mini_export_hlpr(t_shell *shell, char **argv, int i, char *identifier)
+static void	mini_export_hlpr(t_shell *shell, char **argv,
+	int i, char *identifier)
 {
 	if (!check_env(shell, identifier, argv[i]))
 	{

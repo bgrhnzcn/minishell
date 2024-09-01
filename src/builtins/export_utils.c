@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:02:40 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/08/28 14:50:13 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/31 16:51:56 by olyetisk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ static	int	find_existing_env_var(t_shell *shell, const char *identifier)
 	j = 0;
 	while (shell->env[j])
 	{
-		env_var = strchr(shell->env[j], '=');
+		env_var = ft_strchr(shell->env[j], '=');
 		if (env_var)
 		{
 			len = env_var - shell->env[j];
-			if (strncmp(identifier, shell->env[j], len) == 0
-				&& strlen(identifier) == len)
+			if (ft_strncmp(identifier, shell->env[j], len) == 0
+				&& ft_strlen(identifier) == len)
 				return (j);
 		}
 		j++;
@@ -39,7 +39,7 @@ static	int	update_env_var(t_shell *shell, int j, const char *arg)
 	char	*new_env_var;
 
 	free(shell->env[j]);
-	new_env_var = strdup(arg);
+	new_env_var = ft_strdup(arg);
 	if (!new_env_var)
 		return (0);
 	shell->env[j] = new_env_var;
@@ -73,7 +73,7 @@ int	add_new_env(t_shell *shell, const char *arg)
 		new_env[shell->j] = shell->env[shell->j];
 		shell->j++;
 	}
-	new_env[env_count] = strdup(arg);
+	new_env[env_count] = ft_strdup(arg);
 	if (!new_env[env_count])
 	{
 		free(new_env);

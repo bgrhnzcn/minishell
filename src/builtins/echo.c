@@ -3,49 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:53:03 by olyetisk          #+#    #+#             */
-/*   Updated: 2024/08/28 14:49:00 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/08/28 19:19:45 by olyetisk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_bool	check_echo(char *s)
+int	check_echo(char *s)
 {
-	if (!*s)
-		return (EXIT_FAILURE);
-	if (*s == '-' && *(s + 1))
+	int	i;
+
+	if (s == NULL || strlen(s) < 2)
+		return (0);
+	if (s[0] != '-' || s[1] != 'n')
+		return (0);
+	i = 2;
+	while (s[i])
 	{
-		while (*s == '-')
-			s++;
-		s++;
-		while (*s == 'n')
-			s++;
+		if (s[i] != 'n')
+			return (0);
+		i++;
 	}
-	if (*s)
-		return (false);
-	return (EXIT_SUCCESS);
+	return (1);
 }
 
 void	mini_echo(char **av)
 {
-	t_bool	flg;
+	int	new;
+	int	i;
 
-	av++;
-	flg = false;
-	while (*av && check_echo(*av))
+	new = 0;
+	i = 1;
+	while (av[i] && check_echo(av[i]))
 	{
-		flg = 1;
-		av++;
+		new = 1;
+		i++;
 	}
-	while (*av)
+	while (av[i])
 	{
-		ft_putstr_fd(*av++, 1);
-		if (*av)
+		ft_putstr_fd(av[i], 1);
+		i++;
+		if (av[i])
 			ft_putstr_fd(" ", 1);
 	}
-	if (!flg)
+	if (!new)
 		ft_putstr_fd("\n", 1);
 }

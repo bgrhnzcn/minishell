@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 16:13:49 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/26 18:57:13 by bgrhnzcn         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:59:58 by olyetisk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	split_dollar(char *env, t_token *dollar)
 	t_token	*temp;
 	char	**split;
 	int		i;
+	int		max;
 
 	temp = dollar;
 	env = ft_strchr(env, '=');
@@ -26,10 +27,12 @@ void	split_dollar(char *env, t_token *dollar)
 		return ;
 	}
 	split = ft_split(env + 1, ' ');
+	max = ft_strarrlen(split);
 	i = 0;
 	while (split[i])
 	{
-		add_token_after(temp, new_token(WHITESPACE, ft_strdup(" ")));
+		if (max > 1)
+			add_token_after(temp, new_token(WHITESPACE, ft_strdup(" ")));
 		add_token_after(temp, new_token(WORD, ft_strdup(split[i])));
 		temp = temp->next->next;
 		i++;
