@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:08:54 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/29 17:17:07 by olyetisk         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:58:20 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	valid_identifier(const char *str)
 	int	i;
 
 	i = 0;
-	if (!str || !ft_isalpha(str[0]))
+	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
 		return (0);
 	while (str[i] && str[i] != '=')
 	{

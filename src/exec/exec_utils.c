@@ -6,7 +6,7 @@
 /*   By: buozcan <buozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 18:31:59 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/09/01 19:42:35 by buozcan          ###   ########.fr       */
+/*   Updated: 2024/09/02 12:44:50 by buozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,9 @@ char	**split_path(t_shell *shell)
 	cmd = get_env(shell->env, "PATH");
 	if (ft_strequ(cmd, ""))
 		return (free(cmd), NULL);
-	paths = ft_split(cmd, ':');
+	if (cmd[5] == 0)
+		return (free(cmd), NULL);
+	paths = ft_split(cmd + 5, ':');
 	if (paths == NULL)
 		return (free(cmd), NULL);
 	free(cmd);

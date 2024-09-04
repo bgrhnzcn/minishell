@@ -6,7 +6,7 @@ OBJ = obj
 
 SRC = src
 
-CFLAGS = -g -fsanitize=address -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 READLINE_DIR = ./lib/readline-8.2
 
@@ -91,7 +91,7 @@ $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 $(LIBFT):
 	@make -C lib/libft && make -C lib/libft clean
 
-$(NAME): $(READLINE_V) $(LIBFT) $(OBJS) 
+$(NAME): $(READLINE_V) $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(INCLUDES) $(OBJS) $(DYLIBS) $(LIBFT)
 
 $(READLINE_V): | $(READLINE_DIR)
@@ -100,14 +100,5 @@ $(READLINE_V): | $(READLINE_DIR)
 	@cd readline-8.2 && make install 2>&1 | awk '{printf "."; fflush()}'
 	@printf "\n"
 	@rm -rf readline-8.2
-
-ifeq ($(shell uname), Linux)
-leak: re
-	@valgrind --leak-check=full --track-origins=yes ./minishell
-else
-leak: re
-	@bash ./minishell.sh
-	@make run
-endif
 
 .PHONY: all re fclean clean
