@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olyetisk <olyetisk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bgrhnzcn <bgrhnzcn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 16:13:49 by bgrhnzcn          #+#    #+#             */
-/*   Updated: 2024/08/29 18:59:58 by olyetisk         ###   ########.fr       */
+/*   Updated: 2024/09/24 16:44:33 by bgrhnzcn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	split_dollar(char *env, t_token *dollar)
 
 	temp = dollar;
 	env = ft_strchr(env, '=');
-	if (env + 1 == NULL)
+	if (*(env + 1) == 0)
 	{
 		dollar->type = WORD;
 		return ;
